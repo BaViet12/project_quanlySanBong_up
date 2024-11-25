@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model VaiTro {
+  id          Int            @id @default(autoincrement())
+  Ten         String
+  users       User[]
+  permissions VaiTro_Quyen[]
+}
+
+model Quyen {
+  id    Int            @id @default(autoincrement())
+  Ten   String
+  MoTa  String?        @db.LongText
+  roles VaiTro_Quyen[]
+}
+
+model VaiTro_Quyen {
+  Id       Int    @id @default(autoincrement())
+  MaVaiTro Int
+  MaQuyen  Int
+  Ten      String
+  vaitro   VaiTro @relation(fields: [MaVaiTro], references: [id])
+  quyen    Quyen  @relation(fields: [MaQuyen], references: [id])
+}
+
+model Fields {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique @db.VarChar(45)
+  field_type Int
+  status     FieldStatus
+  MoTa       String?     @db.LongText
+  update_at  DateTime    @db.Timestamp
+  Timeslots  Timeslot[]
+  Bookings   Booking[]
+}
+
+model Timeslot {
+  id         Int            @id @default(autoincrement())
+  field_id   Int
+  start_time DateTime       @db.Time
+  end_time   DateTime       @db.Time
+  price      Decimal        @db.Decimal(10, 2)
+  status     TimeslotStatus
+  update_at  DateTime       @db.Timestamp
+  field      Fields         @relation(fields: [field_id], references: [id])
+  Bookings   Booking[]
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique @db.VarChar(100)
+  phone    String?   @db.VarChar(15)
+  email    String?   @db.VarChar(100)
+  MaVaiTro Int
+  vaitro   VaiTro?   @relation(fields: [MaVaiTro], references: [id])
+  Bookings Booking[]
+}
+
+model Booking {
+  id           Int           @id @default(autoincrement())
+  user_id      Int
+  field_id     Int
+  time_slot_id Int
+  booking_date DateTime      @db.Date
+  total_price  Decimal       @db.Decimal(10, 2)
+  status       BookingStatus
+  created_at   DateTime      @db.Timestamp
+  user         User          @relation(fields: [user_id], references: [id])
+  field        Fields        @relation(fields: [field_id], references: [id])
+  timeslot     Timeslot      @relation(fields: [time_slot_id], references: [id])
+}
+
+enum FieldStatus {
+  BAOTRI
+  HOATDONG
+}
+
+enum TimeslotStatus {
+  TRONG
+  DADAT
+}
+
+enum BookingStatus {
+  DANGXULY
+  DAXACNHAN
+  DAHUY
+}
