@@ -38,22 +38,31 @@ model Fields {
   name       String      @unique @db.VarChar(45)
   field_type Int
   status     FieldStatus
+  HinhAnh    String
   MoTa       String?     @db.LongText
   update_at  DateTime    @db.Timestamp
-  Timeslots  Timeslot[]
-  Bookings   Booking[]
+  Price      Price[]
+}
+
+model Price {
+  id          Int            @id @default(autoincrement())
+  name        String         @unique @db.VarChar(45)
+  field_id    Int
+  timeslot_id Int
+  price       Decimal        @db.Decimal(10, 2)
+  status      TimeslotStatus
+  update_at   DateTime       @db.Timestamp
+  field       Fields         @relation(fields: [field_id], references: [id])
+  timeslot    Timeslot       @relation(fields: [timeslot_id], references: [id])
+  Bookings    Booking[]
 }
 
 model Timeslot {
-  id         Int            @id @default(autoincrement())
-  field_id   Int
-  start_time DateTime       @db.Time
-  end_time   DateTime       @db.Time
-  price      Decimal        @db.Decimal(10, 2)
-  status     TimeslotStatus
-  update_at  DateTime       @db.Timestamp
-  field      Fields         @relation(fields: [field_id], references: [id])
-  Bookings   Booking[]
+  id         Int      @id @default(autoincrement())
+  name       String   @unique @db.VarChar(45)
+  start_time DateTime @db.Time
+  end_time   DateTime @db.Time
+  Price      Price[]
 }
 
 model User {
@@ -67,17 +76,14 @@ model User {
 }
 
 model Booking {
-  id           Int           @id @default(autoincrement())
-  user_id      Int
-  field_id     Int
-  time_slot_id Int
-  booking_date DateTime      @db.Date
-  total_price  Decimal       @db.Decimal(10, 2)
-  status       BookingStatus
-  created_at   DateTime      @db.Timestamp
-  user         User          @relation(fields: [user_id], references: [id])
-  field        Fields        @relation(fields: [field_id], references: [id])
-  timeslot     Timeslot      @relation(fields: [time_slot_id], references: [id])
+  id          Int           @id @default(autoincrement())
+  user_id     Int
+  price_id    Int
+  total_price Decimal       @db.Decimal(10, 2)
+  status      BookingStatus
+  created_at  DateTime      @db.Timestamp
+  user        User          @relation(fields: [user_id], references: [id])
+  price       Price         @relation(fields: [price_id], references: [id])
 }
 
 enum FieldStatus {

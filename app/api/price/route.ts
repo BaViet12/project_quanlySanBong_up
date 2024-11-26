@@ -4,18 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    const Soccer = await prisma.fields.findMany({
-      include: {
-        Price: {
-          include: {
-            timeslot: true,
-          },
-        },
-      },
-    });
-    const Timeslot = await prisma.timeslot.findMany();
+    const Soccer = await prisma.price.findMany();
     return NextResponse.json(
-      { Soccer, Timeslot, message: "Các sân bóng" },
+      { Soccer, message: "Các mức giá" },
       { status: 201 }
     );
   } catch (error: any) {
@@ -32,29 +23,36 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const se = await prisma.fields.findUnique({ where: { name: body.name } });
+    const se = await prisma.price.findUnique({ where: { name: body.name } });
     if (se == null) {
-      const newSan = await prisma.fields.create({
+      const newSan = await prisma.price.create({
         data: {
           name: body.name,
-          field_type: body.field_type,
+          field: {
+            connect: { id: body.field_id }, // Liên kết với trường field_id
+          },
+          timeslot: {
+            connect: { id: body.timeslot_id }, // Liên kết với trường field_id
+          },
+          price: body.price,
           status: body.status,
-          HinhAnh: body.HinhAnh,
-          MoTa: body.MoTa,
           update_at: new Date(),
         },
       });
       return NextResponse.json(
-        { newSan, message: "Tạo sân thành công" },
+        { newSan, message: "Tạo mức giá sân thành công" },
         { status: 201 }
       );
     } else {
-      return NextResponse.json({ message: "Sân đã tồn tại" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Mức giá sân đã tồn tại" },
+        { status: 400 }
+      );
     }
   } catch (error: any) {
     return NextResponse.json(
       {
-        message: "Tạo sân thất bại",
+        message: "Tạo thất bại",
         error: error.message,
       },
       { status: 500 }
@@ -64,7 +62,7 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const Delete = await prisma.fields.deleteMany();
+    const Delete = await prisma.price.deleteMany();
     return NextResponse.json(
       { Delete, message: "Xóa thành công" },
       { status: 201 }
