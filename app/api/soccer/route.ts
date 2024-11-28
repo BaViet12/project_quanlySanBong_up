@@ -13,9 +13,9 @@ export async function GET(req: NextRequest) {
         },
       },
     });
-    const Timeslot = await prisma.timeslot.findMany();
+
     return NextResponse.json(
-      { Soccer, Timeslot, message: "Các sân bóng" },
+      { Soccer, message: "Các sân bóng" },
       { status: 201 }
     );
   } catch (error: any) {

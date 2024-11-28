@@ -84,6 +84,7 @@ const ListFields:React.FC = () => {
                 <div>
                 <img src={soccer.HinhAnh} alt={soccer.name} className="w-96 h-96 object-cover m-auto"/>
                 </div>
+                <div className='flex flex-col gap-2'>
                 <div className='flex flex-col gap-5'>
                   <h1 className='text-3xl'>{soccer.name}</h1>
                   <p className='text-blue-700 flex gap-1'>Thể loại: 
@@ -95,7 +96,14 @@ const ListFields:React.FC = () => {
                   <p className='text-blue-700 flex gap-1'>Mô tả: 
                     <p className='text-black'>{soccer.MoTa}</p>
                   </p>
-                  
+                </div>
+                <div className='flex gap-2'>
+                {Array.isArray(soccer.Price) && soccer.Price.map((price) => (
+                      <p key={price.id} className="flex">
+                          <span className="text-black border-2 border-black p-2 hover:text-white hover:bg-blue-700 hover:border-white">{price.timeslot?.name || "Không có"}</span>
+                      </p>
+                  ))}
+                </div>
                 </div>
               </div>
             ))
