@@ -35,7 +35,6 @@ export async function POST(req: NextRequest) {
             connect: { id: body.timeslot_id }, // Liên kết với trường field_id
           },
           price: body.price,
-          status: body.status,
           update_at: new Date(),
         },
       });
@@ -50,6 +49,7 @@ export async function POST(req: NextRequest) {
       );
     }
   } catch (error: any) {
+    console.log(error);
     return NextResponse.json(
       {
         message: "Tạo thất bại",

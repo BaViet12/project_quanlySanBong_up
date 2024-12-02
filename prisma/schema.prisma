@@ -38,30 +38,30 @@ model Fields {
   name       String      @unique @db.VarChar(45)
   field_type Int
   status     FieldStatus
-  HinhAnh    String
+  HinhAnh    String?     @db.VarChar(255)
   MoTa       String?     @db.LongText
   update_at  DateTime    @db.Timestamp
   Price      Price[]
 }
 
 model Price {
-  id          Int            @id @default(autoincrement())
-  name        String         @unique @db.VarChar(45)
+  id          Int       @id @default(autoincrement())
+  name        String    @unique @db.VarChar(45)
   field_id    Int
   timeslot_id Int
-  price       Decimal        @db.Decimal(10, 2)
-  status      TimeslotStatus
-  update_at   DateTime       @db.Timestamp
-  field       Fields         @relation(fields: [field_id], references: [id])
-  timeslot    Timeslot       @relation(fields: [timeslot_id], references: [id])
+  price       Decimal   @db.Decimal(10, 2)
+  update_at   DateTime  @db.Timestamp
+  field       Fields    @relation(fields: [field_id], references: [id])
+  timeslot    Timeslot  @relation(fields: [timeslot_id], references: [id])
   Bookings    Booking[]
 }
 
 model Timeslot {
-  id         Int      @id @default(autoincrement())
-  name       String   @unique @db.VarChar(45)
-  start_time DateTime @db.Time
-  end_time   DateTime @db.Time
+  id         Int            @id @default(autoincrement())
+  name       String         @unique @db.VarChar(45)
+  start_time DateTime       @db.DateTime()
+  end_time   DateTime       @db.DateTime()
+  status     TimeslotStatus
   Price      Price[]
 }
 
@@ -80,8 +80,8 @@ model Booking {
   user_id     Int
   price_id    Int
   total_price Decimal       @db.Decimal(10, 2)
-  status      BookingStatus
   created_at  DateTime      @db.Timestamp
+  status      BookingStatus
   user        User          @relation(fields: [user_id], references: [id])
   price       Price         @relation(fields: [price_id], references: [id])
 }
