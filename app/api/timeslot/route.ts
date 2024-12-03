@@ -3,49 +3,6 @@ import { timeStamp } from "console";
 import { NextRequest, NextResponse } from "next/server";
 import { parseISO, isAfter, addHours } from "date-fns";
 
-// export async function GET(req: NextRequest) {
-//   try {
-//     const Soccer = await prisma.timeslot.findMany();
-
-//     // Lấy thời gian hiện tại
-//     const now = new Date();
-
-//     // Xử lý status trả về true hoặc false
-//     const updatedSoccer = Soccer.map((slot) => {
-//       const startTime = new Date(slot.start_time);
-//       const endTime = new Date(slot.end_time);
-//       // const isExpired = endTime.getTime() < now.getTime();
-//       const isExpired = isAfter(now, endTime);
-
-//       const isAvailable = slot.status !== "DADAT" && !isExpired;
-
-//       console.log("now:", now);
-//       console.log("startTime:", startTime);
-//       console.log("endTime:", endTime);
-//       console.log("isExpired:", isExpired);
-
-//       return {
-//         ...slot,
-//         status: isAvailable ? true : false, // Chuyển đổi status
-//       };
-//     });
-
-//     return NextResponse.json(
-//       { Soccer: updatedSoccer, message: "Các khung giờ" },
-//       { status: 201 }
-//     );
-//   } catch (error: any) {
-//     console.log("Error", error);
-//     return NextResponse.json(
-//       {
-//         message: "Thất bại",
-//         error: error.message,
-//       },
-//       { status: 500 }
-//     );
-//   }
-// }
-
 export async function GET(req: NextRequest) {
   try {
     const Soccer = await prisma.timeslot.findMany();
@@ -87,6 +44,63 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+// export async function GET(req: NextRequest) {
+//   try {
+//     const { searchParams } = new URL(req.url);
+//     const date = searchParams.get("date"); // Lấy ngày từ query
+
+//     if (!date) {
+//       return NextResponse.json(
+//         { message: "Vui lòng cung cấp ngày (date)" },
+//         { status: 400 }
+//       );
+//     }
+
+//     // Chuyển giờ ngày bắt đầu và ngày kết thúc (start và end của ngày)
+//     const startOfDay = addHours(new Date(`${date}T00:00:00`), -7);
+//     const endOfDay = addHours(new Date(`${date}T23:59:59`), -7);
+
+//     // Lấy dữ liệu từ database, lọc theo ngày
+//     const Soccer = await prisma.timeslot.findMany({
+//       where: {
+//         start_time: {
+//           gte: startOfDay, // >= bắt đầu từ 00:00
+//           lte: endOfDay, // <= kết thúc 23:59
+//         },
+//       },
+//     });
+
+//     const nowUTC = new Date();
+//     const nowVN = addHours(nowUTC, 7); // Chuyển giờ sang GMT+7
+
+//     const updatedSoccer = Soccer.map((slot) => {
+//       const endTime = new Date(slot.end_time);
+//       const isExpired = endTime < nowVN; // So sánh giờ hiện tại
+
+//       return {
+//         ...slot,
+//         // status: slot.status !== "DADAT" && !isExpired, // Đặt trạng thái khung giờ
+//         start_time: addHours(new Date(slot.start_time), 7), // Chuyển sang GMT+7
+//         end_time: addHours(new Date(slot.end_time), 7), // Chuyển sang GMT+7
+//       };
+//     });
+
+//     return NextResponse.json(
+//       { Soccer: updatedSoccer, message: "Các khung giờ theo ngày" },
+//       { status: 200 }
+//     );
+//   } catch (error: any) {
+//     console.log("Error", error);
+//     return NextResponse.json(
+//       {
+//         message: "Lấy dữ liệu thất bại",
+//         error: error.message,
+//       },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 export async function DELETE(req: NextRequest) {
   try {
