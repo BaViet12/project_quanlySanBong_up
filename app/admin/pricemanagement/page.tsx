@@ -1,8 +1,12 @@
+"use client";
+import TablePrice from '@/app/component/TablePrice'
 import React from 'react'
 
 const pricemanagement = () => {
   return (
-    <div>page</div>
+    <div>
+      <TablePrice/>
+    </div>
   )
 }
 

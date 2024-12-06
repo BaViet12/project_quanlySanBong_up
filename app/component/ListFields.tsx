@@ -38,8 +38,8 @@ const ListFields: React.FC = () => {
         console.log("Dữ liệu từ API TimeSlot:", data);
 
         // Đảm bảo gán dữ liệu đúng định dạng
-        if (data && data.Soccer && Array.isArray(data.Soccer)) {
-          setTimeslots(data.Soccer); // Thay đổi nếu API thực sự trả về "Soccer" thay vì "TimeSlot"
+        if (data && data.TimeslotAPI && Array.isArray(data.TimeslotAPI)) {
+          setTimeslots(data.TimeslotAPI); // Thay đổi nếu API thực sự trả về "Soccer" thay vì "TimeSlot"
         } else {
           console.error("Dữ liệu không hợp lệ (timeslots):", data);
         }

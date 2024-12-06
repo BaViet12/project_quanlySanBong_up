@@ -5,13 +5,13 @@ import { parseISO, isAfter, addHours } from "date-fns";
 
 export async function GET(req: NextRequest) {
   try {
-    const Soccer = await prisma.timeslot.findMany();
+    const TimeslotAPI = await prisma.timeslot.findMany();
 
     // Chuyển giờ now sang giờ Việt Nam
     const nowUTC = new Date();
     const nowVN = addHours(nowUTC, 7); // Chuyển từ UTC sang GMT+7
 
-    const updatedSoccer = Soccer.map((slot) => {
+    const updatedSoccer = TimeslotAPI.map((slot) => {
       const startTime = new Date(slot.start_time);
       const endTime = new Date(slot.end_time);
 
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json(
-      { Soccer: updatedSoccer, message: "Các khung giờ" },
+      { TimeslotAPI: updatedSoccer, message: "Các khung giờ" },
       { status: 201 }
     );
   } catch (error: any) {

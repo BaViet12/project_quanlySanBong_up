@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       const newSan = await prisma.fields.create({
         data: {
           name: body.name,
-          field_type: body.field_type,
+          field_type: parseInt(body.field_type),
           status: body.status,
           HinhAnh: body.HinhAnh,
           MoTa: body.MoTa,

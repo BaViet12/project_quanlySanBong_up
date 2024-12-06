@@ -1,3 +1,4 @@
+"use client";
 import TableTimeSlot from '@/app/component/TableTimeSlot'
 import React from 'react'
 

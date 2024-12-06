@@ -29,7 +29,8 @@ const TableFields = () => {
         })
     },[setSanTable]);
   return (
-    <div className='overflow-x-auto flex justify-center'>
+    <div>
+        <div className='overflow-x-auto flex justify-center'>
         <table className='table w-[1100px] xl:ml-36 border-2 mt-14 text-center'>
             <thead className=''>
                 <tr className='bg-green-800 text-white text-sm'>
@@ -43,8 +44,13 @@ const TableFields = () => {
                 </tr>
             </thead>
             <tbody>
-                {sanTable.map((field)=>(
+                {sanTable.length === 0 ? (
                     <tr>
+                        <td colSpan={7}>Đang tải dữ liệu...</td>
+                    </tr>
+                ) : (
+                sanTable.map((field) => (
+                    <tr key={field.id}>
                         <td>{field.id}</td>
                         <td>{field.name}</td>
                         <td>{field.field_type}</td>
@@ -52,10 +58,11 @@ const TableFields = () => {
                         <td>{field.HinhAnh}</td>
                         <td>{field.MoTa}</td>
                     </tr>
-                )
-            )}
+                ))
+                )}
             </tbody>
         </table>
+    </div>
     </div>
   )
 }

@@ -18,14 +18,15 @@ const TableTimeSlot = () => {
             return response.json();
         })
         .then((data)=>{
-            console.log("Dữ liệu từ API Field",data.Soccer);
-            setTimeslot(data.Soccer);
+            console.log("Dữ liệu từ API Field",data.TimeslotAPI);
+            setTimeslot(data.TimeslotAPI);
         })
         .catch((error)=>{
             console.error('Error:',error);
         })
     },[setTimeslot]);
   return (
+    
     <div className='overflow-x-auto flex justify-center'>
         <table className='table w-[1100px] xl:ml-36 border-2 mt-14 text-center'>
             <thead className=''>
@@ -39,7 +40,7 @@ const TableTimeSlot = () => {
             </thead>
             <tbody>
                 {timeslot.map((timeslot)=>(
-                    <tr>
+                    <tr key={timeslot.id}>
                         <td>{timeslot.id}</td>
                         <td>{timeslot.name}</td>
                         <td>{timeslot.start_time}</td>
