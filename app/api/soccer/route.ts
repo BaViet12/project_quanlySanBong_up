@@ -1,28 +1,97 @@
 import prisma from "@/prisma/client";
 import { timeStamp } from "console";
 import { NextRequest, NextResponse } from "next/server";
+import { parseISO, isAfter, addHours } from "date-fns";
+
+// export async function GET(req: NextRequest) {
+//   try {
+//     const Soccer = await prisma.fields.findMany({
+//       include: {
+//         Price: {
+//           include: {
+//             timeslot: true,
+//           },
+//         },
+//       },
+//     });
+
+//     return NextResponse.json(
+//       { Soccer, message: "Các sân bóng" },
+//       { status: 201 }
+//     );
+//   } catch (error: any) {
+//     console.log("Error", error);
+//     return NextResponse.json(
+//       {
+//         message: "Thất bại",
+//         error: error.message,
+//       },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 export async function GET(req: NextRequest) {
   try {
-    const Soccer = await prisma.fields.findMany({
+    // Lấy toàn bộ danh sách sân bóng kèm khung giờ và giá
+    const fields = await prisma.fields.findMany({
       include: {
         Price: {
           include: {
-            timeslot: true,
+            timeslot: true, // Bao gồm thông tin khung giờ
           },
         },
       },
     });
 
-    return NextResponse.json(
-      { Soccer, message: "Các sân bóng" },
-      { status: 201 }
-    );
-  } catch (error: any) {
-    console.log("Error", error);
+    // Chuyển giờ hiện tại sang giờ Việt Nam
+    const nowUTC = new Date();
+    const nowVN = addHours(nowUTC, 7); // UTC → GMT+7
+
+    // Xử lý dữ liệu
+    const updatedFields = fields.map((field) => {
+      const updatedPrices = field.Price.map((price) => {
+        const timeslot = price.timeslot;
+        const startTime = new Date(timeslot.start_time);
+        const endTime = new Date(timeslot.end_time);
+
+        // Kiểm tra trạng thái của khung giờ
+        const isExpired = endTime < nowVN; // Quá giờ hiện tại
+        const isAvailable = timeslot.status === "TRONG" && !isExpired;
+
+        return {
+          id: timeslot.id,
+          name: timeslot.name,
+          startTime: startTime,
+          endTime: endTime,
+          price: price.price,
+          status: isAvailable, // true hoặc false
+        };
+      });
+
+      return {
+        id: field.id,
+        name: field.name,
+        fieldType: field.field_type,
+        status: field.status,
+        image: field.HinhAnh,
+        description: field.MoTa,
+        timeslots: updatedPrices,
+      };
+    });
+
     return NextResponse.json(
       {
-        message: "Thất bại",
+        fields: updatedFields,
+        message: "Danh sách tất cả các sân bóng và khung giờ",
+      },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Error:", error);
+    return NextResponse.json(
+      {
+        message: "Không thể lấy danh sách sân bóng",
         error: error.message,
       },
       { status: 500 }

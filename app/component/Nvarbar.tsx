@@ -14,7 +14,7 @@ const Navbar = () => {
                     placeholder="Từ khóa tìm kiếm"
                     className="flex-grow bg-transparent outline-none text-gray-700 placeholder-gray-400 text-lg"
                 />
-                <button className="text-gray-500 hover:text-gray-700">
+                <button className="text-green-800 hover:text-gray-700">
                     <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -32,20 +32,20 @@ const Navbar = () => {
                 </button>
             </div>
             <ul className='flex gap-5 mr-10'>
-                <li className=' hover:text-green-800 text-xl text-blue-700'>Đăng nhập</li>
-                <li className=' hover:text-green-800 text-xl text-blue-700'>Đăng ký  </li>
+                <li className=' hover:text-red-600 text-xl text-green-800'>Đăng nhập</li>
+                <li className=' hover:text-red-600 text-xl text-green-800'>Đăng ký  </li>
             </ul>
         </div>
-        <div className='w-full flex justify-around items-center bg-white text-black z-10 pb-3'>
+        <div className='w-full flex justify-around items-center bg-white text-black z-10 pb-3 pt-3'>
             <nav>
                 <ul className=" flex gap-44">
-                    <li className="hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 text-xl text-blue-700">Sân bóng đá 7 người</li>
-                    <li className="hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 text-xl text-blue-700">Sân bóng đá 5 người</li>
-                    <li className="hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 text-xl text-blue-700">
+                    <li className="hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 text-xl text-green-800">Sân bóng đá 7 người</li>
+                    <li className="hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 text-xl text-green-800">Sân bóng đá 5 người</li>
+                    <li className="hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 text-xl text-green-800">
                         <Link href={'/shop'}>Mua sắm</Link>
                     </li>
-                    <li className="hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 text-xl text-blue-700">Quy định</li>
-                    <li className="hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 text-xl text-blue-700">Liên hệ</li>
+                    <li className="hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 text-xl text-green-800">Quy định</li>
+                    <li className="hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out after:duration-300 text-xl text-green-800">Liên hệ</li>
                 </ul>
             </nav>
         </div>

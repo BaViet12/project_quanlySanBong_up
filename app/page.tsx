@@ -4,6 +4,8 @@ import Carousel from "./component/Carousel";
 import Intro from "./component/Intro";
 import ListFields from "./component/ListFields";
 import TimeSlot from "./component/TimeSlot";
+import ListFieldsText from "./component/ListFieldsText";
+import Footer from "./component/Footer";
 
 export default function Home() {
   return (
@@ -11,8 +13,10 @@ export default function Home() {
       <Navbar></Navbar>
       <Carousel></Carousel>
       <Intro></Intro>
-      <ListFields></ListFields>
+      <ListFieldsText></ListFieldsText>
+      {/* <ListFields></ListFields> */}
       {/* <TimeSlot></TimeSlot> */}
+      <Footer></Footer>
     </div>
   );
 }

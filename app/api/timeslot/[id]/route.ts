@@ -43,7 +43,7 @@ export async function DELETE(
   }
 }
 
-export async function PATCH(
+export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
@@ -58,6 +58,7 @@ export async function PATCH(
           name: body.name,
           start_time: body.start_time,
           end_time: body.end_time,
+          status: body.status,
         },
       });
       return NextResponse.json(
