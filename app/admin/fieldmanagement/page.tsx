@@ -1,6 +1,6 @@
 "use client";
 import TableFields from '@/app/component/TableFields'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {FileUpLoad} from "@/app/component/FileUpLoad"
 
 interface FormDataField {
@@ -11,6 +11,16 @@ interface FormDataField {
   MoTa:string;
 }
 
+export interface San {
+  id:number;
+  name:string;
+  fieldType:number;
+  status:string;
+  image:string;
+  description:string;
+}
+
+
 
 const fieldmanagement = () => {
   const initialFormData:FormDataField = {
@@ -20,11 +30,31 @@ const fieldmanagement = () => {
     HinhAnh:'',
     MoTa:'',
   };
+  const [sanTable,setSanTable] = useState<San[]>([]);
   const [formData,setFormData] = useState<FormDataField>(initialFormData);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [reloadKey, setReloadKey] = useState(0);
   const [imageUrl, setImageUrl] = useState('');
+  
+    useEffect(()=>{
+        fetch('/api/soccer')
+        .then((response) =>{
+            if(!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            return response.json();
+        })
+        .then((data)=>{
+            console.log("Dữ liệu từ API Field",data.fields);
+            setSanTable(data.fields);
+        })
+        .catch((error)=>{
+            console.error('Error:',error);
+        })
+    },[setSanTable]);
+  
+  
 
   const refreshData = () => {
     setReloadKey((prevKey) => prevKey + 1);
@@ -159,7 +189,7 @@ const fieldmanagement = () => {
             </div>
         </div>
         <div className='mr-32'>
-            <TableFields/>
+            <TableFields sanTable={sanTable} />
         </div>
     </div>
   )

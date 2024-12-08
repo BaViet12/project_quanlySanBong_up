@@ -1,33 +1,40 @@
 'use client';
 import React, { useEffect, useState } from 'react'
+import { San } from '@/app/admin/fieldmanagement/page';
 
-interface San {
-    id:number;
-    name:string;
-    field_type:number;
-    status:string;
-    HinhAnh:string;
-    MoTa:string;
-}
 
-const TableFields = () => {
-    const [sanTable,setSanTable] = useState<San[]>([]);
-    useEffect(()=>{
-        fetch('/api/soccer')
-        .then((response) =>{
-            if(!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-            return response.json();
-        })
-        .then((data)=>{
-            console.log("Dữ liệu từ API Field",data.Soccer);
-            setSanTable(data.Soccer);
-        })
-        .catch((error)=>{
-            console.error('Error:',error);
-        })
-    },[setSanTable]);
+// interface San {
+//     id:number;
+//     name:string;
+//     fieldType:number;
+//     status:string;
+//     image:string;
+//     description:string;
+// }
+
+interface TableFieldsProps {
+    sanTable: San[]; // Prop sanTable là một mảng chứa các phần tử kiểu San
+  }
+  
+
+const TableFields: React.FC<TableFieldsProps> = ({sanTable}) => {
+    // const [sanTable,setSanTable] = useState<San[]>([]);
+    // useEffect(()=>{
+    //     fetch('/api/soccer')
+    //     .then((response) =>{
+    //         if(!response.ok) {
+    //             throw new Error('Failed to fetch data');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then((data)=>{
+    //         console.log("Dữ liệu từ API Field",data.fields);
+    //         setSanTable(data.fields);
+    //     })
+    //     .catch((error)=>{
+    //         console.error('Error:',error);
+    //     })
+    // },[setSanTable]);
   return (
     <div>
         <div className='overflow-x-auto flex justify-center'>
@@ -53,10 +60,10 @@ const TableFields = () => {
                     <tr key={field.id}>
                         <td>{field.id}</td>
                         <td>{field.name}</td>
-                        <td>{field.field_type}</td>
+                        <td>{field.fieldType}</td>
                         <td>{field.status}</td>
-                        <td>{field.HinhAnh}</td>
-                        <td>{field.MoTa}</td>
+                        <td>{field.image}</td>
+                        <td>{field.description}</td>
                     </tr>
                 ))
                 )}
