@@ -1,44 +1,42 @@
 'use client';
 import React, { useEffect, useState } from 'react'
-import { San } from '@/app/admin/fieldmanagement/page';
 
 
-// interface San {
-//     id:number;
-//     name:string;
-//     fieldType:number;
-//     status:string;
-//     image:string;
-//     description:string;
-// }
-
-interface TableFieldsProps {
-    sanTable: San[]; // Prop sanTable là một mảng chứa các phần tử kiểu San
+interface San {
+    id:number;
+    name:string;
+    fieldType:number;
+    status:string;
+    image:string;
+    description:string;
+}
+interface TableDashboardProps {
+    onEdit: (product: San) => void;
+    onDelete: (id: number) => void;
+    reloadKey: (id: number) => void;
   }
-  
 
-const TableFields: React.FC<TableFieldsProps> = ({sanTable}) => {
-    // const [sanTable,setSanTable] = useState<San[]>([]);
-    // useEffect(()=>{
-    //     fetch('/api/soccer')
-    //     .then((response) =>{
-    //         if(!response.ok) {
-    //             throw new Error('Failed to fetch data');
-    //         }
-    //         return response.json();
-    //     })
-    //     .then((data)=>{
-    //         console.log("Dữ liệu từ API Field",data.fields);
-    //         setSanTable(data.fields);
-    //     })
-    //     .catch((error)=>{
-    //         console.error('Error:',error);
-    //     })
-    // },[setSanTable]);
+const TableFields: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey}) => {
+    const [sanTable,setSanTable] = useState<San[]>([]);
+    useEffect(()=>{
+        fetch('/api/soccer')
+        .then((response) =>{
+            if(!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+            return response.json();
+        })
+        .then((data)=>{
+            console.log("Dữ liệu từ API Field",data.fields);
+            setSanTable(data.fields);
+        })
+        .catch((error)=>{
+            console.error('Error:',error);
+        })
+    },[setSanTable,reloadKey]);
   return (
-    <div>
-        <div className='overflow-x-auto flex justify-center'>
-        <table className='table w-[1100px] xl:ml-36 border-2 mt-14 text-center'>
+    <div className='overflow-x-auto flex justify-center w-full'>
+        <table className='table w-full xl:ml-36 border-2 mt-14 text-center'>
             <thead className=''>
                 <tr className='bg-green-800 text-white text-sm'>
                     <th>Mã sân</th>
@@ -64,13 +62,21 @@ const TableFields: React.FC<TableFieldsProps> = ({sanTable}) => {
                         <td>{field.status}</td>
                         <td>{field.image}</td>
                         <td>{field.description}</td>
+                        <td className='flex gap-1'>
+                            <button type='submit' className='bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700' onClick={()=> onEdit(field)}>
+                                Sửa
+                            </button>
+                            <button className='bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700' onClick={()=>onDelete(field.id)}>
+                                Xóa
+                            </button>
+                        </td>
                     </tr>
                 ))
                 )}
             </tbody>
         </table>
     </div>
-    </div>
+
   )
 }
 

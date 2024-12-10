@@ -115,19 +115,20 @@ export async function DELETE(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  console.log("Request nhận được:", req);
   try {
     const body = await req.json();
-    const newSan = await prisma.timeslot.create({
+    const newTimeSlot = await prisma.timeslot.create({
       data: {
         name: body.name,
-        start_time: body.start_time,
-        end_time: body.end_time,
+        start_time: new Date(body.start_time),
+        end_time: new Date(body.end_time),
         status: body.status,
       },
     });
 
     return NextResponse.json(
-      { newSan, message: "Tạo khung giờ thành công" },
+      { newTimeSlot, message: "Tạo khung giờ thành công" },
       { status: 201 }
     );
   } catch (error: any) {

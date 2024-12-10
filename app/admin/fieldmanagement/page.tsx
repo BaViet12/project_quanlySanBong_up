@@ -2,57 +2,31 @@
 import TableFields from '@/app/component/TableFields'
 import React, { useEffect, useState } from 'react'
 import {FileUpLoad} from "@/app/component/FileUpLoad"
+import { set } from 'date-fns';
 
 interface FormDataField {
   name:string;
-  field_type:string;
-  status:string;
-  HinhAnh:string;
-  MoTa:string;
-}
-
-export interface San {
-  id:number;
-  name:string;
-  fieldType:number;
+  fieldType:string;
   status:string;
   image:string;
   description:string;
 }
 
-
-
 const fieldmanagement = () => {
   const initialFormData:FormDataField = {
-    name: '',
-    field_type: '',
+    name: "",
+    fieldType:"",
     status:'HOATDONG',
-    HinhAnh:'',
-    MoTa:'',
+    image:"",
+    description:"",
   };
-  const [sanTable,setSanTable] = useState<San[]>([]);
   const [formData,setFormData] = useState<FormDataField>(initialFormData);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
   const [imageUrl, setImageUrl] = useState('');
-  
-    useEffect(()=>{
-        fetch('/api/soccer')
-        .then((response) =>{
-            if(!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-            return response.json();
-        })
-        .then((data)=>{
-            console.log("Dữ liệu từ API Field",data.fields);
-            setSanTable(data.fields);
-        })
-        .catch((error)=>{
-            console.error('Error:',error);
-        })
-    },[setSanTable]);
   
   
 
@@ -68,38 +42,90 @@ const fieldmanagement = () => {
     }))
   }
 
+  const handleEdit = (fields:any) => {
+    setFormData({
+      name:fields.name,
+      fieldType:String(fields.fieldType),
+      status:fields.status,
+      image:fields.HinhAnh,
+      description:fields.description,
+    });
+    setIsEditing(true);
+    setEditingId(fields.id)
+    const dialog = document.getElementById("my_modal_3") as HTMLDialogElement;
+    if (dialog) {
+      dialog.showModal();
+    }
+  }
+
   const handleSubmit = async (e:any) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    const url = isEditing ? `/api/soccer/${editingId}` : '/api/soccer';
+    const method = isEditing ? 'PUT' :'POST';
     console.log("Form Data",formData);
     try {
-      const response = await fetch('/api/soccer',{
-        method:'POST',
+      const response = await fetch(url,{
+        method,
         headers:{
           'Content-Type':'application/json',
         },
-        body : JSON.stringify({...formData, HinhAnh: imageUrl}),
+        body: JSON.stringify({
+          name: formData.name,
+          field_type: parseInt(formData.fieldType), // Chuyển đổi sang số
+          status: formData.status,
+          HinhAnh: imageUrl,
+          MoTa: formData.description,
+        }),
       });
       if(!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Tạo sân bóng thất bại');
+        throw new Error(errorData.message || `Lỗi từ ${isEditing ? 'cập nhật' : 'Tạo '} sân bóng`);
       }
       const data = await response.json();
       setSuccess(data.message || 'Tạo sân bóng thành công');
       setFormData(initialFormData);
+      setIsEditing(false);
+      setEditingId(null);
       setImageUrl('');
       refreshData();
 
+      // Close the dialog after successful submission
+      const dialog = document.getElementById("my_modal_3") as HTMLDialogElement;
+      if (dialog) {
+        dialog.close();
+      }
+
     } catch (err) {
-      setError(err instanceof Error ? err.message:'Lỗi tạo sân bóng');
+      setError(err instanceof Error ? err.message:`Lỗi ${isEditing ? 'cập nhật' : 'tạo'} sân`);
       console.error('Lỗi tạo sân bóng',err);
     }
   }
 
+  const handleDelete = async (id:number) => {
+    if(!confirm("Bạn muốn xóa Sân bóng này không ?")) {
+      return;
+    }
+    try {
+      const respone = await fetch(`/api/soccer/${id}`,{
+        method:'DELETE',
+      });
+      if(!respone.ok) {
+        throw new Error("Lỗi khi xóa sân bóng")
+      }
+      const data = await respone.json();
+      setSuccess(data.message);
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Lỗi xóa sân bóng')
+    }
+  }
+  
+
   return (
     <div className='p-2 w-full h-full ml-7' data-theme="light">
-        <div className='flex w-full justify-between p-3 items-center'>
+        <div className='flex w-full justify-between items-center'>
             <h1 className='text-2xl font-bold py-3'>Quản lý sân bóng</h1>
             <div className='mr-10'>
               <button className="btn bg-green-800" onClick={()=>document.getElementById('my_modal_3').showModal()}>Thêm sân bóng</button>
@@ -108,7 +134,9 @@ const fieldmanagement = () => {
                     <form method="dialog">
                       <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                     </form>
-                    <h3 className="font-bold text-lg mb-5">Thêm sân bóng</h3>
+                    <h3 className="font-bold text-lg mb-4">
+                      {isEditing ? "Cập Nhật Sản Phẩm" : "Thêm Mới Sản Phẩm"}
+                    </h3>
                     <form method='dialog' onSubmit={handleSubmit}>
                       {error && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
@@ -134,8 +162,8 @@ const fieldmanagement = () => {
                         <label className='block text-gray-700'>Loại sân</label>
                         <input 
                           type="text" 
-                          name="field_type"
-                          value={formData.field_type}
+                          name="fieldType"
+                          value={formData.fieldType}
                           onChange={handleChange}
                           className='w-full px-3 py-2 border rounded'
                         />
@@ -174,14 +202,14 @@ const fieldmanagement = () => {
                         <label className='block text-gray-700'>Mô tả</label>
                         <input 
                           type="text" 
-                          name="MoTa"
-                          value={formData.MoTa}
+                          name="description"
+                          value={formData.description}
                           onChange={handleChange}
                           className='w-full px-3 py-2 border rounded'
                         />
                       </div>
                       <button type='submit' className='w-full py-2 mt-4 text-white bg-green-800 rounded hover:bg-blue-600'>
-                        Thêm sân bóng
+                          {isEditing ? "Cập Nhật" : "Thêm Mới"}
                       </button>
                     </form>
                   </div>
@@ -189,7 +217,11 @@ const fieldmanagement = () => {
             </div>
         </div>
         <div className='mr-32'>
-            <TableFields sanTable={sanTable} />
+            <TableFields
+                onEdit={handleEdit}  
+                onDelete={handleDelete}
+                reloadKey={refreshData}
+            />
         </div>
     </div>
   )

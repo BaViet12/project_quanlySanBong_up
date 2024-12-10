@@ -25,10 +25,9 @@ const TableTimeSlot = () => {
             console.error('Error:',error);
         })
     },[setTimeslot]);
-  return (
-    
-    <div className='overflow-x-auto flex justify-center'>
-        <table className='table w-[1100px] xl:ml-36 border-2 mt-14 text-center'>
+  return (   
+    <div className='overflow-x-auto flex justify-center w-full'>
+        <table className='table w-full xl:ml-36 border-2 mt-14 text-center'>
             <thead className=''>
                 <tr className='bg-green-800 text-white text-sm'>
                     <th>Mã khung giờ</th>
@@ -44,8 +43,7 @@ const TableTimeSlot = () => {
                         <td>{timeslot.id}</td>
                         <td>{timeslot.name}</td>
                         <td>{timeslot.start_time}</td>
-                        <td>{timeslot.end_time}</td>
-                        
+                        <td>{timeslot.end_time}</td>                        
                     </tr>
                 )
             )}

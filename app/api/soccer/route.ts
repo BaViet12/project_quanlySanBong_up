@@ -122,6 +122,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Sân đã tồn tại" }, { status: 400 });
     }
   } catch (error: any) {
+    console.error("Error creating field:", error);
     return NextResponse.json(
       {
         message: "Tạo sân thất bại",

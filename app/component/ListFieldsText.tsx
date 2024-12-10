@@ -43,7 +43,7 @@ const SoccerField: React.FC = () => {
   }, []);
 
   return (
-    <div className="container mx-auto p-4 border-2 w-auto h-auto">
+    <div className="container flex flex-wrap mx-auto p-4 w-auto h-auto">
       {selectedField ? (
         <div>
           {/* Chi tiết sân */}
@@ -124,11 +124,11 @@ const SoccerField: React.FC = () => {
         <div className="">
           {/* Danh sách sân */}
           <h1 className="text-4xl font-bold mb-6">Danh sách sân bóng</h1>
-          <div className="flex flex-col">
+          <div className="flex gap-5 flex-wrap">
             {fields.map((field) => (
               <div
                 key={field.id}
-                className="p-4 hover:bg-gray-100 cursor-pointer flex gap-5"
+                className="p-4 hover:bg-gray-100 cursor-pointer flex gap-5 border-4 rounded-xl"
                 onClick={() => setSelectedField(field)}
               >
                 <img
@@ -136,10 +136,9 @@ const SoccerField: React.FC = () => {
                   alt={field.name}
                   className="w-[500px] h-[300px] object-cover rounded-lg mb-4"
                 />
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 items-c">
                     <h3 className="text-6xl font-semibold text-green-800">{field.name}</h3>
-                    <p className="text-xl">Loại sân : {field.fieldType} người</p>
-                    <p className="text-xl">Mô tả : {field.description}</p>
+                    <p className="text-xl">Loại sân: {field.fieldType} người</p>
                 </div>  
               </div>
             ))}
