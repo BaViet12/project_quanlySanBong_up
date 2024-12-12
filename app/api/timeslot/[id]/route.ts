@@ -1,5 +1,6 @@
 import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { parseISO, isAfter, addHours } from "date-fns";
 
 export async function GET(
   req: NextRequest,
@@ -51,26 +52,21 @@ export async function PUT(
     const body = await req.json();
     const SoccerId = parseInt(params.id);
     const se = await prisma.timeslot.findFirst({ where: { name: body.name } });
-    if (se == null) {
-      const PutSoccer = await prisma.timeslot.update({
-        where: { id: SoccerId },
-        data: {
-          name: body.name,
-          start_time: body.start_time,
-          end_time: body.end_time,
-          status: body.status,
-        },
-      });
-      return NextResponse.json(
-        { PutSoccer, message: `Đã cập nhật thành công Khung giờ ${params.id}` },
-        { status: 201 }
-      );
-    } else {
-      return NextResponse.json(
-        { message: "Khung giờ đã tồn tại" },
-        { status: 400 }
-      );
-    }
+    const startTimeVN = addHours(new Date(body.start_time), 7);
+    const endTimeVN = addHours(new Date(body.end_time), 7);
+    const PutSoccer = await prisma.timeslot.update({
+      where: { id: SoccerId },
+      data: {
+        name: body.name,
+        start_time: startTimeVN,
+        end_time: endTimeVN,
+        status: body.status,
+      },
+    });
+    return NextResponse.json(
+      { PutSoccer, message: `Đã cập nhật thành công Khung giờ ${params.id}` },
+      { status: 201 }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { message: "Xảy ra lỗi", error: error.message },

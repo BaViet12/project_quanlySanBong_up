@@ -11,24 +11,40 @@ interface timeslot {
 
 const timeslotmanagement = () => {
   const initialFormData:timeslot = {
-    name: "",
-    start_time: "",
-    end_time: "",
-    status: "",
+    name: '',
+    start_time: '',
+    end_time: '',
+    status: '',
   };
   const [formTimeSlot,setFormTimeSlot] = useState<timeslot>(initialFormData);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
+  const [isEditing,setIsEditing] = useState(false);
+  const [editingId,setEditingId] = useState<number | null>(null);
+  const [reloadKey,setReloadKey] = useState(0);
 
+  const refreshData = () => {
+    setReloadKey((prevKey) => prevKey + 1);
+  };
+  
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormTimeSlot((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e:any) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    console.log("FormData",formTimeSlot);
+    const url = isEditing ? `/api/timeslot/${editingId}`:'/api/timeslot';
+    const method = isEditing ? 'PUT':'POST';
+    console.log("FORMDATA",formTimeSlot);
     try {
-      const respone = await fetch('/api/soccer',{
-        method:'POST',
+      const respone = await fetch(url,{
+        method,
         headers:{
           'Content-Type':'application/json',
         },
@@ -41,19 +57,47 @@ const timeslotmanagement = () => {
       const data = await respone.json();
       setSuccess(data.message || 'Tạo khung giờ thành công');
       setFormTimeSlot(initialFormData);
+      setIsEditing(false);
+      
     }catch(err) {
       setError(err instanceof Error ? err.message:'Lỗi tạo khung giờ');
       console.error('Lỗi tạo khung giờ',err);
     }
   };
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormTimeSlot(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const handleEdit = (timeSlot:any) => {
+    setFormTimeSlot({
+      name:timeSlot.name,
+      start_time: timeSlot.startTimeVN,
+      end_time:timeSlot.endTimeVN,
+      status:timeSlot.status,
+    });
+    setIsEditing(true);
+    setEditingId(timeSlot.id);
+    const dialog = document.getElementById("my_modal_3") as HTMLDialogElement;
+    if(dialog) {
+      dialog.showModal();
+    }
+  }
+  
+  const handleDelete = async (id:number) => {
+    if(!confirm("Bạn muốn xóa khung giờ này không ?")) {
+      return;
+    }
+    try {
+      const respone = await fetch(`/api/timeslot/${id}`,{
+        method:'DELETE',
+      });
+      if(!respone.ok) {
+        throw new Error("Lỗi khi xóa khung giờ")
+      }
+      const data = await respone.json();
+      setSuccess(data.message);
+      refreshData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Lỗi xóa khung giờ')
+    }
+  }
 
   return (
     <div className='p-3'>
@@ -65,6 +109,7 @@ const timeslotmanagement = () => {
                 <form method="dialog">
                   <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                 </form>
+                <h3 className='font-bold text-lg mb-4'>{isEditing ? "Cập nhật khung giờ" : "Thêm mới khung giờ"}</h3>
                 <form method='dialog' onSubmit={handleSubmit}>
                     {error && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
@@ -88,21 +133,31 @@ const timeslotmanagement = () => {
                         <label className='block text-gray-700'>Giờ kết thúc</label>
                         <input type="datetime-local" name='end_time' value={formTimeSlot.end_time} onChange={handleChange} className="w-full px-3 py-2 border rounded" required/>
                     </div>
-                    <div className='mb-4'>
-                        <label className='block text-gray-700'>Trạng thái</label>
-                        <input type="text" name='status' value={formTimeSlot.status} onChange={handleChange} className="w-full px-3 py-2 border rounded" required/>
-                    </div>
-                    <button type="submit"
-                          className="w-full py-2 mt-4 text-white bg-green-800 rounded hover:bg-blue-600"
+                    <div>
+                        <label className='block text-gray-700'>Trạng thái:</label>
+                        <select
+                          name="status"
+                          value={formTimeSlot.status}
+                          onChange={handleChange}
                         >
-                          Thêm Sân Bóng
+                          <option value="">Chọn trạng thái</option>
+                          <option value="TRONG">Trống</option>
+                          <option value="DADAT">Đã đặt</option>
+                        </select>
+                    </div>
+                    <button type='submit' className='w-full py-2 mt-4 text-white bg-green-800 rounded hover:bg-blue-600'>
+                          {isEditing ? "Cập Nhật" : "Thêm Mới"}
                     </button>
                 </form>
               </div>
             </dialog>
       </div>
       <div className='mr-36'>
-        <TableTimeSlot/>
+        <TableTimeSlot
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            reloadKey={refreshData}
+        />
       </div>
     </div>
   )

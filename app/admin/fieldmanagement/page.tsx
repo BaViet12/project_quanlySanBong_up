@@ -16,7 +16,7 @@ const fieldmanagement = () => {
   const initialFormData:FormDataField = {
     name: "",
     fieldType:"",
-    status:'HOATDONG',
+    status:"",
     image:"",
     description:"",
   };
@@ -58,48 +58,91 @@ const fieldmanagement = () => {
     }
   }
 
+  // const handleSubmit = async (e:any) => {
+  //   e.preventDefault();
+  //   setError('');
+  //   setSuccess('');
+  //   const url = isEditing ? `/api/soccer/${editingId}` : '/api/soccer';
+  //   const method = isEditing ? 'PUT' :'POST';
+  //   console.log("Form Data",formData);
+  //   try {
+  //     const response = await fetch(url,{
+  //       method,
+  //       headers:{
+  //         'Content-Type':'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         name: formData.name,
+  //         field_type: parseInt(formData.fieldType), // Chuyển đổi sang số
+  //         status: formData.status,
+  //         HinhAnh: imageUrl,
+  //         MoTa: formData.description,
+  //       }),
+  //     });
+  //     if(!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.message || `Lỗi từ ${isEditing ? 'cập nhật' : 'Tạo '} sân bóng`);
+  //     }
+  //     const data = await response.json();
+  //     setSuccess(data.message || 'Tạo sân bóng thành công');
+  //     setFormData(initialFormData);
+  //     setIsEditing(false);
+  //     setEditingId(null);
+  //     setImageUrl('');
+  //     refreshData();
+
+  //     // Close the dialog after successful submission
+  //     const dialog = document.getElementById("my_modal_3") as HTMLDialogElement;
+  //     if (dialog) {
+  //       dialog.close();
+  //     }
+
+  //   } catch (err) {
+  //     setError(err instanceof Error ? err.message:`Lỗi ${isEditing ? 'cập nhật' : 'tạo'} sân`);
+  //     console.error('Lỗi tạo sân bóng',err);
+  //   }
+  // }
+
   const handleSubmit = async (e:any) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
-    const url = isEditing ? `/api/soccer/${editingId}` : '/api/soccer';
-    const method = isEditing ? 'PUT' :'POST';
-    console.log("Form Data",formData);
+    setError("");
+    setSuccess("");
+    const url = isEditing ? `/api/soccer/${editingId}`:'/api/soccer';
+    const method = isEditing ? 'PUT' : 'POST';
+    console.log("FORM DATA",formData);
     try {
-      const response = await fetch(url,{
+      const respone = await fetch(url,{
         method,
         headers:{
           'Content-Type':'application/json',
         },
         body: JSON.stringify({
           name: formData.name,
-          field_type: parseInt(formData.fieldType), // Chuyển đổi sang số
+          field_type: parseInt(formData.fieldType),
           status: formData.status,
           HinhAnh: imageUrl,
-          MoTa: formData.description,
+          Mota: formData.description,
         }),
-      });
-      if(!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `Lỗi từ ${isEditing ? 'cập nhật' : 'Tạo '} sân bóng`);
-      }
-      const data = await response.json();
-      setSuccess(data.message || 'Tạo sân bóng thành công');
-      setFormData(initialFormData);
-      setIsEditing(false);
-      setEditingId(null);
-      setImageUrl('');
-      refreshData();
+    });
+    if(!respone.ok) {
+      const ErrorData = await respone.json();
+      throw new Error(ErrorData.message || `Lỗi từ ${isEditing ? 'cập nhật ' : 'tạo'} sân bóng`);
+    }
+    const data = await respone.json();
+    setSuccess(`${isEditing ? 'cập nhật':'tạo'} sân thành công`);
+    setFormData(initialFormData);
+    setIsEditing(false);
+    setImageUrl('');
+    refreshData();
 
-      // Close the dialog after successful submission
-      const dialog = document.getElementById("my_modal_3") as HTMLDialogElement;
-      if (dialog) {
-        dialog.close();
-      }
+    const dialog = document.getElementById("my_modal_3") as HTMLDialogElement;
+    if(dialog) {
+      dialog.close();
+    }
 
     } catch (err) {
-      setError(err instanceof Error ? err.message:`Lỗi ${isEditing ? 'cập nhật' : 'tạo'} sân`);
-      console.error('Lỗi tạo sân bóng',err);
+      setError(err instanceof Error ? err.message : `Lỗi ${isEditing ? 'cập nhật': 'tạo' } sân`);
+      console.log('Lỗi tạo sân bóng',err);
     }
   }
 
@@ -160,23 +203,26 @@ const fieldmanagement = () => {
                       </div>
                       <div className='mb-4'>
                         <label className='block text-gray-700'>Loại sân</label>
-                        <input 
-                          type="text" 
-                          name="fieldType"
-                          value={formData.fieldType}
-                          onChange={handleChange}
-                          className='w-full px-3 py-2 border rounded'
-                        />
+                        <select name="fieldType" value={formData.fieldType} onChange={handleChange}>
+                            <option value="">Chọn loại sân</option>
+                            <option value="5">Sân 5 người </option>
+                            <option value="7">Sân 7 người</option>
+                        </select>
                       </div>
                       <div className='mb-4'>
                         <label className='block text-gray-700'>Trạng thái</label>
-                        <input 
+                        {/* <input 
                           type="text" 
                           name="status"
                           value={formData.status}
                           onChange={handleChange}
                           className='w-full px-3 py-2 border rounded'
-                        />
+                        /> */}
+                        <select name="status" value={formData.status}>
+                            <option value="">Chọn trạng thái</option>
+                            <option value="HOATDONG">đang hoạt động</option>
+                            <option value="BAOTRI">đang bảo trì</option>
+                        </select>
                       </div>   
                       <div className='mb-4'>
                         <label className='block text-gray-700'>Hình ảnh</label>

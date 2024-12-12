@@ -5,9 +5,15 @@ interface TimeSlot {
     name: string;
     start_time: string;
     end_time: string;
-    status: boolean;
-  }
-const TableTimeSlot = () => {
+    status: string;
+}
+
+interface TableDashboardProps {
+    onEdit: (product: TimeSlot) => void;
+    onDelete: (id: number) => void;
+    reloadKey: (id: number) => void;
+}
+const TableTimeSlot: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey}) => {
     const [timeslot,setTimeslot] = useState<TimeSlot[]>([]);
     useEffect(()=>{
         fetch('/api/timeslot')
@@ -34,6 +40,7 @@ const TableTimeSlot = () => {
                     <th>Tên khung giờ</th>
                     <th>Giờ bắt đầu</th>
                     <th>Giờ kết thúc</th>
+                    <th>Trạng thái</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
@@ -43,7 +50,16 @@ const TableTimeSlot = () => {
                         <td>{timeslot.id}</td>
                         <td>{timeslot.name}</td>
                         <td>{timeslot.start_time}</td>
-                        <td>{timeslot.end_time}</td>                        
+                        <td>{timeslot.end_time}</td>
+                        <td>{timeslot.status}</td> 
+                        <td className='flex gap-1 justify-center'>
+                            <button type='submit' className='bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700' onClick={()=>onEdit(timeslot)}  >
+                                Sửa
+                            </button>
+                            <button className='bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700 ' onClick={()=>onDelete(timeslot.id)}>
+                                Xóa
+                            </button>
+                        </td>                      
                     </tr>
                 )
             )}

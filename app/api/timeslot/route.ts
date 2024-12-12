@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
       };
     });
 
+    
     return NextResponse.json(
       { TimeslotAPI: updatedSoccer, message: "Các khung giờ" },
       { status: 201 }
@@ -118,11 +119,23 @@ export async function POST(req: NextRequest) {
   console.log("Request nhận được:", req);
   try {
     const body = await req.json();
+
+    // Kiểm tra body không được rỗng
+    if (!body || typeof body !== "object") {
+      return NextResponse.json(
+        { message: "Dữ liệu không hợp lệ hoặc bị trống" },
+        { status: 400 }
+      );
+    }
+
+    const startTimeVN = addHours(new Date(body.start_time), 7);
+    const endTimeVN = addHours(new Date(body.end_time), 7);
+
     const newTimeSlot = await prisma.timeslot.create({
       data: {
         name: body.name,
-        start_time: new Date(body.start_time),
-        end_time: new Date(body.end_time),
+        start_time: startTimeVN,
+        end_time: endTimeVN,
         status: body.status,
       },
     });
