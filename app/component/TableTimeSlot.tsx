@@ -30,7 +30,7 @@ const TableTimeSlot: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey
         .catch((error)=>{
             console.error('Error:',error);
         })
-    },[setTimeslot]);
+    },[reloadKey]);
   return (   
     <div className='overflow-x-auto flex justify-center w-full'>
         <table className='table w-full xl:ml-36 border-2 mt-14 text-center'>

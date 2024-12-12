@@ -8,8 +8,14 @@ interface Price {
     timeslot_id: number;
     price: number;
 }
+interface TableDashboardProps {
+    onEdit: (product: Price) => void;
+    onDelete: (id: number) => void;
+    reloadKey: (id: number) => void;
+}
 
-const TablePrice = () => {
+
+const TablePrice: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey}) => {
     const [price,setPrice] = useState<Price[]>([]);
     useEffect(()=>{
         fetch('/api/price')
@@ -26,7 +32,7 @@ const TablePrice = () => {
         .catch((error)=>{
             console.error('Error:',error);
         })
-    },[setPrice]);
+    },[reloadKey]);
   return (
     <div className='overflow-x-auto flex justify-center scroll-m-10' >
         <table className='table w-[1100px] xl:ml-36 border-2 mt-14 text-center'>
@@ -48,6 +54,14 @@ const TablePrice = () => {
                         <td>{pricemap.field_id}</td>
                         <td>{pricemap.timeslot_id}</td>
                         <td>{pricemap.price}</td>
+                        <td className='flex gap-1 justify-center'>
+                            <button type='submit' className='bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700' onClick={()=>onEdit(pricemap)}  >
+                                Sửa
+                            </button>
+                            <button className='bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700 ' onClick={()=>onDelete(pricemap.id)}>
+                                Xóa
+                            </button>
+                        </td> 
                     </tr>
                 )
             )}

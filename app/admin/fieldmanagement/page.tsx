@@ -58,51 +58,6 @@ const fieldmanagement = () => {
     }
   }
 
-  // const handleSubmit = async (e:any) => {
-  //   e.preventDefault();
-  //   setError('');
-  //   setSuccess('');
-  //   const url = isEditing ? `/api/soccer/${editingId}` : '/api/soccer';
-  //   const method = isEditing ? 'PUT' :'POST';
-  //   console.log("Form Data",formData);
-  //   try {
-  //     const response = await fetch(url,{
-  //       method,
-  //       headers:{
-  //         'Content-Type':'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         name: formData.name,
-  //         field_type: parseInt(formData.fieldType), // Chuyển đổi sang số
-  //         status: formData.status,
-  //         HinhAnh: imageUrl,
-  //         MoTa: formData.description,
-  //       }),
-  //     });
-  //     if(!response.ok) {
-  //       const errorData = await response.json();
-  //       throw new Error(errorData.message || `Lỗi từ ${isEditing ? 'cập nhật' : 'Tạo '} sân bóng`);
-  //     }
-  //     const data = await response.json();
-  //     setSuccess(data.message || 'Tạo sân bóng thành công');
-  //     setFormData(initialFormData);
-  //     setIsEditing(false);
-  //     setEditingId(null);
-  //     setImageUrl('');
-  //     refreshData();
-
-  //     // Close the dialog after successful submission
-  //     const dialog = document.getElementById("my_modal_3") as HTMLDialogElement;
-  //     if (dialog) {
-  //       dialog.close();
-  //     }
-
-  //   } catch (err) {
-  //     setError(err instanceof Error ? err.message:`Lỗi ${isEditing ? 'cập nhật' : 'tạo'} sân`);
-  //     console.error('Lỗi tạo sân bóng',err);
-  //   }
-  // }
-
   const handleSubmit = async (e:any) => {
     e.preventDefault();
     setError("");
@@ -121,7 +76,7 @@ const fieldmanagement = () => {
           field_type: parseInt(formData.fieldType),
           status: formData.status,
           HinhAnh: imageUrl,
-          Mota: formData.description,
+          MoTa: formData.description,
         }),
     });
     if(!respone.ok) {
@@ -211,14 +166,7 @@ const fieldmanagement = () => {
                       </div>
                       <div className='mb-4'>
                         <label className='block text-gray-700'>Trạng thái</label>
-                        {/* <input 
-                          type="text" 
-                          name="status"
-                          value={formData.status}
-                          onChange={handleChange}
-                          className='w-full px-3 py-2 border rounded'
-                        /> */}
-                        <select name="status" value={formData.status}>
+                        <select name="status" value={formData.status} onChange={handleChange}>
                             <option value="">Chọn trạng thái</option>
                             <option value="HOATDONG">đang hoạt động</option>
                             <option value="BAOTRI">đang bảo trì</option>

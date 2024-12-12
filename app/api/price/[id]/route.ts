@@ -48,35 +48,27 @@ export async function PUT(
   try {
     const body = await req.json();
     const PriceId = parseInt(params.id);
-    const se = await prisma.price.findUnique({ where: { name: body.name } });
-    if (se == null) {
-      const PutSoccer = await prisma.price.update({
-        where: { id: PriceId },
-        data: {
-          name: body.name,
-          field: {
-            connect: { id: body.field_id }, // Liên kết với trường field_id
-          },
-          timeslot: {
-            connect: { id: body.timeslot_id }, // Liên kết với trường field_id
-          },
-          price: body.price,
-          update_at: new Date(),
+    const PutSoccer = await prisma.price.update({
+      where: { id: PriceId },
+      data: {
+        name: body.name,
+        field: {
+          connect: { id: body.field_id }, // Liên kết với trường field_id
         },
-      });
-      return NextResponse.json(
-        {
-          PutSoccer,
-          message: `Đã cập nhật thành công mức giá có id ${params.id}`,
+        timeslot: {
+          connect: { id: body.timeslot_id }, // Liên kết với trường field_id
         },
-        { status: 201 }
-      );
-    } else {
-      return NextResponse.json(
-        { message: "Mức giá đã tồn tại" },
-        { status: 400 }
-      );
-    }
+        price: body.price,
+        update_at: new Date(),
+      },
+    });
+    return NextResponse.json(
+      {
+        PutSoccer,
+        message: `Đã cập nhật thành công mức giá có id ${params.id}`,
+      },
+      { status: 201 }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { message: "Xảy ra lỗi", error: error.message },

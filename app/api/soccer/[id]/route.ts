@@ -48,26 +48,21 @@ export async function PUT(
   try {
     const body = await req.json();
     const SoccerId = parseInt(params.id);
-    const se = await prisma.fields.findUnique({ where: { name: body.name } });
-    if (se == null) {
-      const PutSoccer = await prisma.fields.update({
-        where: { id: SoccerId },
-        data: {
-          name: body.name,
-          field_type: body.field_type,
-          status: body.status,
-          HinhAnh: body.HinhAnh,
-          MoTa: body.MoTa,
-          update_at: new Date(),
-        },
-      });
-      return NextResponse.json(
-        { PutSoccer, message: `Đã cập nhật thành công Sân bóng ${params.id}` },
-        { status: 201 }
-      );
-    } else {
-      return NextResponse.json({ message: "Sân đã tồn tại" }, { status: 400 });
-    }
+    const PutSoccer = await prisma.fields.update({
+      where: { id: SoccerId },
+      data: {
+        name: body.name,
+        field_type: body.field_type,
+        status: body.status,
+        HinhAnh: body.HinhAnh,
+        MoTa: body.MoTa,
+        update_at: new Date(),
+      },
+    });
+    return NextResponse.json(
+      { PutSoccer, message: `Đã cập nhật thành công Sân bóng ${params.id}` },
+      { status: 201 }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { message: "Xảy ra lỗi", error: error.message },

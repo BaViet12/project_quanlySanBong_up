@@ -51,14 +51,18 @@ const timeslotmanagement = () => {
         body:JSON.stringify(formTimeSlot),
       });
       if(!respone.ok) {
-        const erroData = await respone.json();
-        throw new Error(erroData.message);
+        const errorData = await respone.json();
+        throw new Error(errorData.message);
       }
       const data = await respone.json();
       setSuccess(data.message || 'Tạo khung giờ thành công');
       setFormTimeSlot(initialFormData);
       setIsEditing(false);
-      
+      refreshData();
+      const dialog = document.getElementById("my_modal_3") as HTMLDialogElement;
+      if(dialog) {
+        dialog.showModal();
+      }
     }catch(err) {
       setError(err instanceof Error ? err.message:'Lỗi tạo khung giờ');
       console.error('Lỗi tạo khung giờ',err);
@@ -74,6 +78,7 @@ const timeslotmanagement = () => {
     });
     setIsEditing(true);
     setEditingId(timeSlot.id);
+    refreshData()
     const dialog = document.getElementById("my_modal_3") as HTMLDialogElement;
     if(dialog) {
       dialog.showModal();

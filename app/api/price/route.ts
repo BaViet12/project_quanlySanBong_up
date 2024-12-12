@@ -29,12 +29,12 @@ export async function POST(req: NextRequest) {
         data: {
           name: body.name,
           field: {
-            connect: { id: body.field_id }, // Liên kết với trường field_id
+            connect: { id: Number(body.field_id) }, // Liên kết với trường field_id
           },
           timeslot: {
-            connect: { id: body.timeslot_id }, // Liên kết với trường field_id
+            connect: { id: Number(body.timeslot_id) }, // Liên kết với trường field_id
           },
-          price: body.price,
+          price: Number(body.price),
           update_at: new Date(),
         },
       });
