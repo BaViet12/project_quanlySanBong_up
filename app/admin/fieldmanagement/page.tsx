@@ -88,7 +88,7 @@ const fieldmanagement = () => {
     setFormData(initialFormData);
     setIsEditing(false);
     setImageUrl('');
-    refreshData();
+    // refreshData();
 
     const dialog = document.getElementById("my_modal_3") as HTMLDialogElement;
     if(dialog) {
