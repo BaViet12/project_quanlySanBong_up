@@ -138,18 +138,6 @@ const timeslotmanagement = () => {
                         <label className='block text-gray-700'>Giờ kết thúc</label>
                         <input type="datetime-local" name='end_time' value={formTimeSlot.end_time} onChange={handleChange} className="w-full px-3 py-2 border rounded" required/>
                     </div>
-                    <div>
-                        <label className='block text-gray-700'>Trạng thái:</label>
-                        <select
-                          name="status"
-                          value={formTimeSlot.status}
-                          onChange={handleChange}
-                        >
-                          <option value="">Chọn trạng thái</option>
-                          <option value="TRONG">Trống</option>
-                          <option value="DADAT">Đã đặt</option>
-                        </select>
-                    </div>
                     <button type='submit' className='w-full py-2 mt-4 text-white bg-green-800 rounded hover:bg-blue-600'>
                           {isEditing ? "Cập Nhật" : "Thêm Mới"}
                     </button>

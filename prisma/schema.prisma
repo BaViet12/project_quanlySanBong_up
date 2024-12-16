@@ -45,23 +45,23 @@ model Fields {
 }
 
 model Price {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique @db.VarChar(45)
+  id          Int         @id @default(autoincrement())
+  name        String      @unique @db.VarChar(45)
   field_id    Int
   timeslot_id Int
-  price       Decimal   @db.Decimal(10, 2)
-  update_at   DateTime  @db.Timestamp
-  field       Fields    @relation(fields: [field_id], references: [id])
-  timeslot    Timeslot  @relation(fields: [timeslot_id], references: [id])
+  price       Decimal     @db.Decimal(10, 2)
+  update_at   DateTime    @db.Timestamp
+  status      PriceStatus
+  field       Fields      @relation(fields: [field_id], references: [id])
+  timeslot    Timeslot    @relation(fields: [timeslot_id], references: [id])
   Bookings    Booking[]
 }
 
 model Timeslot {
-  id         Int            @id @default(autoincrement())
-  name       String         @unique @db.VarChar(45)
-  start_time DateTime       @db.DateTime()
-  end_time   DateTime       @db.DateTime()
-  status     TimeslotStatus
+  id         Int      @id @default(autoincrement())
+  name       String   @unique @db.VarChar(45)
+  start_time DateTime @db.DateTime()
+  end_time   DateTime @db.DateTime()
   Price      Price[]
 }
 
@@ -84,6 +84,33 @@ model Booking {
   status      BookingStatus
   user        User          @relation(fields: [user_id], references: [id])
   price       Price         @relation(fields: [price_id], references: [id])
+  ThanhToan   ThanhToan[]
+}
+
+model ThanhToan {
+  id             Int           @id @default(autoincrement())
+  booking_id     Int
+  transaction_id String        @unique
+  totalprice     Decimal       @db.Decimal(10, 2)
+  status         PaymentStatus
+  method         PaymentMethod
+  created_at     DateTime      @default(now())
+
+  booking Booking @relation(fields: [booking_id], references: [id])
+}
+
+enum PaymentStatus {
+  DANGXULY
+  THANHCONG
+  THATBAI
+}
+
+enum PaymentMethod {
+  MOMO
+  VNPAY
+  STRIPE
+  PAYPAL
+  TIENMAT
 }
 
 enum FieldStatus {
@@ -91,7 +118,7 @@ enum FieldStatus {
   HOATDONG
 }
 
-enum TimeslotStatus {
+enum PriceStatus {
   TRONG
   DADAT
 }

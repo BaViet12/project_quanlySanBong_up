@@ -78,7 +78,6 @@ export async function POST(req: NextRequest) {
         name: body.name,
         start_time: startTimeVN,
         end_time: endTimeVN,
-        status: body.status,
       },
     });
 

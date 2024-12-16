@@ -31,6 +31,7 @@ const TableFields: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey})
         null
       );
     const [loading, setLoading] = useState(false);
+    const [loadingFields, setLoadingFields] = useState(true);
 
     useEffect(() => {
         fetch(`/admin/api/field?page=${currentPage}&limit_size=${pageSize}`)
@@ -42,6 +43,7 @@ const TableFields: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey})
             setSanTable(data.data);
             setPhanTrang(data.meta);
             setLoading(false);
+            
           })
           .catch((error) => {
             console.error("Error:", error);
@@ -86,7 +88,7 @@ const TableFields: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey})
                         <th>Loại sân</th>
                         <th>Trạng thái</th>
                         <th>Hình ảnh</th>
-                        <th>Mô tả</th>
+                        <th >Mô tả</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>

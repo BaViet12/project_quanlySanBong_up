@@ -59,6 +59,7 @@ export async function PUT(
           connect: { id: body.timeslot_id }, // Liên kết với trường field_id
         },
         price: body.price,
+        status:body.status,
         update_at: new Date(),
       },
     });

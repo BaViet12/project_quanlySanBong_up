@@ -60,7 +60,6 @@ export async function PUT(
         name: body.name,
         start_time: startTimeVN,
         end_time: endTimeVN,
-        status: body.status,
       },
     });
     return NextResponse.json(

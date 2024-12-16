@@ -7,6 +7,7 @@ interface Price {
     field_id: number;
     timeslot_id: number;
     price: number;
+    status:string;
 }
 
 
@@ -18,6 +19,7 @@ const pricemanagement = () => {
     field_id:0,
     timeslot_id:0,
     price:0,
+    status:'',
   };
 
   const [formPrice,setFormPrice] = useState<Price>(initialFormData);
@@ -81,6 +83,7 @@ const pricemanagement = () => {
       field_id: price.field_id,
       timeslot_id:price.timeslot_id,
       price:price.price,
+      status:price.status,
     });
     setIsEditing(true);
     setEditingId(price.id);
@@ -148,6 +151,14 @@ const pricemanagement = () => {
                     <div className='mb-4'>
                         <label className='block text-gray-700'>Giá</label>
                         <input type="number" name='price' value={formPrice.price} onChange={handleChange} className="w-full px-3 py-2 border rounded" required />
+                    </div>
+                    <div className='mb-4'>
+                        <label className='block text-gray-700'>Trạng thái</label>
+                        <select name="status" value={formPrice.status} onChange={handleChange}>
+                          <option value="">Chọn trạng thái</option>
+                          <option value="TRONG">Trống</option>
+                          <option value="DADAT">Đã đặt</option>
+                        </select>
                     </div>
                     <button type='submit' className='w-full py-2 mt-4 text-white bg-green-800 rounded hover:bg-blue-600'>
                           {isEditing ? "Cập Nhật" : "Thêm Mới"}

@@ -3,72 +3,52 @@ import { timeStamp } from "console";
 import { NextRequest, NextResponse } from "next/server";
 import { parseISO, isAfter, addHours } from "date-fns";
 
-// export async function GET(req: NextRequest) {
-//   try {
-//     const Soccer = await prisma.fields.findMany({
-//       include: {
-//         Price: {
-//           include: {
-//             timeslot: true,
-//           },
-//         },
-//       },
-//     });
-
-//     return NextResponse.json(
-//       { Soccer, message: "Các sân bóng" },
-//       { status: 201 }
-//     );
-//   } catch (error: any) {
-//     console.log("Error", error);
-//     return NextResponse.json(
-//       {
-//         message: "Thất bại",
-//         error: error.message,
-//       },
-//       { status: 500 }
-//     );
-//   }
-// }
-
 export async function GET(req: NextRequest) {
   try {
-    // Lấy toàn bộ danh sách sân bóng kèm khung giờ và giá
+    // Lấy dữ liệu sân bóng kèm khung giờ và giá
     const fields = await prisma.fields.findMany({
       include: {
         Price: {
           include: {
-            timeslot: true, // Bao gồm thông tin khung giờ
+            timeslot: true, // Bao gồm thông tin khung giờ từ bảng Timeslot
           },
         },
       },
     });
 
-    // Chuyển giờ hiện tại sang giờ Việt Nam
+    // Giờ hiện tại Việt Nam
     const nowUTC = new Date();
-    const nowVN = addHours(nowUTC, 7); // UTC → GMT+7
+    const nowVN = addHours(nowUTC, 7); // Giờ UTC + 7
 
-    // Xử lý dữ liệu
+    // Xử lý logic để kiểm tra trạng thái khung giờ và giá
     const updatedFields = fields.map((field) => {
+      // Kiểm tra mỗi price trong bảng Price
       const updatedPrices = field.Price.map((price) => {
-        const timeslot = price.timeslot;
-        const startTime = new Date(timeslot.start_time);
+        const { timeslot, status } = price; // Giải nén thông tin timeslot và status của Price
         const endTime = new Date(timeslot.end_time);
 
-        // Kiểm tra trạng thái của khung giờ
-        const isExpired = endTime < nowVN; // Quá giờ hiện tại
-        const isAvailable = timeslot.status === "TRONG" && !isExpired;
+        // Logic xử lý trạng thái
+        let updatedStatus: boolean;
+
+        if (endTime < nowVN && status === "DADAT") {
+          updatedStatus = false; // Quá giờ hiện tại và đã đặt
+        } else if (endTime >= nowVN && status === "TRONG") {
+          updatedStatus = true; // Chưa qua giờ hiện tại và còn trống
+        } else {
+          updatedStatus = false; // Trạng thái mặc định khác (nếu không thỏa điều kiện)
+        }
 
         return {
           id: timeslot.id,
           name: timeslot.name,
-          startTime: startTime,
-          endTime: endTime,
+          startTime: timeslot.start_time,
+          endTime: timeslot.end_time,
           price: price.price,
-          status: isAvailable, // true hoặc false
+          status: updatedStatus, // Gán trạng thái mới (true hoặc false)
         };
       });
 
+      // Trả về dữ liệu sân bóng và khung giờ
       return {
         id: field.id,
         name: field.name,
@@ -76,19 +56,20 @@ export async function GET(req: NextRequest) {
         status: field.status,
         image: field.HinhAnh,
         description: field.MoTa,
-        timeslots: updatedPrices,
+        timeslots: updatedPrices, // Danh sách khung giờ đã cập nhật trạng thái
       };
     });
 
+    // Trả dữ liệu về JSON
     return NextResponse.json(
       {
         fields: updatedFields,
-        message: "Danh sách tất cả các sân bóng và khung giờ",
+        message: "Danh sách sân bóng và trạng thái khung giờ",
       },
       { status: 200 }
     );
   } catch (error: any) {
-    console.error("Error:", error);
+    console.error("Lỗi khi lấy dữ liệu sân bóng:", error);
     return NextResponse.json(
       {
         message: "Không thể lấy danh sách sân bóng",

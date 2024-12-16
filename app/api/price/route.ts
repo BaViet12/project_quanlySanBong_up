@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
             connect: { id: Number(body.timeslot_id) }, // Liên kết với trường field_id
           },
           price: Number(body.price),
+          status: body.status,
           update_at: new Date(),
         },
       });

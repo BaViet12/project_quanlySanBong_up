@@ -7,6 +7,7 @@ interface Price {
     field_id: number;
     timeslot_id: number;
     price: number;
+    status:string;
 }
 interface TableDashboardProps {
     onEdit: (product: Price) => void;
@@ -26,7 +27,7 @@ interface PhanTrang {
 const TablePrice: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey}) => {
     const [price,setPrice] = useState<Price[]>([]);
     const [currentPage,setCurrentPage] = useState(1);
-    const [pageSize,setPageSize] = useState(10);
+    const [pageSize,setPageSize] = useState(5);
     const [phanTrang,setPhanTrang] = useState<PhanTrang | null>(null);
     const [loading,setLoading] = useState(false);
     useEffect(()=>{
@@ -44,6 +45,7 @@ const TablePrice: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey}) 
             console.error("Error",error);
         })
     },[currentPage,pageSize,reloadKey]);
+    
     useEffect(()=>{
         fetch('/api/price')
         .then((response) =>{
@@ -79,6 +81,7 @@ const TablePrice: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey}) 
                         <th>Mã sân</th>
                         <th>Mã giờ</th>
                         <th>Giá</th>
+                        <th>Trạng thái</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -90,6 +93,7 @@ const TablePrice: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey}) 
                             <td>{pricemap.field_id}</td>
                             <td>{pricemap.timeslot_id}</td>
                             <td>{pricemap.price}</td>
+                            <td>{pricemap.status}</td>
                             <td className='flex gap-1 justify-center'>
                                 <button type='submit' className='bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700' onClick={()=>onEdit(pricemap)}  >
                                     Sửa
@@ -133,7 +137,6 @@ const TablePrice: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey}) 
             >
               Trước
             </button>
-
             {[...Array(phanTrang.totalPage)].map((_, index) => (
               <button
                 key={index + 1}

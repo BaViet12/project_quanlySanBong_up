@@ -5,7 +5,6 @@ interface TimeSlot {
     name: string;
     start_time: string;
     end_time: string;
-    status: string;
 }
 
 interface TableDashboardProps {
@@ -40,7 +39,6 @@ const TableTimeSlot: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey
                     <th>Tên khung giờ</th>
                     <th>Giờ bắt đầu</th>
                     <th>Giờ kết thúc</th>
-                    <th>Trạng thái</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
@@ -51,7 +49,6 @@ const TableTimeSlot: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey
                         <td>{timeslot.name}</td>
                         <td>{timeslot.start_time}</td>
                         <td>{timeslot.end_time}</td>
-                        <td>{timeslot.status}</td> 
                         <td className='flex gap-1 justify-center'>
                             <button type='submit' className='bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700' onClick={()=>onEdit(timeslot)}  >
                                 Sửa

@@ -107,7 +107,7 @@ const SoccerField: React.FC = () => {
                 <strong>Khung giờ : </strong> {selectedSlot.name}
               </p>
               <p>
-                <strong>Giá :</strong> {selectedSlot.price.toLocaleString()}.000 VNĐ
+                <strong>Giá :</strong> {selectedSlot.price.toLocaleString()} VNĐ
               </p>
             </div>
           )}
