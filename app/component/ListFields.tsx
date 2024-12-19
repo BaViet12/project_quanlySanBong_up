@@ -1,193 +1,202 @@
+"use client"
+import React, { useEffect, useState } from 'react'
+import clsx from "clsx"
 
-"use client";
-import React, { useEffect, useState } from "react";
-import clsx from 'clsx';
-
-interface Soccer {
-  id: number;
-  name: string;
-  field_type: number;
-  status: string;
-  HinhAnh: string;
-  MoTa: string;
-}
 
 interface TimeSlot {
   id: number;
   name: string;
-  start_time: string;
-  end_time: string;
+  startTime: string;
+  endTime: string;
+  price: number;
   status: boolean;
 }
 
-const ListFields: React.FC = () => {
-  const [soccers, setSoccers] = useState<Soccer[]>([]);
-  const [timeslots, setTimeslots] = useState<TimeSlot[]>([]);
-  const [selectedDate,setSelectedDate] = useState<string>(""); // Ngày được chọn 
-  const [dates,setDates] = useState<String[]>([]); // Danh sách các ngày
+interface Field {
+  id:number;
+  name:string;
+  fieldType:string;
+  status:string;
+  image:string;
+  description:string;
+  timeslots:TimeSlot[];
+}
 
-  // Fetch TimeSlot API khoong theo ngay
-  useEffect(() => {
-    const fetchTimeSlot = async () => {
+const ListFields:React.FC = () => {
+  const [fields,setFields] = useState<Field[]>([]);
+  const [selectedField,setSelectedField] = useState<Field | null>(null);
+  const [selectedTimeSlot,setSelectedTimeSlot] = useState<TimeSlot|null>(null);
+
+  const GiaLapUSER = 1;
+
+  const handleBooking = async (price_id: number, total_price: number, status: string) => {
+    try {
+      const respone = await fetch("/api/booking",{
+        method:"POST",
+        headers:{
+          'Content-Type':'application/json',
+        },
+        body:JSON.stringify({
+          user_id:GiaLapUSER,
+          price_id,
+          total_price,
+          status:"DANGXULY"
+        })
+      })
+      const data = await respone.json();
+      if(respone.ok) {
+        alert(data.message || "Đặt sân thành công");
+      } else {
+        alert(data.message || "Đặt sân thất bại!");
+      }
+    } catch(error) {
+      console.error("Lỗi đặt sân: ",error);
+      alert("Lỗi hệ thống, vui lòng thử lại sau");
+    }
+  }
+
+  useEffect(()=>{
+    const fetchFields = async () => {
       try {
-        const res = await fetch("/api/timeslot");
-        if (!res.ok) {
-          throw new Error(`Failed to fetch timeslots: ${res.statusText}`);
-        }
-        const data = await res.json();
-        console.log("Dữ liệu từ API TimeSlot:", data);
-
-        // Đảm bảo gán dữ liệu đúng định dạng
-        if (data && data.TimeslotAPI && Array.isArray(data.TimeslotAPI)) {
-          setTimeslots(data.TimeslotAPI); // Thay đổi nếu API thực sự trả về "Soccer" thay vì "TimeSlot"
-        } else {
-          console.error("Dữ liệu không hợp lệ (timeslots):", data);
-        }
+        const response = await fetch("/api/soccer");
+        const data = await response.json();
+        setFields(data.fields);
+        console.log("Dữ liệu lấy từ API sân bóng",data.fields);
       } catch (error) {
-        console.error("Lỗi khi gọi API timeslots:", error);
+        console.error("Lỗi khi gọi API :" ,error);
       }
     };
+    fetchFields();
+  },[]);
 
-    fetchTimeSlot();
-  }, []);
 
-  // useEffect(() => {
-  //   const today = new Date();
-  //   const tempDates: string[] = [];
-  //   for (let i = 0; i < 7; i++) {
-  //     const date = new Date(today);
-  //     date.setDate(today.getDate() + i);
-  //     tempDates.push(date.toISOString().split("T")[0]); // Định dạng YYYY-MM-DD
-  //   }
-  //   setDates(tempDates);
-  //   setSelectedDate(tempDates[0]); // Ngày mặc định là hôm nay
-  // }, []);
-
-  // Fetch TimeSlot API theo ngày
-  // useEffect(() => {
-  //   if (!selectedDate) return;
-
-  //   const fetchTimeSlot = async () => {
-  //     try {
-  //       const res = await fetch(`/api/timeslot?date=${selectedDate}`);
-  //       if (!res.ok) {
-  //         throw new Error(`Failed to fetch timeslots: ${res.statusText}`);
-  //       }
-  //       const data = await res.json();
-  //       console.log("Dữ liệu từ API TimeSlot:", data);
-
-  //       if (data && data.Soccer && Array.isArray(data.Soccer)) {
-  //         setTimeslots(data.Soccer);
-  //       } else {
-  //         console.error("Dữ liệu không hợp lệ (timeslots):", data);
-  //       }
-  //     } catch (error) {
-  //       console.error("Lỗi khi gọi API timeslots:", error);
-  //     }
-  //   };
-
-  //   fetchTimeSlot();
-  // }, [selectedDate]);
-
-  // Fetch Soccer API
-  useEffect(() => {
-    const fetchSoccers = async () => {
-      try {
-        const res = await fetch("/api/soccer");
-        if (!res.ok) {
-          throw new Error(`Failed to fetch soccers: ${res.statusText}`);
-        }
-        const data = await res.json();
-        console.log("Dữ liệu từ API Sân bóng:", data);
-
-        if (data && Array.isArray(data.Soccer)) {
-          setSoccers(data.Soccer);
-        } else {
-          console.error("Dữ liệu không hợp lệ (soccers):", data);
-        }
-      } catch (error) {
-        console.error("Lỗi khi gọi API soccers:", error);
-      }
-    };
-
-    fetchSoccers();
-  }, []);
 
   return (
-    <div className="p-10">
-      <h1 className="ml-28 font-bold text-5xl py-10">Danh sách sân bóng</h1>
-      {/* Danh sách ngày */}
-      {/* <div className="flex gap-4 mb-6 ml-28">
-        {dates.map((date) => (
-          <button
-            key={String(date)}
-            onClick={() => setSelectedDate(String(date))}
-            className={clsx(
-              "px-4 py-2 rounded-lg",
-              selectedDate === date
-                ? "bg-blue-600 text-white"
-                : "bg-gray-200 text-black"
-            )}
-          >
-            {date}
-          </button>
-        ))}
-      </div> */}
-      <div className="flex flex-wrap justify-start gap-10 px-48">
-        {soccers.length > 0 ? (
-          soccers.map((soccer) => (
-            <div
-              key={soccer.id}
-              className="flex p-6 w-full h-auto gap-10"
-            >
-              <div>
-                <img
-                  src={soccer.HinhAnh}
-                  alt={soccer.name}
-                  className="w-auto h-96 object-cover m-auto"
-                />
-              </div>
-              <div className="flex flex-col gap-4">
-                <h1 className="text-3xl font-semibold">{soccer.name}</h1>
-                <p className="text-blue-700 flex gap-1">
-                  Thể loại:{" "}
-                  <span className="text-black">
-                    Sân bóng đá {soccer.field_type} người
-                  </span>
-                </p>
-                <p className="text-blue-700 flex gap-1">
-                  Trạng thái:{" "}
-                  <span className="text-black">{soccer.status}</span>
-                </p>
-                <p className="text-blue-700 flex gap-1">
-                  Mô tả: <span className="text-black">{soccer.MoTa}</span>
-                </p>
-                <div className="flex flex-wrap gap-2 ">
-                    {timeslots.map((time) => (
-                      <span
-                        key={time.id}
-                        className={clsx(
-                          "px-2 py-1 rounded-lg text-sm",
-                          {
-                            "bg-green-700 text-white hover:bg-blue-800": time.status === true, // Màu xanh nếu status là true
-                            "bg-gray-200 text-gray-500": time.status === false, // Màu bạc nếu status là false
-                          }
-                        )}
-                      >
-                        {time.name}
-                      </span>
-                    ))}
-                </div>
+    <div  className="w-auto h-auto p-4 mx-auto">
+      {selectedField ? (
+        <div>
+          <div className='flex px-[200px] gap-5 md:flex-row'>
+            <img 
+              src={selectedField.image} 
+              alt={selectedField.name}
+              className='w-[500px] h-[300px] rounded-xl shadow-lg' 
+            />
+            <div className='flex flex-col gap-10'>
+              <h1 className='text-6xl font-black'>{selectedField.name}</h1>
+              <p>
+                <strong>Thể loại:</strong> sân bóng {selectedField.fieldType} người
+              </p>
+              <p>
+                <strong>Trạng thái:</strong>{" "}
+                <span
+                  className={clsx(
+                    "font-semibold",
+                    selectedField.status ==="HOATDONG" ? "text-green-500" : "text-red-500"
+                  )}
+                >
+                  {selectedField.status === "HOATDONG"
+                    ? "Hoạt động"
+                  : selectedField.status === "BAOTRI"
+                    ? "Bảo trì"
+                  : selectedField.status}
+                </span>
+              </p>
+              <p>
+                <strong>Mô tả:</strong> {selectedField.description}
+              </p>
+            </div>
+          </div>
+          {/* Danh sách khung giờ */}
+          <div className='mt-6 px-[200px]'>
+            <h3 className='text-xl'>Khung giờ</h3>
+            <div className='flex flex-wrap gap-2 mt-3'>
+              {selectedField.timeslots.map((slot) => (
+                <button 
+                  key={slot.id}
+                  onClick={()=>setSelectedTimeSlot(slot)}
+                  className={clsx(
+                    "px-4 py-2 rounded-lg hover:bg-orange-600",
+                    slot.status
+                      ? "bg-blue-500 hover:bg-blue-600 text-white"
+                      : "bg-gray-400 cursor-not-allowed text-gray-700"
+                    )}
+                    disabled={!slot.status}
+                >
+                  {slot.name}
+                </button>
+              ))
+              }
+            </div> 
+          </div>
+          {/* Thông tin khung giờ */}
+          {selectedTimeSlot && (
+              <div className="mt-4 border rounded-lg bg-gray-50 flex flex-col gap-3">
+              <h4 className="text-xl font-bold">Thông tin khung giờ</h4>
+              <p className="">
+                <strong>Khung giờ : </strong> {selectedTimeSlot.name}
+              </p>
+              <p>
+                <strong>Giá :</strong> {selectedTimeSlot.price.toLocaleString()} VNĐ
+              </p>
+              <div className='flex justify-around'>
+                <button
+                  onClick={() =>
+                    handleBooking(
+                      selectedTimeSlot.id,
+                      selectedTimeSlot.price,
+                      "DANGDAT"
+                    )
+                  }
+                  className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 w-[200px] "
+                >
+                  Đặt sân
+                </button>
+                <button
+                  className="mt-6 ml-[1400px] px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  onClick={() => setSelectedField(null)}
+                >
+                  Quay lại
+                </button>
               </div>
             </div>
-          ))
-        ) : (
-          <p>Không có dữ liệu để hiển thị</p>
-        )}
+          )}
+        </div>
+
+        
+      ) : (
+        <div className='w-full h-auto px-[100px]'>
+          <h1 className='text-4xl font-bold mb-10'>Danh sách sân bóng</h1>
+          <div className='flex gap-44 pb-10'>
+            {fields.map((field) => (
+              <div key={field.id}
+              className='flex gap-5 flex-wrap'
+              onClick={()=>setSelectedField(field)}
+              >
+                <div>
+                  <img 
+                    src={field.image} 
+                    alt={field.name}
+                    className='w-[600px] h-[400px] rounded-lg' 
+                  />
+                </div>
+                <div className='flex flex-col gap-3'>
+                  <h1 className='font-semi text-6xl'>{field.name}</h1>
+                  <p className='font-semi text-lg'>Sân bóng đá {field.fieldType} người</p>
+                  <p 
+                    className={clsx(
+                      "font-semibold",
+                      field.status === "HOATDONG"
+                      ? "text-green-500"
+                      : "text-red-500"
+                    )}>{field.status === "HOATDONG" ? "Hoạt động": field.status ==="BAOTRI" ? "Bảo trì":field.status}</p>
+                </div>
+              </div>
+            ))}
       </div>
     </div>
-  );
-};
+    )}
+    </div>
+  )
+}
 
-export default ListFields;
-
+export default ListFields
