@@ -29,7 +29,19 @@ const ListFields:React.FC = () => {
 
   const GiaLapUSER = 1;
 
+  const fetchFields = async () => {
+    try {
+      const response = await fetch("/api/soccer");
+      const data = await response.json();
+      setFields(data.fields);
+      console.log("Dữ liệu từ API soccer sau fetch:", data.fields);
+    } catch (error) {
+      console.error("Lỗi khi gọi API :", error);
+    }
+  };
+
   const handleBooking = async (price_id: number, total_price: number, status: string) => {
+    console.log("Dữ liệu gửi lên API:", { user_id: GiaLapUSER, price_id, total_price, status });
     try {
       const respone = await fetch("/api/booking",{
         method:"POST",
@@ -45,7 +57,9 @@ const ListFields:React.FC = () => {
       })
       const data = await respone.json();
       if(respone.ok) {
+        
         alert(data.message || "Đặt sân thành công");
+        await fetchFields();
       } else {
         alert(data.message || "Đặt sân thất bại!");
       }
@@ -60,8 +74,8 @@ const ListFields:React.FC = () => {
       try {
         const response = await fetch("/api/soccer");
         const data = await response.json();
+        console.log("Dữ liệu từ API soccer sau khi đặt sân:", data);
         setFields(data.fields);
-        console.log("Dữ liệu lấy từ API sân bóng",data.fields);
       } catch (error) {
         console.error("Lỗi khi gọi API :" ,error);
       }
@@ -106,9 +120,10 @@ const ListFields:React.FC = () => {
               </p>
             </div>
           </div>
+
           {/* Danh sách khung giờ */}
           <div className='mt-6 px-[200px]'>
-            <h3 className='text-xl'>Khung giờ</h3>
+            <h3 className='text-2xl font-bold'>Khung giờ</h3>
             <div className='flex flex-wrap gap-2 mt-3'>
               {selectedField.timeslots.map((slot) => (
                 <button 
@@ -127,38 +142,38 @@ const ListFields:React.FC = () => {
               ))
               }
             </div> 
-          </div>
-          {/* Thông tin khung giờ */}
-          {selectedTimeSlot && (
-              <div className="mt-4 border rounded-lg bg-gray-50 flex flex-col gap-3">
-              <h4 className="text-xl font-bold">Thông tin khung giờ</h4>
-              <p className="">
-                <strong>Khung giờ : </strong> {selectedTimeSlot.name}
-              </p>
-              <p>
-                <strong>Giá :</strong> {selectedTimeSlot.price.toLocaleString()} VNĐ
-              </p>
-              <div className='flex justify-around'>
-                <button
-                  onClick={() =>
-                    handleBooking(
-                      selectedTimeSlot.id,
-                      selectedTimeSlot.price,
-                      "DANGDAT"
-                    )
-                  }
-                  className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 w-[200px] "
-                >
-                  Đặt sân
-                </button>
                 <button
                   className="mt-6 ml-[1400px] px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                   onClick={() => setSelectedField(null)}
                 >
                   Quay lại
                 </button>
-              </div>
-            </div>
+          </div>
+          {/* Thông tin khung giờ */}
+          {selectedTimeSlot && (
+              <div className="w-[500px] mt-4 border rounded-lg bg-gray-50 flex flex-col gap-3 p-10 ml-48">
+                  <h4 className="text-xl font-bold">Thông tin khung giờ</h4>
+                  <p className="">
+                    <strong>Khung giờ: </strong> {selectedTimeSlot.name}
+                  </p>
+                  <p>
+                    <strong>Giá: </strong> {selectedTimeSlot.price.toLocaleString()} VNĐ
+                  </p>
+                  <button
+                  onClick={() => {
+                    console.log(selectedTimeSlot)
+                    handleBooking(
+                      selectedTimeSlot.id,
+                      selectedTimeSlot.price,
+                      "DANGDAT"
+                    )
+                  }}
+                  className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 w-[200px] ml-[150px]"
+                >
+                  Đặt sân
+                </button>
+              </div>   
+            
           )}
         </div>
 

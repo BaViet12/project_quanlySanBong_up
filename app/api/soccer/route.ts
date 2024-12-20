@@ -24,22 +24,22 @@ export async function GET(req: NextRequest) {
     const updatedFields = fields.map((field) => {
       // Kiểm tra mỗi price trong bảng Price
       const updatedPrices = field.Price.map((price) => {
-        const { timeslot, status } = price; // Giải nén thông tin timeslot và status của Price
+        const { timeslot } = price; // Giải nén thông tin timeslot và status của Price
         const endTime = new Date(timeslot.end_time);
 
         // Logic xử lý trạng thái
         let updatedStatus: boolean;
 
-        if (endTime < nowVN && status === "DADAT") {
+        if (endTime < nowVN && price.status === "DADAT") {
           updatedStatus = false; // Quá giờ hiện tại và đã đặt
-        } else if (endTime >= nowVN && status === "TRONG") {
+        } else if (endTime >= nowVN && price.status === "TRONG") {
           updatedStatus = true; // Chưa qua giờ hiện tại và còn trống
         } else {
           updatedStatus = false; // Trạng thái mặc định khác (nếu không thỏa điều kiện)
         }
 
         return {
-          id: timeslot.id,
+          id: price.id,
           name: timeslot.name,
           startTime: timeslot.start_time,
           endTime: timeslot.end_time,
