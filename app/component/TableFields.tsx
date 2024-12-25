@@ -104,9 +104,13 @@ const TableFields: React.FC<TableDashboardProps> = ({onDelete,onEdit,reloadKey})
                             <td>{field.name}</td>
                             <td>{field.fieldType}</td>
                             <td>{field.status}</td>
-                            <td>{field.image}</td>
+                            <td>
+                              <div className='flex justify-center'>
+                                <img src={field.image} alt={field.name} className='w-12 h-12 object-cover rounded' />
+                              </div>
+                            </td>
                             <td>{field.description}</td>
-                            <td className='flex gap-1'>
+                            <td className='flex gap-1 justify-center items-center'>
                                 <button type='submit' className='bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700' onClick={()=> onEdit(field)}>
                                     Sửa
                                 </button>

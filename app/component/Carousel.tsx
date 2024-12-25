@@ -3,7 +3,7 @@ import React from 'react'
 const Carousel = () => {
   return (
     <div>
-        <div className="carousel w-full relative">
+        <div className="carousel w-full relative rounded-xl">
           <div id="slide1" className="carousel-item relative w-full">
             <img
               src="https://images.pexels.com/photos/262524/pexels-photo-262524.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"

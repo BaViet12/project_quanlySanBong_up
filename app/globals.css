@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Karla:ital,wght@0,200..800;1,200..800&family=Outfit:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,4 +19,10 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.nav-item {
+  @apply hover:text-red-600 relative after:absolute after:bottom-0 after:left-0 after:bg-orange-500 
+    after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out 
+    after:duration-300 text-base text-gray-600  cursor-pointer;
 }

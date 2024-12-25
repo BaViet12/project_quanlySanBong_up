@@ -96,7 +96,7 @@ const ListFields:React.FC = () => {
               className='w-[500px] h-[300px] rounded-xl shadow-lg' 
             />
             <div className='flex flex-col gap-10'>
-              <h1 className='text-6xl font-black'>{selectedField.name}</h1>
+              <h1 className='text-7xl font-semi'>{selectedField.name}</h1>
               <p>
                 <strong>Thể loại:</strong> sân bóng {selectedField.fieldType} người
               </p>
@@ -131,7 +131,9 @@ const ListFields:React.FC = () => {
                   onClick={()=>setSelectedTimeSlot(slot)}
                   className={clsx(
                     "px-4 py-2 rounded-lg hover:bg-orange-600",
-                    slot.status
+                    selectedTimeSlot?.id === slot.id
+                    ? "bg-yellow-500 text-white"
+                    :slot.status
                       ? "bg-blue-500 hover:bg-blue-600 text-white"
                       : "bg-gray-400 cursor-not-allowed text-gray-700"
                     )}
@@ -143,7 +145,7 @@ const ListFields:React.FC = () => {
               }
             </div> 
                 <button
-                  className="mt-6 ml-[1400px] px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                  className="mt-6 whitespace-nowrap ml-[1200px] px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
                   onClick={() => setSelectedField(null)}
                 >
                   Quay lại
@@ -151,10 +153,10 @@ const ListFields:React.FC = () => {
           </div>
           {/* Thông tin khung giờ */}
           {selectedTimeSlot && (
-              <div className="w-[500px] mt-4 border rounded-lg bg-gray-50 flex flex-col gap-3 p-10 ml-48">
-                  <h4 className="text-xl font-bold">Thông tin khung giờ</h4>
-                  <p className="">
-                    <strong>Khung giờ: </strong> {selectedTimeSlot.name}
+              <div className="w-[1200px] mt-4  rounded-lg bg-gray-50 flex flex-col gap-3 p-10 ml-48">
+                  <h4 className="text-xl font-semi">Thông tin khung giờ</h4>
+                  <p>
+                    <strong >Khung giờ: </strong> {selectedTimeSlot.name}
                   </p>
                   <p>
                     <strong>Giá: </strong> {selectedTimeSlot.price.toLocaleString()} VNĐ
@@ -175,16 +177,14 @@ const ListFields:React.FC = () => {
               </div>   
             
           )}
-        </div>
-
-        
+        </div>        
       ) : (
         <div className='w-full h-auto px-[100px]'>
-          <h1 className='text-4xl font-bold mb-10'>Danh sách sân bóng</h1>
-          <div className='flex gap-44 pb-10'>
+          <h1 className='text-5xl font-bold mb-10'>Danh sách sân bóng</h1>
+          <div className='flex gap-20 pb-10 flex-wrap pt-10'>
             {fields.map((field) => (
               <div key={field.id}
-              className='flex gap-5 flex-wrap'
+              className='flex gap-10 p-10 flex-wrap hover:border-2  w-[1200px]'
               onClick={()=>setSelectedField(field)}
               >
                 <div>
@@ -195,7 +195,7 @@ const ListFields:React.FC = () => {
                   />
                 </div>
                 <div className='flex flex-col gap-3'>
-                  <h1 className='font-semi text-6xl'>{field.name}</h1>
+                  <h1 className='font-semibold text-6xl'>{field.name}</h1>
                   <p className='font-semi text-lg'>Sân bóng đá {field.fieldType} người</p>
                   <p 
                     className={clsx(

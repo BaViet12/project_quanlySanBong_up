@@ -9,13 +9,11 @@ import Footer from "./component/Footer";
 
 export default function Home() {
   return (
-    <div>
+    <div className="max-w-screen-2xl mx-auto">
       <Navbar></Navbar>
       <Carousel></Carousel>
       <Intro></Intro>
-      {/* <ListFieldsText></ListFieldsText> */}
       <ListFields></ListFields>
-      {/* <TimeSlot></TimeSlot> */}
       <Footer></Footer>
     </div>
   );

@@ -8,6 +8,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        Karla: ["Karla", "serif"],
+        DmSan: ["DM Sans", "serif"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
