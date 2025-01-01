@@ -1,14 +1,22 @@
-import React from 'react'
+"use client"
+import React, { useState } from 'react'
 import Link from 'next/link';
+import { TiThMenuOutline } from "react-icons/ti";
 
 const Navbar = () => {
+   const [isMenuOpen,setIsMenuOpen] = useState(false);
+   
+   const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+   }
+
   return (
-    <div className='pt-5'>
-        <div className='flex justify-between justify-items-center h-16 w-full pb-5'>
-            <div className='basic-2/6'>
+    <div className='pt-5 relative'>
+        <div className='flex justify-around items-center h-16 w-full pb-5'>
+            <div className='basic-2/6 '>
                 <img className='w-52 ml-10 cursor-pointer' src="https://cdn0021.imgtaothao.com/media/logo/logo-datsantructuyen.png" alt="logo" />
             </div>
-            <div className="flex items-center w-full max-w-md mx-auto bg-gray-100 rounded-md px-4 py-2 shadow-md basis-3/6/">
+            <div className="hidden lg:flex items-center w-full max-w-md mx-auto bg-gray-100 rounded-md px-4 py-2 shadow-md basis-3/6/">
                 <input
                     type="text"
                     placeholder="Từ khóa tìm kiếm"
@@ -31,14 +39,17 @@ const Navbar = () => {
                     </svg>
                 </button>
             </div>
-            <ul className='flex gap-5 mr-10 basis-1/6 uppercase'>
-                <li className='nav-item'>Đăng nhập</li>
-                <li className='nav-item'>Đăng ký  </li>
+            <ul  className='hidden lg:flex gap-5 mr-10 basis-1/6 uppercase'>
+                <li className='nav-item whitespace-nowrap'>Đăng nhập</li>
+                <li className='nav-item whitespace-nowrap'>Đăng ký  </li>
             </ul>
-        </div>
-        <div className='w-full flex justify-around items-center bg-white text-black z-10 pb-3 pt-3'>
-            <nav>
-                <ul className=" flex gap-44 uppercase">
+            <div  className='lg:hidden' onClick={toggleMenu}>
+                <TiThMenuOutline className='size-5'/>
+            </div>
+        </div> 
+        <div className={`lg:flex flex-col lg:flex-row justify-around items-center bg-white text-black z-10 pb-3 pt-3 ${isMenuOpen? "block" : "hidden"}`}>
+            <nav className=''>
+                <ul className="flex flex-col lg:flex-row items-center flex-wrap gap-10 lg:gap-44  uppercase z-50 tqd-topmenu">
                     <li className="nav-item">Sân bóng đá 7 người</li>
                     <li className="nav-item">Sân bóng đá 5 người</li>
                     <li className="nav-item">

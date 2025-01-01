@@ -26,3 +26,11 @@ body {
     after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out 
     after:duration-300 text-base text-gray-600  cursor-pointer;
 }
+.tqd-topmenu {
+  @apply absolute top-24 z-50 w-full bg-white;
+}
+  @media (min-width: 1024px) {
+    .tqd-topmenu {
+      @apply static; /* Đặt menu ở trạng thái bình thường (màn hình lớn) */
+    }
+  }
