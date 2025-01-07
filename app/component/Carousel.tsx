@@ -2,7 +2,7 @@ import React from 'react'
 
 const Carousel = () => {
   return (
-    <div>
+    <div className='px-10 py-2'>
         <div className="carousel w-full relative rounded-xl">
           <div id="slide1" className="carousel-item relative w-full">
             <img

@@ -2,7 +2,7 @@ import React from 'react'
 
 const NvarbarAdmin = () => {
   return (
-    <div className="navbar bg-green-900 w-full">
+    <div className="navbar w-full bg-gray-400 rounded-lg ">
         <div className="flex-none">
             <button className="btn btn-square btn-ghost text-white">
             <svg
@@ -19,7 +19,7 @@ const NvarbarAdmin = () => {
             </button>
         </div>
         <div className="flex-1">
-            <a className="btn btn-ghost text-xl text-white">Sân Bóng Đình Làng Hòa Mỹ</a>
+            <a className="btn btn-ghost text-xl text-black font-Karla">Sân Bóng Đình Làng Hòa Mỹ</a>
         </div>
         <div className="flex-none">
             <button className="btn btn-square btn-ghost text-white">

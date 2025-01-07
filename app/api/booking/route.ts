@@ -71,6 +71,7 @@ export async function GET(Request: NextRequest) {
 export async function POST(Request: NextRequest) {
   try {
     const body = await Request.json();
+    console.log("Request body:", body);
 
     // Kiểm tra tồn tại khung giờ (price)
     const price = await prisma.price.findUnique({
@@ -80,13 +81,13 @@ export async function POST(Request: NextRequest) {
     console.log("Gio ", body.price_id);
 
     if (!price) {
+      console.error("Khung giờ không tồn tại:", body.price_id);
       return NextResponse.json(
         { message: "Khung giờ không tồn tại" },
         { status: 400 }
       );
     }
-    console.log("Cập nhật trạng thái khung giờ trước:", price.status);
-
+  
     // Kiểm tra trạng thái khung giờ
     if (price.status === "DADAT") {
       return NextResponse.json(
@@ -94,7 +95,6 @@ export async function POST(Request: NextRequest) {
         { status: 400 }
       );
     }
-
     // Sử dụng giao dịch để đảm bảo đồng bộ dữ liệu
     const [newBooking, updatedPrice] = await prisma.$transaction([
       // Tạo booking mới
@@ -107,22 +107,19 @@ export async function POST(Request: NextRequest) {
             connect: { id: Number(body.price_id) },
           },
           total_price: body.total_price,
-          status: body.status || "CHUAXACNHAN", // Gán mặc định nếu không có
+          status: body.status || "CHUAXACNHAN",
           created_at: new Date(),
         },
       }),
       // Cập nhật trạng thái khung giờ
       prisma.price.update({
         where: { id: Number(body.price_id) },
-
         data: {
           status: "DADAT",
         },
       }),
     ]);
-
     console.log("Cập nhật trạng thái khung giờ sau:", updatedPrice.status);
-
     // Trả về thông tin booking
     return NextResponse.json(
       { newBooking, message: "Đặt sân thành công" },

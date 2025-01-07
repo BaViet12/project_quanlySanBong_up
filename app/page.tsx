@@ -13,7 +13,8 @@ export default function Home() {
       <Navbar></Navbar>
       <Carousel></Carousel>
       <Intro></Intro>
-      <ListFields></ListFields>
+      <ListFieldsText></ListFieldsText>
+      {/* <ListFields></ListFields> */}
       <Footer></Footer>
     </div>
   );

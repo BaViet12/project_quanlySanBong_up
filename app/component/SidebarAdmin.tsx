@@ -36,10 +36,10 @@ const SidebarAdmin:React.FC = () => {
     router.push(href);
   };
   return (
-    <div className='flex flex-col h-full w-72 bg-green-900 fixed'>
-        <div className="collapse collapse-arrow w-64 m-6 bg-green-900">
+    <div className='flex flex-col h-full w-72 fixed'>
+        <div className="collapse collapse-arrow w-64 m-6 bg-slate-400">
           <input type="checkbox" name="my-accordion-2" />
-            <div className="collapse-title text-white text-base text-center mb-2  font-medium">
+            <div className="collapse-title text-black flex justify-center font-medium">
               Quản Lý
             </div>
             <div className="collapse-content">
@@ -51,10 +51,10 @@ const SidebarAdmin:React.FC = () => {
                       className={`block pl-7 pr-7 py-2 rounded-lg transition-colors ${
                         isActivePath(link.href)
                           ? "bg-green-800 text-white"
-                          : "text-gray-300 hover:bg-slate-800 hover:text-white"
+                          : "text-black hover:bg-green-900 hover:text-white"
                       }`}
                     >
-                    <div className="absolute left-9  ">{link.icon}</div> 
+                    <div className="absolute left-9">{link.icon}</div> 
                     <div className="text-lg">{link.label}</div>
                     </button>
                   </li>

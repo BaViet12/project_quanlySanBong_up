@@ -5,13 +5,11 @@ import { TiThMenuOutline } from "react-icons/ti";
 
 const Navbar = () => {
    const [isMenuOpen,setIsMenuOpen] = useState(false);
-   
    const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
    }
-
   return (
-    <div className='pt-5 relative'>
+    <div className='relative py-6 mx-10'>
         <div className='flex justify-around items-center h-16 w-full pb-5'>
             <div className='basic-2/6 '>
                 <img className='w-52 ml-10 cursor-pointer' src="https://cdn0021.imgtaothao.com/media/logo/logo-datsantructuyen.png" alt="logo" />
