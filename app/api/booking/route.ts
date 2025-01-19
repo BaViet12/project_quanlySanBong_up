@@ -87,7 +87,7 @@ export async function POST(Request: NextRequest) {
         { status: 400 }
       );
     }
-  
+
     // Kiểm tra trạng thái khung giờ
     if (price.status === "DADAT") {
       return NextResponse.json(

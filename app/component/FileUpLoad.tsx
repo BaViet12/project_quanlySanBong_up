@@ -1,27 +1,28 @@
-"use client"
-import React from 'react'
+"use client";
+import React from "react";
 
-import { UploadDropzone } from '../lib/uploadthing';
-import { ourFileRouter } from '../api/uploadthing/core';
+import { UploadDropzone } from "../lib/uploadthing";
+import { ourFileRouter } from "../api/uploadthing/core";
 
 interface FileUploadProps {
-    onChange: (url?: string) => void;
-    endpoint: keyof typeof ourFileRouter;
-    showUpload: boolean;
+  onChange: (url?: string) => void;
+  endpoint: keyof typeof ourFileRouter;
+  showUpload: boolean;
 }
-export const FileUpLoad = ({ onChange, endpoint, showUpload }: FileUploadProps) => {
-  return (
-    showUpload ? ( 
-        <UploadDropzone
-            endpoint={endpoint}
-            onClientUploadComplete={(res)=>{
-                onChange(res?.[0].url);
-                
-            }}
-            onUploadError={(error: Error)=>{
-                alert(`ERROR! ${error.message}`);
-            }}
-        />
-    ):null
-  )
-}
+export const FileUpLoad = ({
+  onChange,
+  endpoint,
+  showUpload,
+}: FileUploadProps) => {
+  return showUpload ? (
+    <UploadDropzone
+      endpoint={endpoint}
+      onClientUploadComplete={(res) => {
+        onChange(res?.[0].url);
+      }}
+      onUploadError={(error: Error) => {
+        alert(`ERROR! ${error.message}`);
+      }}
+    />
+  ) : null;
+};
