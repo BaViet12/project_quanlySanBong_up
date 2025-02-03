@@ -40,17 +40,19 @@ const SidebarAdmin: React.FC = () => {
   };
   return (
     <div className="flex flex-col h-full w-72 fixed items-center">
-      <p className="w-64 flex justify-center text-black font-medium bg-slate-400 rounded-xl p-4 my-4 gap-2">
-        <Link href={"/admin"}>DashBoard</Link>
+      <p className="w-64 flex justify-center font-medium rounded-xl p-4 my-4 gap-2 border-2 border-gray-200 text-gray-700">
+        <Link className="" href={"/admin"}>
+          DashBoard
+        </Link>
         <span>
-          <IoHome className="text-xl" />
+          <IoHome className="text-xl " />
         </span>
       </p>
 
-      <div className="collapse collapse-arrow w-64 bg-slate-400">
+      <div className="collapse collapse-arrow w-64 border-2 border-gray-200">
         <input type="checkbox" name="my-accordion-2" />
-        <div className="collapse-title text-black flex justify-center font-medium">
-          Quản Lý
+        <div className="collapse-title text-gray-700 flex justify-center font-medium ">
+          <div>Quản Lý</div>
         </div>
         <div className="collapse-content">
           <ul className="">
@@ -60,8 +62,8 @@ const SidebarAdmin: React.FC = () => {
                   onClick={() => handleNavigation(link.href)}
                   className={`block pl-7 pr-7 py-2 rounded-lg transition-colors ${
                     isActivePath(link.href)
-                      ? "bg-green-800 text-white"
-                      : "text-black hover:bg-green-900 hover:text-white"
+                      ? "bg-gray-800 text-white"
+                      : "text-gray-700 hover:bg-green-900 hover:text-white"
                   }`}
                 >
                   <div className="absolute left-9">{link.icon}</div>

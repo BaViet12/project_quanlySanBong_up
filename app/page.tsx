@@ -3,8 +3,7 @@ import Navbar from "./component/Nvarbar";
 import Carousel from "./component/Carousel";
 import Intro from "./component/Intro";
 import ListFields from "./component/ListFields";
-import TimeSlot from "./component/TimeSlot";
-import ListFieldsText from "./component/ListFieldsText";
+import Fields from "./component/Fields";
 import Footer from "./component/Footer";
 
 export default function Home() {
@@ -13,8 +12,7 @@ export default function Home() {
       <Navbar></Navbar>
       <Carousel></Carousel>
       <Intro></Intro>
-      <ListFieldsText></ListFieldsText>
-      {/* <ListFields></ListFields> */}
+      <Fields></Fields>
       <Footer></Footer>
     </div>
   );

@@ -92,10 +92,10 @@ model ThanhToan {
   booking_id     Int
   transaction_id String        @unique
   totalprice     Decimal       @db.Decimal(10, 2)
+  deposit        Decimal?      @db.Decimal(10, 2)
   status         PaymentStatus
   method         PaymentMethod
   created_at     DateTime      @default(now())
-
   booking Booking @relation(fields: [booking_id], references: [id])
 }
 

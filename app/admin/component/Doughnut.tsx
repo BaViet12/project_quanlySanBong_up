@@ -77,7 +77,7 @@ export default function BarChart() {
   }, []);
   return (
     <div className="">
-      <h1 className="text-center">Thống kê sân bóng</h1>
+      <h1 className="text-center text-lg">Thống kê sân bóng</h1>
       <Doughnut data={chartData}></Doughnut>
     </div>
   );

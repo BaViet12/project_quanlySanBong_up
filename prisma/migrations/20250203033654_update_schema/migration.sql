@@ -29,8 +29,9 @@ CREATE TABLE `VaiTro_Quyen` (
 CREATE TABLE `Fields` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(45) NOT NULL,
-    `field_type` ENUM('5', '7') NOT NULL,
+    `field_type` INTEGER NOT NULL,
     `status` ENUM('BAOTRI', 'HOATDONG') NOT NULL,
+    `HinhAnh` VARCHAR(255) NULL,
     `MoTa` LONGTEXT NULL,
     `update_at` TIMESTAMP NOT NULL,
 
@@ -39,15 +40,27 @@ CREATE TABLE `Fields` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Price` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(45) NOT NULL,
+    `field_id` INTEGER NOT NULL,
+    `timeslot_id` INTEGER NOT NULL,
+    `price` DECIMAL(10, 2) NOT NULL,
+    `update_at` TIMESTAMP NOT NULL,
+    `status` ENUM('TRONG', 'DADAT') NOT NULL,
+
+    UNIQUE INDEX `Price_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `Timeslot` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `field_id` INTEGER NOT NULL,
-    `start_time` TIME NOT NULL,
-    `end_time` TIME NOT NULL,
-    `price` DECIMAL(10, 2) NOT NULL,
-    `status` ENUM('TRONG', 'DADAT') NOT NULL,
-    `update_at` TIMESTAMP NOT NULL,
+    `name` VARCHAR(45) NOT NULL,
+    `start_time` DATETIME NOT NULL,
+    `end_time` DATETIME NOT NULL,
 
+    UNIQUE INDEX `Timeslot_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -67,13 +80,26 @@ CREATE TABLE `User` (
 CREATE TABLE `Booking` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `user_id` INTEGER NOT NULL,
-    `field_id` INTEGER NOT NULL,
-    `time_slot_id` INTEGER NOT NULL,
-    `booking_date` DATE NOT NULL,
+    `price_id` INTEGER NOT NULL,
     `total_price` DECIMAL(10, 2) NOT NULL,
-    `status` ENUM('DANGXULY', 'DAXACNHAN', 'DAHUY') NOT NULL,
     `created_at` TIMESTAMP NOT NULL,
+    `status` ENUM('DANGXULY', 'DAXACNHAN', 'DAHUY') NOT NULL,
 
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `ThanhToan` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `booking_id` INTEGER NOT NULL,
+    `transaction_id` VARCHAR(191) NOT NULL,
+    `totalprice` DECIMAL(10, 2) NOT NULL,
+    `deposit` DECIMAL(10, 2) NULL,
+    `status` ENUM('DANGXULY', 'THANHCONG', 'THATBAI') NOT NULL,
+    `method` ENUM('MOMO', 'VNPAY', 'STRIPE', 'PAYPAL', 'TIENMAT') NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    UNIQUE INDEX `ThanhToan_transaction_id_key`(`transaction_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -84,7 +110,10 @@ ALTER TABLE `VaiTro_Quyen` ADD CONSTRAINT `VaiTro_Quyen_MaVaiTro_fkey` FOREIGN K
 ALTER TABLE `VaiTro_Quyen` ADD CONSTRAINT `VaiTro_Quyen_MaQuyen_fkey` FOREIGN KEY (`MaQuyen`) REFERENCES `Quyen`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Timeslot` ADD CONSTRAINT `Timeslot_field_id_fkey` FOREIGN KEY (`field_id`) REFERENCES `Fields`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Price` ADD CONSTRAINT `Price_field_id_fkey` FOREIGN KEY (`field_id`) REFERENCES `Fields`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Price` ADD CONSTRAINT `Price_timeslot_id_fkey` FOREIGN KEY (`timeslot_id`) REFERENCES `Timeslot`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `User` ADD CONSTRAINT `User_MaVaiTro_fkey` FOREIGN KEY (`MaVaiTro`) REFERENCES `VaiTro`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -93,7 +122,7 @@ ALTER TABLE `User` ADD CONSTRAINT `User_MaVaiTro_fkey` FOREIGN KEY (`MaVaiTro`) 
 ALTER TABLE `Booking` ADD CONSTRAINT `Booking_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Booking` ADD CONSTRAINT `Booking_field_id_fkey` FOREIGN KEY (`field_id`) REFERENCES `Fields`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Booking` ADD CONSTRAINT `Booking_price_id_fkey` FOREIGN KEY (`price_id`) REFERENCES `Price`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Booking` ADD CONSTRAINT `Booking_time_slot_id_fkey` FOREIGN KEY (`time_slot_id`) REFERENCES `Timeslot`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `ThanhToan` ADD CONSTRAINT `ThanhToan_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `Booking`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

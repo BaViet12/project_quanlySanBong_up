@@ -1,19 +1,31 @@
 import React from "react";
+import clsx from "clsx";
 import TimeSlotList from "./TimeSlotList";
-import BookingModal from "./BookingModal";
+import TimeSlotDetails from "./TimeSlotDetails";
+
+interface TimeSlot {
+  id: number;
+  name: string;
+  startTime: string;
+  endTime: string;
+  price: number;
+  status: boolean;
+}
+
+interface Field {
+  id: number;
+  name: string;
+  fieldType: string;
+  status: string;
+  image: string;
+  description: string;
+  timeslots: TimeSlot[];
+}
 
 interface FieldDetailsProps {
-  field: {
-    id: number;
-    name: string;
-    fieldType: string;
-    status: string;
-    image: string;
-    description: string;
-    timeslots: { id: number; name: string; status: boolean }[];
-  };
-  selectedTimeSlot: number | null;
-  onSelectTimeSlot: (timeSlotId: number) => void;
+  field: Field;
+  selectedTimeSlot: TimeSlot | null;
+  onSelectTimeSlot: (slot: TimeSlot) => void;
   onBack: () => void;
 }
 
@@ -23,8 +35,6 @@ const FieldDetails: React.FC<FieldDetailsProps> = ({
   onSelectTimeSlot,
   onBack,
 }) => {
-  const [showModal, setShowModal] = React.useState(false);
-
   return (
     <div>
       <div className="flex px-[200px] gap-5 md:flex-row">
@@ -39,28 +49,41 @@ const FieldDetails: React.FC<FieldDetailsProps> = ({
             <strong>Thể loại:</strong> sân bóng {field.fieldType} người
           </p>
           <p>
+            <strong>Trạng thái:</strong>{" "}
+            <span
+              className={clsx(
+                "font-semibold",
+                field.status === "HOATDONG" ? "text-green-500" : "text-red-500"
+              )}
+            >
+              {field.status === "HOATDONG"
+                ? "Hoạt động"
+                : field.status === "BAOTRI"
+                ? "Bảo trì"
+                : field.status}
+            </span>
+          </p>
+          <p>
             <strong>Mô tả:</strong> {field.description}
           </p>
         </div>
       </div>
 
-      {/* Time Slot List */}
       <div className="mt-6 px-[200px]">
         <TimeSlotList
-          timeSlots={field.timeslots}
+          timeslots={field.timeslots}
           selectedTimeSlot={selectedTimeSlot}
           onSelectTimeSlot={onSelectTimeSlot}
         />
         <button
-          className="mt-6 whitespace-nowrap ml-[900px] px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+          className="mt-6 whitespace-nowrap ml-[900px] px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-gray-600"
           onClick={onBack}
         >
           Quay lại
         </button>
       </div>
 
-      {/* Booking Modal */}
-      <BookingModal show={showModal} onClose={() => setShowModal(false)} />
+      {selectedTimeSlot && <TimeSlotDetails timeSlot={selectedTimeSlot} />}
     </div>
   );
 };
