@@ -84,19 +84,6 @@ model Booking {
   status      BookingStatus
   user        User          @relation(fields: [user_id], references: [id])
   price       Price         @relation(fields: [price_id], references: [id])
-  ThanhToan   ThanhToan[]
-}
-
-model ThanhToan {
-  id             Int           @id @default(autoincrement())
-  booking_id     Int
-  transaction_id String        @unique
-  totalprice     Decimal       @db.Decimal(10, 2)
-  deposit        Decimal?      @db.Decimal(10, 2)
-  status         PaymentStatus
-  method         PaymentMethod
-  created_at     DateTime      @default(now())
-  booking Booking @relation(fields: [booking_id], references: [id])
 }
 
 enum PaymentStatus {
