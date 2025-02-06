@@ -206,7 +206,7 @@ const fieldmanagement = () => {
                       <button
                         type="button"
                         onClick={() => setImageUrl("")}
-                        className="mt-2 px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                        className="mt-2 px-4 py-1 bg-black text-white rounded hover:bg-red-600"
                       >
                         Cancel
                       </button>

@@ -11,13 +11,9 @@ interface TimeSlot {
 
 interface TimeSlotDetailsProps {
   timeSlot: TimeSlot;
-  userId: number;
 }
 
-const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({
-  timeSlot,
-  userId,
-}) => {
+const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
   const [paymentMethod, setPaymentMethod] = useState<"full" | "deposit" | null>(
     null
   );
@@ -28,13 +24,13 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({
     bankName: "Ngân hàng An Bình",
     accountName: "Văn Bá Việt",
     accountNumber: "0762748624",
-    note: "Nội dung CK: đặt sân ..." + timeSlot.id,
+    note: "Nội dung CK: đặt sân...;Khung giờ " + timeSlot.name + "",
   };
 
   const handlePayment = (method: "full" | "deposit") => {
     setPaymentMethod(method);
     if (method === "full") {
-      setTotalPrice(timeSlot.price);
+      setTotalPrice(timeSlot.price * 1);
       setDeposit(0);
     } else if (method === "deposit") {
       setTotalPrice(timeSlot.price);
@@ -58,13 +54,14 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({
         >
           Đặt sân
         </button>
-        <dialog id="my_modal_3" className="modal">
-          <div className="modal-box">
+        <dialog id="my_modal_3" className="modal ">
+          <div className="modal-box ">
             <form method="dialog">
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                 ✕
               </button>
             </form>
+
             <div className="flex justify-center">
               <h3 className="font-bold text-lg py-2">
                 Chọn phương thức thanh toán
@@ -75,7 +72,7 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({
               {timeSlot.name}
             </p>
             <p className="font-Karla py-2">
-              <strong>Giá: </strong> {timeSlot.price.toLocaleString()} VNĐ
+              <strong>Giá: </strong> {timeSlot.price * 1} VNĐ
             </p>
             <p className="py-2">Bạn muốn thanh toán 100% hay đặt cọc 30% ?</p>
             <div className="flex justify-center gap-5">
@@ -93,22 +90,25 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({
               </button>
             </div>
             {paymentMethod && (
-              <div className="mt-4 text-center">
-                <h4 className="text-lg font-semibold py-2">
+              <div className="mt-4">
+                <h4 className="text-lg font-bold py-2 text-center">
                   Thông tin chuyển khoản
                 </h4>
                 <p className="py-2">
                   <strong>Ngân hàng:</strong> {bankDetails.bankName}
                 </p>
-                <p className="py-2">
-                  <strong>Chủ tài khoản:</strong> {bankDetails.accountName}
-                </p>
-                <p className="py-2">
-                  <strong>Số tài khoản:</strong> {bankDetails.accountNumber}
-                </p>
+
                 <p className="py-2">
                   <strong>Nội dung chuyển khoản:</strong> {bankDetails.note}
                 </p>
+                <div className="flex justify-center rounded-r-xl">
+                  <img
+                    src="/QRCode.jpg"
+                    alt="anh QR"
+                    width={200}
+                    height={200}
+                  />
+                </div>
                 <p className="mt-2">
                   <strong>Số tiền cần thanh toán: </strong>
                   {paymentMethod === "full"

@@ -68,7 +68,6 @@ const FieldDetails: React.FC<FieldDetailsProps> = ({
           </p>
         </div>
       </div>
-
       <div className="mt-6 px-[200px]">
         <TimeSlotList
           timeslots={field.timeslots}

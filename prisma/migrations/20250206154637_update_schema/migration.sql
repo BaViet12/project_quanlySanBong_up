@@ -82,24 +82,12 @@ CREATE TABLE `Booking` (
     `user_id` INTEGER NOT NULL,
     `price_id` INTEGER NOT NULL,
     `total_price` DECIMAL(10, 2) NOT NULL,
+    `paid_amount` DECIMAL(10, 2) NOT NULL,
+    `payment_status` ENUM('DANGXULY', 'THANHCONG', 'THATBAI') NOT NULL,
+    `receipt_image` VARCHAR(255) NULL,
     `created_at` TIMESTAMP NOT NULL,
     `status` ENUM('DANGXULY', 'DAXACNHAN', 'DAHUY') NOT NULL,
 
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `ThanhToan` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `booking_id` INTEGER NOT NULL,
-    `transaction_id` VARCHAR(191) NOT NULL,
-    `totalprice` DECIMAL(10, 2) NOT NULL,
-    `deposit` DECIMAL(10, 2) NULL,
-    `status` ENUM('DANGXULY', 'THANHCONG', 'THATBAI') NOT NULL,
-    `method` ENUM('MOMO', 'VNPAY', 'STRIPE', 'PAYPAL', 'TIENMAT') NOT NULL,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-
-    UNIQUE INDEX `ThanhToan_transaction_id_key`(`transaction_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -123,6 +111,3 @@ ALTER TABLE `Booking` ADD CONSTRAINT `Booking_user_id_fkey` FOREIGN KEY (`user_i
 
 -- AddForeignKey
 ALTER TABLE `Booking` ADD CONSTRAINT `Booking_price_id_fkey` FOREIGN KEY (`price_id`) REFERENCES `Price`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `ThanhToan` ADD CONSTRAINT `ThanhToan_booking_id_fkey` FOREIGN KEY (`booking_id`) REFERENCES `Booking`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
