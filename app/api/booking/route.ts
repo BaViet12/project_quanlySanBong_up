@@ -1,4 +1,5 @@
 import prisma from "@/prisma/client";
+import { request } from "http";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(Request: NextRequest) {
@@ -55,6 +56,41 @@ export async function DELETE(Request: NextRequest) {
   } catch (error: any) {
     return NextResponse.json(
       { message: "Thất bại", error: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(Request: NextRequest) {
+  const body = await Request.json();
+  try {
+    const newBooking = await prisma.booking.create({
+      data: {
+        user_id: body.user_id,
+        price_id: body.price_id,
+        total_price: body.total_price,
+        paid_amount: body.paid_amount,
+        receipt_image: body.receipt_image,
+        payment_status: "DANGXULY",
+        status: "DANGXULY",
+        created_at: new Date(),
+      },
+    });
+    await prisma.price.update({
+      where: { id: body.price_id },
+      data: { status: "DADAT" },
+    });
+    return NextResponse.json({
+      message: "Đặt sân thành công! Đợi nhân viên xác nhận.",
+      newBooking,
+    });
+  } catch (error: any) {
+    console.error(error);
+    return NextResponse.json(
+      {
+        message: "Lỗi khi đặt sân",
+        error: error.message,
+      },
       { status: 500 }
     );
   }
