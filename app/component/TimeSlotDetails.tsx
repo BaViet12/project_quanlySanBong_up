@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FileUpLoad } from "./FileUpLoad";
 
 interface TimeSlot {
   id: number;
@@ -19,7 +20,9 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
   );
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [deposit, setDeposit] = useState<number>(0);
+  const [imageUrl, setImageUrl] = useState("");
 
+  const UserID = 1;
   const bankDetails = {
     bankName: "Ngân hàng An Bình",
     accountName: "Văn Bá Việt",
@@ -37,6 +40,39 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
       setDeposit(timeSlot.price * 0.3);
     }
   };
+
+  const handleBooking = async () => {
+    if (!imageUrl) {
+      alert("Vui lòng tải lên ảnh biên lai trước khi đặt sân.");
+      return;
+    }
+    try {
+      const response = await fetch("/api/booking", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: UserID,
+          price_id: timeSlot.id,
+          total_price: totalPrice,
+          paid_amount: paymentMethod === "full" ? totalPrice : deposit,
+          receipt_image: imageUrl,
+        }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error("Lỗi khi đặt sân:", error);
+      alert("Có lỗi xảy ra. Vui lòng thử lại.");
+    }
+  };
+
   return (
     <div className="w-[900px] mt-4 rounded-md border-2 flex flex-col gap-10 p-10 mx-auto">
       <h4 className="text-xl font-semibold text-center">Thông tin khung giờ</h4>
@@ -50,7 +86,9 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
       <div className="flex justify-center">
         <button
           className="p-2 rounded-lg w-[100px] bg-red-500 hover:bg-gray-600 text-white"
-          onClick={() => document.getElementById("my_modal_3").showModal()}
+          onClick={() => {
+            document.getElementById("my_modal_3").showModal();
+          }}
         >
           Đặt sân
         </button>
@@ -105,7 +143,7 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
                   <img
                     src="/QRCode.jpg"
                     alt="anh QR"
-                    width={200}
+                    width={300}
                     height={200}
                   />
                 </div>
@@ -116,10 +154,42 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
                     : deposit.toLocaleString()}{" "}
                   VNĐ
                 </p>
+                <div className="mt-2">
+                  <strong>Số tiền cần thanh toán: </strong>
+                  <FileUpLoad
+                    endpoint="imageUploader"
+                    onChange={(url) => setImageUrl(url || "")}
+                    showUpload={!imageUrl}
+                  />
+                  {imageUrl && (
+                    <div className="mt-2 flex flex-col items-center">
+                      <img
+                        src={imageUrl}
+                        alt="Uploaded"
+                        className="max-w-xs max-h-48"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setImageUrl("")}
+                        className="mt-2 px-4 py-1 bg-black text-white rounded hover:bg-red-600"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
+                </div>
                 <p className="text-sm text-gray-500 mt-2 py-2">
                   Vui lòng thanh toán theo thông tin trên và đợi 5 phút nhân
                   viên xác nhận.
                 </p>
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleBooking}
+                    className="mt-4 bg-blue-600 text-white rounded px-6 py-2"
+                  >
+                    Xác nhận đặt sân
+                  </button>
+                </div>
               </div>
             )}
           </div>

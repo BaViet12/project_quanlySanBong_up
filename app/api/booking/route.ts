@@ -4,9 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(Request: NextRequest) {
   try {
-    const Booking = await prisma.booking.findMany();
+    const BookingAPI = await prisma.booking.findMany();
     return NextResponse.json(
-      { Booking, message: "Các đơn đặt sân" },
+      { BookingAPI, message: "Các đơn đặt sân" },
       { status: 201 }
     );
   } catch (error: any) {
@@ -76,16 +76,16 @@ export async function POST(Request: NextRequest) {
         created_at: new Date(),
       },
     });
-    await prisma.price.update({
-      where: { id: body.price_id },
-      data: { status: "DADAT" },
-    });
+    // await prisma.price.update({
+    //   where: { id: body.price_id },
+    //   data: { status: "DADAT" },
+    // });
     return NextResponse.json({
       message: "Đặt sân thành công! Đợi nhân viên xác nhận.",
       newBooking,
     });
   } catch (error: any) {
-    console.error(error);
+    console.error("Error creating booking:", error);
     return NextResponse.json(
       {
         message: "Lỗi khi đặt sân",

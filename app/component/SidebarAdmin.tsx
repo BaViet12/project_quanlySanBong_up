@@ -19,6 +19,11 @@ const SidebarAdmin: React.FC = () => {
   const router = useRouter();
   const sidebarLink: SidebarLink[] = [
     {
+      icon: <GiReceiveMoney />,
+      href: "/admin/confirmbooking",
+      label: "Xác nhận đặt sân",
+    },
+    {
       icon: <TbSoccerField />,
       href: "/admin/fieldmanagement",
       label: "Quản lý Sân Bóng",
