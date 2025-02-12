@@ -76,10 +76,10 @@ export async function POST(Request: NextRequest) {
         created_at: new Date(),
       },
     });
-    // await prisma.price.update({
-    //   where: { id: body.price_id },
-    //   data: { status: "DADAT" },
-    // });
+    await prisma.price.update({
+      where: { id: body.price_id },
+      data: { status: "DADAT" },
+    });
     return NextResponse.json({
       message: "Đặt sân thành công! Đợi nhân viên xác nhận.",
       newBooking,

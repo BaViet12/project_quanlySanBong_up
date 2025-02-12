@@ -35,6 +35,56 @@ const TableBooking = () => {
         console.error("Error:", error);
       });
   }, []);
+
+  const handleConfirm = async (id: number) => {
+    try {
+      const respone = await fetch(`/api/booking/${id}`, {
+        method: "PATCH",
+        headers: {
+          "content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          payment_status: "THANHCONG",
+        }),
+      });
+      const result = await respone.json();
+      if (respone.ok) {
+        setBookingTable((prevState) =>
+          prevState.map((booking) =>
+            booking.id === id
+              ? { ...booking, payment_status: "THANHCONG", status: "DAXACNHAN" }
+              : booking
+          )
+        );
+        alert(result.message);
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error("Lỗi khi cập nhật trạng thái:", error);
+      alert("Có lỗi xảy ra. Vui lòng thử lại.");
+    }
+  };
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(`/api/booking/${id}`, {
+        method: "DELETE",
+      });
+      const result = await response.json();
+      if (response.ok) {
+        setBookingTable((prevState) =>
+          prevState.filter((booking) => booking.id !== id)
+        );
+        alert(result.message);
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error("Lỗi khi xóa booking:", error);
+      alert("Có lỗi xảy ra. Vui lòng thử lại.");
+    }
+  };
+
   return (
     <div className="space-x-4">
       <div className="overflow-x-auto flex justify-center w-full">
@@ -46,6 +96,7 @@ const TableBooking = () => {
               <th>Tổng tiền</th>
               <th>Đặt cọc</th>
               <th>Giao dịch</th>
+              <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -59,12 +110,25 @@ const TableBooking = () => {
                   <div className="flex justify-center">
                     <img
                       src={booking.receipt_image}
-                      className="w-20 h-28 object-cover rounded"
+                      className="w-15 h-12 object-cover rounded"
                     />
                   </div>
                 </td>
                 <td>
-                  <button>Xác nhận</button>
+                  <div className="flex gap-1 justify-center">
+                    <button
+                      onClick={() => handleConfirm(booking.id)}
+                      className="bg-green-800 rounded-sm p-2 w-[80px]  text-white hover:bg-blue-700"
+                    >
+                      Xác nhận
+                    </button>
+                    <button
+                      onClick={() => handleDelete(booking.id)}
+                      className="bg-green-800 rounded-sm p-2 w-[80px] text-white hover:bg-blue-700"
+                    >
+                      Xóa
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

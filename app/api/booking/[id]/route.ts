@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+import { parse } from "path";
 
 const prisma = new PrismaClient();
 
@@ -39,7 +40,7 @@ export async function PATCH(
     return NextResponse.json(
       {
         updateBooking,
-        message: "Đã cập nhật trạng thái",
+        message: "Đã xác nhận thành công",
       },
       { status: 201 }
     );
@@ -47,7 +48,42 @@ export async function PATCH(
     console.error(error);
     return NextResponse.json(
       {
-        message: "Lỗi khi cập nhật trạng thái",
+        message: "Lỗi khi xác nhận trạng thái",
+        error: error.message,
+      },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  Request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const BookingId = parseInt(params.id);
+
+  try {
+    const DeleteBookingID = await prisma.booking.delete({
+      where: { id: BookingId },
+    });
+    await prisma.price.update({
+      where: { id: DeleteBookingID.price_id },
+      data: {
+        status: "TRONG",
+      },
+    });
+    return NextResponse.json(
+      {
+        DeleteBookingID,
+        message: `Xóa thành công đơn đặt sân theo ID : ${params.id}`,
+      },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error(error);
+    return NextResponse.json(
+      {
+        message: "Lỗi khi hủy",
         error: error.message,
       },
       { status: 500 }

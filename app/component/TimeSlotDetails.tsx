@@ -21,6 +21,7 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [deposit, setDeposit] = useState<number>(0);
   const [imageUrl, setImageUrl] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const UserID = 1;
   const bankDetails = {
@@ -63,7 +64,13 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
 
       const result = await response.json();
       if (response.ok) {
-        alert(result.message);
+        setSuccessMessage(result.message); // Hiển thị thông báo thành công
+        setTimeout(() => {
+          const modal = document.getElementById(
+            "my_modal_3"
+          ) as HTMLDialogElement;
+          modal?.close(); // Đóng modal sau khi đặt sân thành công
+        }, 1000); // Đảm bảo thông báo có thời gian hiển thị trước khi đóng modal
       } else {
         alert(result.message);
       }
@@ -195,6 +202,11 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
           </div>
         </dialog>
       </div>
+      {successMessage && (
+        <div className="mt-4 text-green-600 text-center">
+          <strong>{successMessage}</strong>
+        </div>
+      )}
     </div>
   );
 };
