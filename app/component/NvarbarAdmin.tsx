@@ -1,4 +1,5 @@
 import React from "react";
+import { IoMdNotificationsOutline } from "react-icons/io";
 
 const NvarbarAdmin = () => {
   return (
@@ -26,6 +27,11 @@ const NvarbarAdmin = () => {
         </a>
       </div>
       <div className="flex-none">
+        <div>
+          <div className="text-3xl">
+            <IoMdNotificationsOutline />
+          </div>
+        </div>
         <button className="btn btn-square btn-ghost text-black">
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -1,16 +1,48 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { TiThMenuOutline } from "react-icons/ti";
+import { UserAuth } from "../types/auth";
+import { da } from "date-fns/locale";
+import { FaUserCircle } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<UserAuth | null>(null);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const response = await fetch("api/auth/session");
+        if (!response.ok) throw new Error("Failed to fetch session");
+        const data = await response.json();
+        console.log("Session data:", data);
+        setUser(data);
+      } catch (error) {
+        console.error("Failed to fetch session", error);
+        setUser(null);
+      }
+    };
+    fetchSession();
+  }, []);
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      setUser(null);
+
+      router.push("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
-    <div className="relative py-6 mx-10">
-      <div className="flex justify-around items-center h-16 w-full pb-5">
+    <div className="relative py-6 mx-10 ">
+      <div className="flex justify-between items-center h-16 w-full pb-5">
         <div className="basic-2/6 ">
           <img
             className="w-52 ml-10 cursor-pointer"
@@ -18,32 +50,46 @@ const Navbar = () => {
             alt="logo"
           />
         </div>
-        <div className="hidden lg:flex items-center w-full max-w-md mx-auto bg-gray-100 rounded-md px-4 py-2 shadow-md basis-3/6/">
-          <input
-            type="text"
-            placeholder="Từ khóa tìm kiếm"
-            className="flex-grow bg-transparent outline-none text-gray-700 placeholder-gray-400 text-lg"
-          />
-          <button className="text-green-800 hover:text-gray-700">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-7 h-7 "
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-4.35-4.35m0 0a7.5 7.5 0 1 0-10.6 0 7.5 7.5 0 0 0 10.6 0z"
-              />
-            </svg>
-          </button>
-        </div>
-        <ul className="hidden lg:flex gap-5 mr-10 basis-1/6 uppercase">
-          <li className="nav-item whitespace-nowrap font-Karla">Đăng nhập</li>
-          <li className="nav-item whitespace-nowrap font-Karla">Đăng ký </li>
+
+        <ul className="hidden lg:flex gap-5 font-Karla ">
+          {/* Hiển thị thông tin người dùng nếu đã đăng nhập */}
+          {user ? (
+            <li className="relative">
+              <div className="dropdown">
+                <div tabIndex={0} role="button" className="btn m-1 bg-white">
+                  <FaUserCircle className="text-xl" />
+                  <span>{user?.Hoten}</span>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                >
+                  <li>
+                    <a href="/profile">Profile</a>
+                  </li>
+                  <li>
+                    <a>
+                      <a href="/admin">Dashboard</a>
+                    </a>
+                  </li>
+                  <li>
+                    <a>
+                      <a onClick={handleLogout}>Logout</a>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          ) : (
+            <>
+              <li className="nav-item whitespace-nowrap font-Karla">
+                <Link href="/login">Đăng nhập</Link>
+              </li>
+              <li className="nav-item whitespace-nowrap font-Karla">
+                <Link href="/register">Đăng ký</Link>
+              </li>
+            </>
+          )}
         </ul>
         <div className="lg:hidden" onClick={toggleMenu}>
           <TiThMenuOutline className="size-5" />

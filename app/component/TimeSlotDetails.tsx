@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FileUpLoad } from "./FileUpLoad";
+
+import { UserAuth } from "../types/auth";
 
 interface TimeSlot {
   id: number;
@@ -15,6 +17,7 @@ interface TimeSlotDetailsProps {
 }
 
 const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
+  const [user, setUser] = useState<UserAuth | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"full" | "deposit" | null>(
     null
   );
@@ -23,7 +26,6 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const UserID = 1;
   const bankDetails = {
     bankName: "Ngân hàng An Bình",
     accountName: "Văn Bá Việt",
@@ -31,6 +33,21 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
     note: "Nội dung CK: đặt sân...;Khung giờ " + timeSlot.name + "",
   };
 
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const response = await fetch("api/auth/session");
+        if (!response.ok) throw new Error("Failed to fetch session");
+        const data = await response.json();
+        console.log("Session data:", data);
+        setUser(data);
+      } catch (error) {
+        console.error("Failed to fetch session", error);
+        setUser(null);
+      }
+    };
+    fetchSession();
+  }, []);
   const handlePayment = (method: "full" | "deposit") => {
     setPaymentMethod(method);
     if (method === "full") {
@@ -41,7 +58,6 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
       setDeposit(timeSlot.price * 0.3);
     }
   };
-
   const handleBooking = async () => {
     if (!imageUrl) {
       alert("Vui lòng tải lên ảnh biên lai trước khi đặt sân.");
@@ -54,7 +70,7 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: UserID,
+          user_id: user?.id,
           price_id: timeSlot.id,
           total_price: totalPrice,
           paid_amount: paymentMethod === "full" ? totalPrice : deposit,

@@ -1,4 +1,6 @@
+import { getSession } from "@/app/lib/auth";
 import prisma from "@/prisma/client";
+
 import { request } from "http";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -63,6 +65,7 @@ export async function DELETE(Request: NextRequest) {
 
 export async function POST(Request: NextRequest) {
   const body = await Request.json();
+  // const session = await getSession();
   try {
     const newBooking = await prisma.booking.create({
       data: {
@@ -76,10 +79,19 @@ export async function POST(Request: NextRequest) {
         created_at: new Date(),
       },
     });
+
     await prisma.price.update({
       where: { id: body.price_id },
       data: { status: "DADAT" },
     });
+
+    await prisma.notification.create({
+      data: {
+        message: `Đơn đặt sân mới từ user ID ${body.user_id}`,
+        user_id: body.user_id,
+      },
+    });
+
     return NextResponse.json({
       message: "Đặt sân thành công! Đợi nhân viên xác nhận.",
       newBooking,
@@ -89,7 +101,7 @@ export async function POST(Request: NextRequest) {
     return NextResponse.json(
       {
         message: "Lỗi khi đặt sân",
-        error: error.message,
+        error: error.message || "Không xác định lỗi ",
       },
       { status: 500 }
     );

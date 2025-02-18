@@ -129,7 +129,7 @@ const fieldmanagement = () => {
         <h1 className="text-2xl font-bold py-3">Quản Lý Sân Bóng</h1>
         <div className="mr-10">
           <button
-            className="btn bg-green-800"
+            className="btn bg-green-800 text-white"
             onClick={() => document.getElementById("my_modal_3").showModal()}
           >
             Thêm sân bóng
