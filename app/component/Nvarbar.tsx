@@ -1,19 +1,50 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { pusherClient } from "../lib/pusher";
 import { TiThMenuOutline } from "react-icons/ti";
 import { UserAuth } from "../types/auth";
 import { da } from "date-fns/locale";
 import { FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { CgProfile } from "react-icons/cg";
+import { GrDashboard } from "react-icons/gr";
+import { MdOutlineLogout } from "react-icons/md";
+import { IoIosNotifications } from "react-icons/io";
 
+interface Notification {
+  id: number;
+  message: string;
+  bookingDetails: {
+    id: number;
+    userName: string;
+    fieldName: string;
+    timeslot: string;
+    totalPrice: number;
+    status: string;
+  };
+}
 const Navbar = () => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<UserAuth | null>(null);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  useEffect(() => {
+    const channel = pusherClient.subscribe("notifications");
+
+    channel.bind("new-booking", (data: Notification) => {
+      setNotifications((prev) => [data, ...prev]);
+      setUnreadCount((prev) => prev + 1);
+    });
+
+    return () => {
+      pusherClient.unsubscribe("notifications");
+    };
+  }, []);
   useEffect(() => {
     const fetchSession = async () => {
       try {
@@ -28,7 +59,7 @@ const Navbar = () => {
       }
     };
     fetchSession();
-  }, []);
+  }, [notifications]);
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
@@ -41,8 +72,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className="relative py-6 mx-10 ">
-      <div className="flex justify-between items-center h-16 w-full pb-5">
+    <div className="relative pb-2 pt-3 mx-10 ">
+      <div className="flex justify-between items-center h-16 w-full pb-2">
         <div className="basic-2/6 ">
           <img
             className="w-52 ml-10 cursor-pointer"
@@ -55,29 +86,44 @@ const Navbar = () => {
           {/* Hiển thị thông tin người dùng nếu đã đăng nhập */}
           {user ? (
             <li className="relative">
-              <div className="dropdown">
-                <div tabIndex={0} role="button" className="btn m-1 bg-white">
-                  <FaUserCircle className="text-xl" />
-                  <span>{user?.Hoten}</span>
+              <div className="flex justify-center items-center gap-2">
+                <div className="dropdown">
+                  <div tabIndex={0} role="button" className="btn m-1 bg-white">
+                    <FaUserCircle className="text-xl" />
+                    <span>{user?.Hoten}</span>
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                  >
+                    <li>
+                      <div className="flex justify-around">
+                        <a href="/profile" className="text-lg">
+                          Profile
+                        </a>
+                        <CgProfile className="text-xl" />
+                      </div>
+                    </li>
+                    {user.vaitro?.Ten === "Admin" && (
+                      <li>
+                        <div className="flex justify-around">
+                          <a href="/admin " className="text-lg">
+                            Dashboard
+                          </a>
+                          <GrDashboard className="text-xl" />
+                        </div>
+                      </li>
+                    )}
+                    <li>
+                      <div className="flex justify-around">
+                        <a onClick={handleLogout} className="text-lg">
+                          Logout
+                        </a>
+                        <MdOutlineLogout className="text-xl" />
+                      </div>
+                    </li>
+                  </ul>
                 </div>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
-                >
-                  <li>
-                    <a href="/profile">Profile</a>
-                  </li>
-                  <li>
-                    <a>
-                      <a href="/admin">Dashboard</a>
-                    </a>
-                  </li>
-                  <li>
-                    <a>
-                      <a onClick={handleLogout}>Logout</a>
-                    </a>
-                  </li>
-                </ul>
               </div>
             </li>
           ) : (

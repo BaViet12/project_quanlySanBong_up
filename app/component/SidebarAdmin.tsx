@@ -5,16 +5,35 @@ import { IoTimerOutline } from "react-icons/io5";
 import { GiReceiveMoney } from "react-icons/gi";
 import { IoHome } from "react-icons/io5";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { pusherClient } from "../lib/pusher";
+import { toast, ToastContainer } from "react-toastify";
 
 interface SidebarLink {
   icon: React.ReactElement;
   href: string;
   label: string;
 }
-
+interface Notification {
+  id: number;
+  message: string;
+  bookingDetails: {
+    id: number;
+    userName: string;
+    fieldName: string;
+    timeslot: string;
+    totalPrice: number;
+    status: string;
+  };
+}
 const SidebarAdmin: React.FC = () => {
+  const isActivePath = (path: string) => pathname === path;
+  const handleNavigation = (href: string) => {
+    router.push(href);
+  };
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
   const sidebarLink: SidebarLink[] = [
@@ -39,20 +58,36 @@ const SidebarAdmin: React.FC = () => {
       label: "Quản lý Giá",
     },
   ];
-  const isActivePath = (path: string) => pathname === path;
-  const handleNavigation = (href: string) => {
-    router.push(href);
-  };
+  useEffect(() => {
+    // Subscribe to Pusher channel
+    const channel = pusherClient.subscribe("notifications");
+
+    channel.bind("new-booking", (data: Notification) => {
+      setNotifications((prev) => [data, ...prev]);
+      setUnreadCount((prev) => prev + 1);
+      toast.success(
+        `New booking by ${data.bookingDetails.userName} for field ${data.bookingDetails.fieldName}`
+      );
+    });
+
+    // Cleanup
+    return () => {
+      pusherClient.unsubscribe("notifications");
+    };
+  }, []);
+
   return (
     <div className="flex flex-col h-full w-72 fixed items-center">
-      <p className="w-64 flex justify-center font-medium rounded-xl p-4 my-4 gap-2 border-2 border-gray-200 text-gray-700">
-        <Link className="" href={"/admin"}>
-          DashBoard
-        </Link>
-        <span>
-          <IoHome className="text-xl " />
-        </span>
-      </p>
+      <div>
+        <p className="w-64 flex justify-center font-medium rounded-xl p-4 my-4 gap-2 border-2 border-gray-200 text-gray-700">
+          <Link className="" href={"/admin"}>
+            DashBoard
+          </Link>
+          <span>
+            <IoHome className="text-xl " />
+          </span>
+        </p>
+      </div>
 
       <div className="collapse collapse-arrow w-64 border-2 border-gray-200">
         <input type="checkbox" name="my-accordion-2" />
@@ -78,6 +113,9 @@ const SidebarAdmin: React.FC = () => {
             ))}
           </ul>
         </div>
+      </div>
+      <div>
+        <ToastContainer autoClose={5000} />
       </div>
     </div>
   );

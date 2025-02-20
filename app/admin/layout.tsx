@@ -5,12 +5,13 @@ import { extractRouterConfig } from "uploadthing/server";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { ourFileRouter } from "../api/uploadthing/core";
 import Nvarbar from "../component/Nvarbar";
+import NavbarAdmin from "../component/NvarbarAdmin";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="hidden md:flex h-full w-full flex-col fixed inset-y-0 z-50">
-      <Nvarbar />
-      <div className="flex w-full bg-gray-50">
+      <NavbarAdmin></NavbarAdmin>
+      <div className="flex w-full bg-white min-h-screen">
         <aside className="w-72">
           <SidebarAdmin />
         </aside>

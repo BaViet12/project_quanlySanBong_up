@@ -14,7 +14,7 @@ export async function signUp(
   phone?: string
 ) {
   try {
-    // Check if user already exists
+    // Kiểm tra xem người dùng đã tồn tại chưa ?
     const existingUser = await prisma.user.findFirst({
       where: {
         OR: [{ email: email }, { UserName: UserName }],
@@ -22,18 +22,18 @@ export async function signUp(
     });
 
     if (existingUser) {
-      throw new Error("Email or username already exists");
+      throw new Error("Tên đăng nhập đã tồn tại");
     }
 
-    // Validate fullname
+    // Kiểm tra tên đăng nhập
     if (!Hoten || Hoten.trim() === "") {
-      throw new Error("Full name is required");
+      throw new Error("Yêu cầu nhập Họ tên");
     }
 
-    // Hash password
+    // Mã hóa mật khẩu
     const hashedPassword = await hash(MatKhau, 12);
 
-    // First, ensure the default role exists
+    // Cấu hình vai trò mặc định là 1 = Khách Hàng
     const defaultRole = await prisma.vaiTro.upsert({
       where: { id: 1 },
       update: {},
@@ -43,13 +43,13 @@ export async function signUp(
       },
     });
 
-    // Create the user with the confirmed default role
+    // Tạo người dùng mới vào database
     const user = await prisma.user.create({
       data: {
         UserName: UserName,
         email: email,
         MatKhau: hashedPassword,
-        Hoten: Hoten ? Hoten.trim() : "", // Ensure fullname is trimmed
+        Hoten: Hoten ? Hoten.trim() : "",
         phone: phone || "",
         MaVaiTro: defaultRole.id,
       },
@@ -59,7 +59,6 @@ export async function signUp(
         UserName: true,
         Hoten: true,
         phone: true,
-
         MaVaiTro: true,
         vaitro: {
           select: {
@@ -69,7 +68,6 @@ export async function signUp(
       },
     });
 
-    // Log the created user for debugging
     console.log("Created user:", user);
 
     return user;
@@ -94,7 +92,7 @@ export async function signUp(
       throw new Error("Invalid role assignment");
     }
 
-    throw error; // Throw the original error for better debugging
+    throw error;
   }
 }
 

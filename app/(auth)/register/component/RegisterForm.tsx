@@ -46,12 +46,14 @@ const RegisterForm = () => {
   return (
     <div className="flex gap-10 bg-gray-200 w-full min-h-screen items-center justify-center">
       <div className="flex items-center justify-center">
-        <img
-          src="https://cdn0021.imgtaothao.com/media/logo/logo-datsantructuyen.png"
-          alt="logo"
-          width={400}
-          height={400}
-        />
+        <a href="/" title="Về trang chủ">
+          <img
+            src="https://cdn0021.imgtaothao.com/media/logo/logo-datsantructuyen.png"
+            alt="logo"
+            width={400}
+            height={400}
+          />
+        </a>
       </div>
       <div className="flex justify-center items-center  flex-col gap-5 w-[600px]">
         <div className="flex flex-col gap-2">
