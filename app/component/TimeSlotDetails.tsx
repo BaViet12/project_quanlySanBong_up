@@ -115,70 +115,57 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
         >
           Đặt sân
         </button>
-        <dialog id="my_modal_3" className="modal ">
-          <div className="modal-box ">
+        <dialog id="my_modal_3" className="modal">
+          <div className="w-[1200px] bg-white p-2 h-[700px] rounded-lg">
             <form method="dialog">
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                 ✕
               </button>
             </form>
-
-            <div className="flex justify-center">
-              <h3 className="font-bold text-lg py-2">
+            <div className="flex justify-center py-2">
+              <h3 className="text-3xl font-bold">
                 Chọn phương thức thanh toán
               </h3>
             </div>
-            <p className="font-Karla py-2">
-              <strong>Khung giờ: </strong>
-              {timeSlot.name}
-            </p>
-            <p className="font-Karla py-2">
-              <strong>Giá: </strong> {timeSlot.price * 1} VNĐ
-            </p>
-            <p className="py-2">Bạn muốn thanh toán 100% hay đặt cọc 30% ?</p>
-            <div className="flex justify-center gap-5">
-              <button
-                className="bg-green-600 rounded-xl w-[100px] p-2"
-                onClick={() => handlePayment("full")}
-              >
-                100%
-              </button>
-              <button
-                className="bg-yellow-400 rounded-xl w-[100px] p-2"
-                onClick={() => handlePayment("deposit")}
-              >
-                30%
-              </button>
-            </div>
-            {paymentMethod && (
-              <div className="mt-4">
-                <h4 className="text-lg font-bold py-2 text-center">
-                  Thông tin chuyển khoản
-                </h4>
-                <p className="py-2">
-                  <strong>Ngân hàng:</strong> {bankDetails.bankName}
+            <div className="flex justify-center mt-10 px-5">
+              <div className="flex flex-col gap-5 w-[600px]">
+                <p className="text-xl">
+                  <strong>Khung giờ: </strong>
+                  {timeSlot.name}
                 </p>
-
-                <p className="py-2">
-                  <strong>Nội dung chuyển khoản:</strong> {bankDetails.note}
+                <p className="text-xl">
+                  <strong>Giá: </strong>
+                  {timeSlot.price}
                 </p>
-                <div className="flex justify-center rounded-r-xl">
-                  <img
-                    src="/QRCode.jpg"
-                    alt="anh QR"
-                    width={300}
-                    height={200}
-                  />
-                </div>
-                <p className="mt-2">
+                <p className="text-xl">
                   <strong>Số tiền cần thanh toán: </strong>
                   {paymentMethod === "full"
                     ? totalPrice.toLocaleString()
                     : deposit.toLocaleString()}{" "}
                   VNĐ
                 </p>
+
+                <div className="flex flex-col gap-5">
+                  <h1 className="text-xl font-bold">
+                    Bạn muốn thanh toán 100% hay đặt cọc 30% ?
+                  </h1>
+                  <div className="flex gap-10 ml-14">
+                    <button
+                      onClick={() => handlePayment("full")}
+                      className="btn w-[100px] bg-green-500 text-white"
+                    >
+                      100%
+                    </button>
+                    <button
+                      onClick={() => handlePayment("deposit")}
+                      className="btn w-[100px] bg-yellow-500 text-white"
+                    >
+                      30%
+                    </button>
+                  </div>
+                </div>
                 <div className="mt-2">
-                  <strong>Số tiền cần thanh toán: </strong>
+                  <h1 className="text-xl font-bold">Ảnh giao dịch ngân hàng</h1>
                   <FileUpLoad
                     endpoint="imageUploader"
                     onChange={(url) => setImageUrl(url || "")}
@@ -201,20 +188,24 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
                     </div>
                   )}
                 </div>
-                <p className="text-sm text-gray-500 mt-2 py-2">
-                  Vui lòng thanh toán theo thông tin trên và đợi 5 phút nhân
-                  viên xác nhận.
+              </div>
+              <div className="gap-2 flex flex-col w-[600px]">
+                <p className="text-xl">
+                  <strong>Nội dung chuyển khoản:</strong> {bankDetails.note}
                 </p>
-                <div className="flex justify-center">
-                  <button
-                    onClick={handleBooking}
-                    className="mt-4 bg-blue-600 text-white rounded px-6 py-2"
-                  >
-                    Xác nhận đặt sân
-                  </button>
+                <div className="flex justify-center rounded-r-xl">
+                  <img src="/QRCode.jpg" alt="anh QR" width={300} height={50} />
                 </div>
               </div>
-            )}
+            </div>
+            <div className="flex justify-center">
+              <button
+                onClick={handleBooking}
+                className="mt-4 bg-blue-600 text-white rounded px-6 py-2"
+              >
+                Xác nhận đặt sân
+              </button>
+            </div>
           </div>
         </dialog>
       </div>

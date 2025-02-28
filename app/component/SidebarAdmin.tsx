@@ -42,6 +42,11 @@ const SidebarAdmin: React.FC = () => {
       href: "/admin/confirmbooking",
       label: "Xác nhận đặt sân",
     },
+    // {
+    //   icon: <GiReceiveMoney />,
+    //   href: "/admin/confirmbooking",
+    //   label: "Sân đã xác nhận",
+    // },
     {
       icon: <TbSoccerField />,
       href: "/admin/fieldmanagement",

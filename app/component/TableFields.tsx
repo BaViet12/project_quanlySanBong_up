@@ -51,22 +51,6 @@ const TableFields: React.FC<TableDashboardProps> = ({
       });
   }, [currentPage, pageSize, reloadKey]);
 
-  // useEffect(() => {
-  //   fetch("/api/soccer")
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch data");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       console.log("Dữ liệu từ API Field", data.fields);
-  //       setSanTable(data.fields);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // }, [reloadKey]);
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };

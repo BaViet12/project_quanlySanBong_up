@@ -11,29 +11,36 @@ interface Booking {
   payment_status: string;
   receipt_image: string;
 }
-interface TableDashboardProps {
-  onEdit: (product: Booking) => void;
-  onDelete: (id: number) => void;
-  reloadKey: (id: number) => void;
+interface PhanTrang {
+  totalRecords: number;
+  totalPage: number;
+  page: number;
+  limit_size: number;
+  skip: number;
 }
 
 const TableBooking = () => {
   const [bookingTable, setBookingTable] = useState<Booking[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  const [phanTrang, setPhanTrang] = useState<PhanTrang | null>(null);
+  const [loading, setLoading] = useState(false);
+  const fetchBookingData = async () => {
+    try {
+      const response = await fetch("/api/booking");
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data = await response.json();
+      console.log("Dữ liệu từ API Field", data.BookingAPI);
+      setBookingTable(data.BookingAPI);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   useEffect(() => {
-    fetch("/api/booking")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Dữ liệu từ API Field", data.BookingAPI);
-        setBookingTable(data.BookingAPI);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+    fetchBookingData(); // Lần đầu tiên tải dữ liệu khi component mount
   }, []);
 
   const handleConfirm = async (id: number) => {
@@ -57,6 +64,7 @@ const TableBooking = () => {
           )
         );
         alert(result.message);
+        fetchBookingData();
       } else {
         alert(result.message);
       }
@@ -76,6 +84,7 @@ const TableBooking = () => {
           prevState.filter((booking) => booking.id !== id)
         );
         alert(result.message);
+        fetchBookingData();
       } else {
         alert(result.message);
       }

@@ -7,7 +7,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(Request: NextRequest) {
   try {
-    const BookingAPI = await prisma.booking.findMany();
+    const BookingAPI = await prisma.booking.findMany({
+      where: {
+        status: "DANGXULY",
+      },
+    });
     return NextResponse.json(
       { BookingAPI, message: "Các đơn đặt sân" },
       { status: 201 }
@@ -63,51 +67,6 @@ export async function DELETE(Request: NextRequest) {
     );
   }
 }
-
-// export async function POST(Request: NextRequest) {
-//   const body = await Request.json();
-//   // const session = await getSession();
-//   try {
-//     const newBooking = await prisma.booking.create({
-//       data: {
-//         user_id: body.user_id,
-//         price_id: body.price_id,
-//         total_price: body.total_price,
-//         paid_amount: body.paid_amount,
-//         receipt_image: body.receipt_image,
-//         payment_status: "DANGXULY",
-//         status: "DANGXULY",
-//         created_at: new Date(),
-//       },
-//     });
-
-//     await prisma.price.update({
-//       where: { id: body.price_id },
-//       data: { status: "DADAT" },
-//     });
-
-//     await prisma.notification.create({
-//       data: {
-//         message: `Đơn đặt sân mới từ user ID ${body.user_id}`,
-//         user_id: body.user_id,
-//       },
-//     });
-
-//     return NextResponse.json({
-//       message: "Đặt sân thành công! Đợi nhân viên xác nhận.",
-//       newBooking,
-//     });
-//   } catch (error: any) {
-//     console.error("Error creating booking:", error);
-//     return NextResponse.json(
-//       {
-//         message: "Lỗi khi đặt sân",
-//         error: error.message || "Không xác định lỗi ",
-//       },
-//       { status: 500 }
-//     );
-//   }
-// }
 
 export async function POST(Request: NextRequest) {
   const body = await Request.json();

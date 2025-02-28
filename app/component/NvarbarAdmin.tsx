@@ -59,7 +59,7 @@ const NavbarAdmin = () => {
       }
     };
     fetchSession();
-  }, [notifications]);
+  }, []);
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
@@ -75,15 +75,15 @@ const NavbarAdmin = () => {
     <div className="relative pb-2 pt-3 mx-10 ">
       <div className="flex justify-between items-center h-16 w-full pb-2">
         <div className="basic-2/6 ">
-          <img
-            className="w-52 ml-10 cursor-pointer"
-            src="https://cdn0021.imgtaothao.com/media/logo/logo-datsantructuyen.png"
-            alt="logo"
-          />
+          <a href="/">
+            <img
+              className="w-52 ml-10 cursor-pointer"
+              src="https://cdn0021.imgtaothao.com/media/logo/logo-datsantructuyen.png"
+              alt="logo"
+            />
+          </a>
         </div>
-
         <ul className="hidden lg:flex gap-5 font-Karla ">
-          {/* Hiển thị thông tin người dùng nếu đã đăng nhập */}
           {user ? (
             <li className="relative">
               <div className="flex justify-center items-center gap-2">
@@ -114,7 +114,6 @@ const NavbarAdmin = () => {
                             <div className="mt-2 text-sm text-gray-600">
                               <p>Khách: {notif.bookingDetails.userName}</p>
                               <p>Sân: {notif.bookingDetails.fieldName}</p>
-
                               <p>
                                 Giá:{" "}
                                 {notif.bookingDetails.totalPrice.toLocaleString()}

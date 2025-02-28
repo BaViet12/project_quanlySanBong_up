@@ -3,6 +3,8 @@ import TableFields from "@/app/component/TableFields";
 import React, { useEffect, useState } from "react";
 import { FileUpLoad } from "@/app/component/FileUpLoad";
 import { set } from "date-fns";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 interface FormDataField {
   name: string;
@@ -127,13 +129,14 @@ const fieldmanagement = () => {
     <div className="p-2 w-full h-full ml-7" data-theme="light">
       <div className="flex w-full justify-between items-center">
         <h1 className="text-2xl font-bold py-3">Quản Lý Sân Bóng</h1>
-        <div className="mr-10">
+        <div className="mr-32 flex gap-2">
           <button
             className="btn bg-green-800 text-white"
             onClick={() => document.getElementById("my_modal_3").showModal()}
           >
             Thêm sân bóng
           </button>
+
           <dialog id="my_modal_3" className="modal">
             <div className="modal-box">
               <form method="dialog">
@@ -232,6 +235,7 @@ const fieldmanagement = () => {
               </form>
             </div>
           </dialog>
+          <button className="btn bg-green-800 text-white">Export</button>
         </div>
       </div>
       <div className="mr-32">

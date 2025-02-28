@@ -11,6 +11,7 @@ import { CgProfile } from "react-icons/cg";
 import { GrDashboard } from "react-icons/gr";
 import { MdOutlineLogout } from "react-icons/md";
 import { IoIosNotifications } from "react-icons/io";
+import { FaCartArrowDown } from "react-icons/fa";
 
 interface Notification {
   id: number;
@@ -72,7 +73,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="relative pb-2 pt-3 mx-10 ">
+    <div className="relative pb-2 pt-3 ">
       <div className="flex justify-between items-center h-16 w-full pb-2">
         <div className="basic-2/6 ">
           <img
@@ -82,15 +83,16 @@ const Navbar = () => {
           />
         </div>
 
-        <ul className="hidden lg:flex gap-5 font-Karla ">
+        <ul className="hidden lg:flex gap-5 font-Karla items-center">
           {/* Hiển thị thông tin người dùng nếu đã đăng nhập */}
           {user ? (
-            <li className="relative">
+            <li className="relative flex justify-center items-center gap-5">
+              <FaCartArrowDown className="text-2xl hover:text-green-600" />
               <div className="flex justify-center items-center gap-2">
                 <div className="dropdown">
                   <div tabIndex={0} role="button" className="btn m-1 bg-white">
-                    <FaUserCircle className="text-xl" />
-                    <span>{user?.Hoten}</span>
+                    <FaUserCircle className="text-2xl" />
+                    <span className="text-base">{user?.Hoten}</span>
                   </div>
                   <ul
                     tabIndex={0}
@@ -98,10 +100,10 @@ const Navbar = () => {
                   >
                     <li>
                       <div className="flex justify-around">
-                        <a href="/profile" className="text-lg">
+                        <a href="/Profile" className="text-lg">
                           Profile
                         </a>
-                        <CgProfile className="text-xl" />
+                        <CgProfile className="text-2xl" />
                       </div>
                     </li>
                     {user.vaitro?.Ten === "Admin" && (
@@ -148,8 +150,12 @@ const Navbar = () => {
       >
         <nav className="">
           <ul className="flex flex-col lg:flex-row items-center flex-wrap gap-10 lg:gap-44  uppercase z-50 tqd-topmenu">
-            <li className="nav-item font-Karla">Sân bóng đá 7 người</li>
-            <li className="nav-item font-Karla">Sân bóng đá 5 người</li>
+            <li className="nav-item font-Karla">
+              <Link href={"/sanbay"}>Sân bóng đá 7 người</Link>
+            </li>
+            <li className="nav-item font-Karla">
+              <Link href={"/sannam"}>Sân bóng đá 5 người</Link>
+            </li>
             <li className="nav-item font-Karla">
               <Link href={"/shop"}>Mua sắm</Link>
             </li>

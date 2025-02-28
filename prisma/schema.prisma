@@ -72,15 +72,17 @@ model User {
   Hoten        String?   @db.VarChar(225)  
   phone        String?   @db.VarChar(15)
   email        String?   @db.VarChar(100)
-  MaVaiTro     Int
+  MaVaiTro     Int  
   vaitro       VaiTro?   @relation(fields: [MaVaiTro], references: [id])
   Bookings     Booking[]
+
 }
 
 model Booking {
   id              Int           @id @default(autoincrement())
   user_id         Int
   price_id        Int
+  cart_id         Int
   total_price     Decimal       @db.Decimal(10, 2)
   paid_amount     Decimal       @db.Decimal(10, 2)  // Số tiền khách đã thanh toán
   payment_status  PaymentStatus
@@ -90,6 +92,7 @@ model Booking {
   status          BookingStatus
   user            User          @relation(fields: [user_id], references: [id])
   price           Price         @relation(fields: [price_id], references: [id])
+
 }
 model Notification {
   id          Int      @id @default(autoincrement())
@@ -97,6 +100,7 @@ model Notification {
   user_id     Int      
   created_at  DateTime @default(now())
 }
+
 
 
 enum PaymentStatus {
