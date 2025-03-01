@@ -43,7 +43,7 @@ const Fields: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-auto h-auto p-4 mx-auto">
+    <div id="fields" className="w-auto h-auto p-4 mx-auto">
       {selectedField ? (
         <FieldDetails
           field={selectedField}

@@ -5,6 +5,7 @@ import { FileUpLoad } from "@/app/component/FileUpLoad";
 import { set } from "date-fns";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import Export from "./component/Export";
 
 interface FormDataField {
   name: string;
@@ -131,7 +132,7 @@ const fieldmanagement = () => {
         <h1 className="text-2xl font-bold py-3">Quản Lý Sân Bóng</h1>
         <div className="mr-32 flex gap-2">
           <button
-            className="btn bg-green-800 text-white"
+            className="btn text-white w-[200px] bg-gray-600"
             onClick={() => document.getElementById("my_modal_3").showModal()}
           >
             Thêm sân bóng
@@ -235,10 +236,10 @@ const fieldmanagement = () => {
               </form>
             </div>
           </dialog>
-          <button className="btn bg-green-800 text-white">Export</button>
         </div>
       </div>
       <div className="mr-32">
+        <Export></Export>
         <TableFields
           onEdit={handleEdit}
           onDelete={handleDelete}

@@ -38,7 +38,7 @@ const TableTimeSlot: React.FC<TableDashboardProps> = ({
     <div className="overflow-x-auto flex justify-center w-full">
       <table className="table w-full xl:ml-36 border-2 mt-14 text-center">
         <thead className="">
-          <tr className="bg-green-800 text-white text-sm">
+          <tr className="bg-gray-500 text-white text-sm">
             <th>Mã khung giờ</th>
             <th>Tên khung giờ</th>
             <th>Giờ bắt đầu</th>
@@ -56,13 +56,13 @@ const TableTimeSlot: React.FC<TableDashboardProps> = ({
               <td className="flex gap-1 justify-center">
                 <button
                   type="submit"
-                  className="bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700"
+                  className="bg-blue-800 rounded-sm px-1 text-white hover:bg-blue-700"
                   onClick={() => onEdit(timeslot)}
                 >
                   Sửa
                 </button>
                 <button
-                  className="bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700 "
+                  className="bg-red-800 rounded-sm px-1 text-white hover:bg-blue-700 "
                   onClick={() => onDelete(timeslot.id)}
                 >
                   Xóa

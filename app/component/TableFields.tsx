@@ -63,16 +63,15 @@ const TableFields: React.FC<TableDashboardProps> = ({
   };
 
   return (
-    <div className="space-x-4">
+    <div className="space-x-4 w-full">
       <div className="overflow-x-auto flex justify-center w-full">
         <table className="table w-full xl:ml-36 border-2 mt-14 text-center">
           <thead className="">
-            <tr className="bg-green-800 text-white text-sm">
+            <tr className="bg-gray-500 text-white text-sm">
               <th>Mã sân</th>
               <th>Tên sân</th>
               <th>Loại sân</th>
               <th>Trạng thái</th>
-              <th>Hình ảnh</th>
               <th>Mô tả</th>
               <th>Thao tác</th>
             </tr>
@@ -89,27 +88,18 @@ const TableFields: React.FC<TableDashboardProps> = ({
                   <td>{field.name}</td>
                   <td>{field.field_type}</td>
                   <td>{field.status}</td>
-                  <td>
-                    <div className="flex justify-center">
-                      <img
-                        src={field.HinhAnh}
-                        alt={field.name}
-                        className="w-14 h-16 object-cover rounded"
-                      />
-                    </div>
-                  </td>
                   <td>{field.MoTa}</td>
                   <td>
                     <div className="flex gap-1 justify-center">
                       <button
                         type="submit"
-                        className="bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700"
+                        className="bg-blue-800 rounded-sm px-1 text-white hover:bg-blue-700"
                         onClick={() => onEdit(field)}
                       >
                         Sửa
                       </button>
                       <button
-                        className="bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700"
+                        className="bg-red-800 rounded-sm px-1 text-white hover:bg-blue-700"
                         onClick={() => onDelete(field.id)}
                       >
                         Xóa
@@ -147,7 +137,7 @@ const TableFields: React.FC<TableDashboardProps> = ({
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-3 py-1 bg-green-800 text-white rounded hover:bg-blue-600 transition-colors disabled:bg-gray-300"
+              className="px-3 py-1 bg-gray-800 text-white rounded hover:bg-blue-600 transition-colors disabled:bg-gray-300"
             >
               Trước
             </button>

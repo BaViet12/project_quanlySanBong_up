@@ -48,7 +48,7 @@ const NavbarAdmin = () => {
   useEffect(() => {
     const fetchSession = async () => {
       try {
-        const response = await fetch("api/auth/session");
+        const response = await fetch("/api/auth/session");
         if (!response.ok) throw new Error("Failed to fetch session");
         const data = await response.json();
         console.log("Session data:", data);

@@ -49,23 +49,6 @@ const TablePrice: React.FC<TableDashboardProps> = ({
         console.error("Error", error);
       });
   }, [currentPage, pageSize, reloadKey]);
-
-  // useEffect(()=>{
-  //     fetch('/api/price')
-  //     .then((response) =>{
-  //         if(!response.ok) {
-  //             throw new Error('Failed to fetch data');
-  //         }
-  //         return response.json();
-  //     })
-  //     .then((data)=>{
-  //         console.log("Dữ liệu từ API Field",data.Soccer);
-  //         setPrice(data.Soccer);
-  //     })
-  //     .catch((error)=>{
-  //         console.error('Error:',error);
-  //     })
-  // },[reloadKey]);
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -81,7 +64,7 @@ const TablePrice: React.FC<TableDashboardProps> = ({
       <div className="overflow-x-auto flex justify-center scroll-m-10">
         <table className="table w-[1100px] xl:ml-36 border-2 mt-14 text-center">
           <thead className="">
-            <tr className="bg-green-800 text-white text-sm">
+            <tr className="bg-gray-500 text-white text-sm">
               <th>Mã giá</th>
               <th>Tên</th>
               <th>Mã sân</th>
@@ -103,13 +86,13 @@ const TablePrice: React.FC<TableDashboardProps> = ({
                 <td className="flex gap-1 justify-center">
                   <button
                     type="submit"
-                    className="bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700"
+                    className="bg-blue-800 rounded-sm px-1 text-white hover:bg-blue-700"
                     onClick={() => onEdit(pricemap)}
                   >
                     Sửa
                   </button>
                   <button
-                    className="bg-green-800 rounded-sm px-1 text-white hover:bg-blue-700 "
+                    className="bg-red-800 rounded-sm px-1 text-white hover:bg-blue-700 "
                     onClick={() => onDelete(pricemap.id)}
                   >
                     Xóa

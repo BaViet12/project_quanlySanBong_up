@@ -99,7 +99,7 @@ const TableBooking = () => {
       <div className="overflow-x-auto flex justify-center w-full">
         <table className="table w-full xl:ml-36 border-2 mt-14 text-center">
           <thead>
-            <tr className="bg-green-800 text-white text-sm">
+            <tr className="bg-gray-500 text-white text-sm">
               <th>Mã đơn hàng</th>
               <th>Mã khách hàng</th>
               <th>Tổng tiền</th>
@@ -127,13 +127,13 @@ const TableBooking = () => {
                   <div className="flex gap-1 justify-center">
                     <button
                       onClick={() => handleConfirm(booking.id)}
-                      className="bg-green-800 rounded-sm p-2 w-[80px]  text-white hover:bg-blue-700"
+                      className="bg-blue-800 rounded-sm p-2 w-[80px]  text-white hover:bg-blue-700"
                     >
                       Xác nhận
                     </button>
                     <button
                       onClick={() => handleDelete(booking.id)}
-                      className="bg-green-800 rounded-sm p-2 w-[80px] text-white hover:bg-blue-700"
+                      className="bg-red-800 rounded-sm p-2 w-[80px] text-white hover:bg-blue-700"
                     >
                       Xóa
                     </button>

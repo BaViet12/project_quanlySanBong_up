@@ -28,7 +28,7 @@ interface FieldListProps {
 const FieldList: React.FC<FieldListProps> = ({ fields, onSelectField }) => {
   return (
     <div className=" w-full  h-auto px-[20px]">
-      <h1 className="text-7xl mb-10 font-mono ">Danh sách sân bóng</h1>
+      <h1 className="text-5xl mb-10 font-mono ">Danh sách sân bóng</h1>
       <div className="flex gap-10 pb-10 justify-start flex-wrap pt-10 w-full">
         {fields.map((field) => (
           <div
@@ -44,8 +44,8 @@ const FieldList: React.FC<FieldListProps> = ({ fields, onSelectField }) => {
               />
             </div>
             <div className="flex flex-col gap-3 justify-center ml-14">
-              <h1 className="font-mono text-9xl">{field.name}</h1>
-              <p className="font-mono text-xl">
+              <h1 className="font-mono text-6xl">{field.name}</h1>
+              <p className="font-mono text-xl text-gray-500">
                 Sân bóng đá {field.fieldType} người
               </p>
               <p
@@ -59,8 +59,8 @@ const FieldList: React.FC<FieldListProps> = ({ fields, onSelectField }) => {
                 {field.status === "HOATDONG"
                   ? "Hoạt động"
                   : field.status === "BAOTRI"
-                    ? "Bảo trì"
-                    : field.status}
+                  ? "Bảo trì"
+                  : field.status}
               </p>
             </div>
           </div>

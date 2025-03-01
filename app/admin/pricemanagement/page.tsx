@@ -114,7 +114,7 @@ const pricemanagement = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold py-3 ml-28">Quản Lý Giá Sân Bóng</h1>
         <button
-          className="bg-green-800 p-3 text-white rounded-md hover:bg-cyan-600 mr-10"
+          className="bg-blue-800 p-3 text-white rounded-md hover:bg-cyan-600 mr-10"
           onClick={() => document.getElementById("my_modal_3").showModal()}
         >
           Thêm giá sân
