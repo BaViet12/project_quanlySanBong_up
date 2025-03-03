@@ -29,6 +29,26 @@ const Export = () => {
       setLoadingExcel(false);
     }
   };
+  const handleExportPdf = async () => {
+    try {
+      const response = await fetch("/api/soccer/export/pdf");
+      if (!response.ok) {
+        throw new Error("Lỗi tải file PDF");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "DanhSachSanBong.pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("🔥 Lỗi xuất file PDF:", error);
+      alert("Xuất file PDF thất bại, vui lòng thử lại!");
+    }
+  };
 
   return (
     <div className="flex justify-end gap-2">
@@ -55,7 +75,9 @@ const Export = () => {
             </a>
           </li>
           <li>
-            <a className="text-sm">PDF</a>
+            <a className="text-sm" onClick={handleExportPdf}>
+              PDF
+            </a>
           </li>
         </ul>
       </div>

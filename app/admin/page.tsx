@@ -3,17 +3,23 @@ import Doughnut from "./component/Doughnut";
 import PieChart from "./component/PieChart";
 import NotificationPanel from "../component/NotificationPanel";
 import TinhTrangSan from "./component/TinhTrangSan";
+import RevenueChart from "./component/RevenueChart";
 
 const page = () => {
   return (
-    <div>
-      <h1 className="font-bold text-3xl">Overview</h1>
-      <div className=" flex  gap-5 py-3 px-1">
-        <div className="w-[400px]  p-4 rounded-lg">
-          <Doughnut></Doughnut>
+    <div className="p-2">
+      <h1 className="font-bold text-5xl">Overview</h1>
+      <div className="flex w-full h-[900px] gap-2">
+        <div className=" flex flex-col gap-2 justify-center h-[600px]">
+          <div className="w-[300px]  p-4 rounded-lg">
+            <Doughnut></Doughnut>
+          </div>
+          <div className="w-[300px] p-4  rounded-lg">
+            <TinhTrangSan></TinhTrangSan>
+          </div>
         </div>
-        <div className="w-[400px]  p-4 rounded-lg">
-          <TinhTrangSan></TinhTrangSan>
+        <div className="w-full h-[900px] p-8">
+          <RevenueChart></RevenueChart>
         </div>
       </div>
     </div>

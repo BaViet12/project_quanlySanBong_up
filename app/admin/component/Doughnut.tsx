@@ -78,7 +78,7 @@ export default function BarChart() {
   return (
     <div>
       <div className="">
-        <h1 className="text-center text-xl">Thống kê sân bóng</h1>
+        <h1 className="text-center text-2xl">Thống kê sân bóng</h1>
         <Doughnut data={chartData}></Doughnut>
       </div>
       <div></div>
