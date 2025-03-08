@@ -10,7 +10,7 @@ import Footer from "../component/Footer";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="hidden md:flex h-full w-full flex-col z-50">
+    <div className="hidden md:flex  w-full flex-col z-50">
       <div className="fixed top-0 left-0 w-full z-50 bg-white">
         <NavbarAdmin></NavbarAdmin>
       </div>
@@ -23,6 +23,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </main>
       </div>
+      <Footer></Footer>
     </div>
   );
 };

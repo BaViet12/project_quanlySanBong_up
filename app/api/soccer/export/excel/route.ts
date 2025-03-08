@@ -44,7 +44,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("🔥 Lỗi xuất file Excel:", error);
+    console.error("Lỗi xuất file Excel:", error);
     return new NextResponse("Lỗi khi xuất file Excel", { status: 500 });
   }
 }

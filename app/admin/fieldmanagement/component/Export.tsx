@@ -81,6 +81,9 @@ const Export = () => {
           </li>
         </ul>
       </div>
+      <div>
+        <button className="btn bg-red-500 text-white w-[95px]">Report</button>
+      </div>
     </div>
   );
 };

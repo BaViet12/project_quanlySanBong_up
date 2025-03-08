@@ -9,8 +9,6 @@ export async function GET(request: NextRequest) {
     if (!session) {
       return NextResponse.json(null);
     }
-
-    // Fetch full user data from database
     const user = await prisma.user.findUnique({
       where: {
         id: session.idUsers,
@@ -33,8 +31,6 @@ export async function GET(request: NextRequest) {
     if (!user) {
       return NextResponse.json(null);
     }
-
-    // Return user data without sensitive information
     return NextResponse.json({
       id: user.id,
       email: user.email,

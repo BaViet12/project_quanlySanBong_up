@@ -1,6 +1,7 @@
 "use client";
 import TableTimeSlot from "@/app/component/TableTimeSlot";
 import React, { useState } from "react";
+import ExportTS from "./component/ExportTS";
 
 interface timeslot {
   name: string;
@@ -178,7 +179,8 @@ const timeslotmanagement = () => {
           </div>
         </dialog>
       </div>
-      <div className="mr-36">
+      <div className="mr-36 pt-10">
+        <ExportTS></ExportTS>
         <TableTimeSlot
           onEdit={handleEdit}
           onDelete={handleDelete}

@@ -107,7 +107,6 @@ export async function POST(Request: NextRequest) {
       },
     });
 
-    // Trigger Pusher event with booking details
     await pusherServer.trigger("notifications", "new-booking", {
       notification,
       bookingDetails: {

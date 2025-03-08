@@ -97,7 +97,7 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
   };
 
   return (
-    <div className="w-[900px] mt-4 rounded-md border-2 flex flex-col gap-10 p-10 mx-auto">
+    <div className="w-[900px] mt-4 rounded-md border-2 flex flex-col gap-10 p-10 mx-auto ">
       <h4 className="text-xl font-semibold text-center">Thông tin khung giờ</h4>
       <p className="font-Karla">
         <strong>Khung giờ: </strong>
@@ -116,56 +116,51 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
           Đặt sân
         </button>
         <dialog id="my_modal_3" className="modal">
-          <div className="w-[1200px] bg-white p-2 h-[700px] rounded-lg">
+          <div className="w-[1000px] bg-white py-5 h-[600px] rounded-lg">
             <form method="dialog">
               <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                 ✕
               </button>
             </form>
-            <div className="flex justify-center py-2">
-              <h3 className="text-3xl font-bold">
-                Chọn phương thức thanh toán
-              </h3>
+            <div className="flex justify-center p-1">
+              <h3 className="text-xl font-bold">Chọn phương thức thanh toán</h3>
             </div>
-            <div className="flex justify-center mt-10 px-5">
-              <div className="flex flex-col gap-5 w-[600px]">
-                <p className="text-xl">
+            <div className="flex justify-center mt-3 px-5">
+              <div className="flex flex-col gap-2 w-[600px]">
+                <p className="text-xs">
                   <strong>Khung giờ: </strong>
                   {timeSlot.name}
                 </p>
-                <p className="text-xl">
+                <p className="text-xs">
                   <strong>Giá: </strong>
                   {timeSlot.price}
                 </p>
-                <p className="text-xl">
+                <p className="text-xs">
                   <strong>Số tiền cần thanh toán: </strong>
                   {paymentMethod === "full"
                     ? totalPrice.toLocaleString()
                     : deposit.toLocaleString()}{" "}
                   VNĐ
                 </p>
-
-                <div className="flex flex-col gap-5">
-                  <h1 className="text-xl font-bold">
-                    Bạn muốn thanh toán 100% hay đặt cọc 30% ?
-                  </h1>
-                  <div className="flex gap-10 ml-14">
+                <div className="flex flex-col gap-2">
+                  <h1 className="text-xs ">Thanh toán 100% hay đặt cọc 30%</h1>
+                  <div className="flex gap-5 ml-14">
                     <button
                       onClick={() => handlePayment("full")}
-                      className="btn w-[100px] bg-green-500 text-white"
+                      className="w-[50px] rounded-lg bg-green-500 text-white hover:bg-gray-400"
                     >
                       100%
                     </button>
                     <button
                       onClick={() => handlePayment("deposit")}
-                      className="btn w-[100px] bg-yellow-500 text-white"
+                      className="w-[50px] rounded-lg bg-yellow-500 text-white hover:bg-gray-400"
                     >
                       30%
                     </button>
                   </div>
                 </div>
                 <div className="mt-2">
-                  <h1 className="text-xl font-bold">Ảnh giao dịch ngân hàng</h1>
+                  <h1 className="text-xs">Ảnh giao dịch ngân hàng</h1>
                   <FileUpLoad
                     endpoint="imageUploader"
                     onChange={(url) => setImageUrl(url || "")}
@@ -190,11 +185,11 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
                 </div>
               </div>
               <div className="gap-2 flex flex-col w-[600px]">
-                <p className="text-xl">
+                <p className="text-xs">
                   <strong>Nội dung chuyển khoản:</strong> {bankDetails.note}
                 </p>
                 <div className="flex justify-center rounded-r-xl">
-                  <img src="/QRCode.jpg" alt="anh QR" width={300} height={50} />
+                  <img src="/QRCode.jpg" alt="anh QR" width={250} height={80} />
                 </div>
               </div>
             </div>

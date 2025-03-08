@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import ExportTS from "../admin/timeslotmanagement/component/ExportTS";
 interface TimeSlot {
   id: number;
   name: string;
@@ -35,8 +36,8 @@ const TableTimeSlot: React.FC<TableDashboardProps> = ({
       });
   }, [reloadKey]);
   return (
-    <div className="overflow-x-auto flex justify-center w-full">
-      <table className="table w-full xl:ml-36 border-2 mt-14 text-center">
+    <div className="flex justify-center">
+      <table className="table w-full xl:ml-36 border-2 text-center">
         <thead className="">
           <tr className="bg-gray-500 text-white text-sm">
             <th>Mã khung giờ</th>

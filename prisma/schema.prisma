@@ -82,7 +82,6 @@ model Booking {
   id              Int           @id @default(autoincrement())
   user_id         Int
   price_id        Int
-  cart_id         Int
   total_price     Decimal       @db.Decimal(10, 2)
   paid_amount     Decimal       @db.Decimal(10, 2)  // Số tiền khách đã thanh toán
   payment_status  PaymentStatus
