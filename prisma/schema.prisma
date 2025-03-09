@@ -55,6 +55,7 @@ model Price {
   field       Fields      @relation(fields: [field_id], references: [id])
   timeslot    Timeslot    @relation(fields: [timeslot_id], references: [id])
   Bookings    Booking[]
+  
 }
 
 model Timeslot {
@@ -75,7 +76,17 @@ model User {
   MaVaiTro     Int  
   vaitro       VaiTro?   @relation(fields: [MaVaiTro], references: [id])
   Bookings     Booking[]
+  Carts        Cart[]    @relation("UserToCart")
+}
 
+model Cart {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  booking_id   Int
+  quantity   Int      @default(1) // Số lượng sân đặt
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id],name: "UserToCart" )
+  booking    Booking  @relation(fields: [booking_id], references: [id],name: "BookingToCart")
 }
 
 model Booking {
@@ -91,7 +102,7 @@ model Booking {
   status          BookingStatus
   user            User          @relation(fields: [user_id], references: [id])
   price           Price         @relation(fields: [price_id], references: [id])
-
+  Carts           Cart[]        @relation("BookingToCart")
 }
 model Notification {
   id          Int      @id @default(autoincrement())
@@ -99,8 +110,6 @@ model Notification {
   user_id     Int      
   created_at  DateTime @default(now())
 }
-
-
 
 enum PaymentStatus {
   DANGXULY

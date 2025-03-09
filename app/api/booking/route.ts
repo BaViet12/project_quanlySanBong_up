@@ -72,6 +72,7 @@ export async function POST(Request: NextRequest) {
   const body = await Request.json();
 
   try {
+    // 1. Tạo đơn đặt sân
     const newBooking = await prisma.booking.create({
       data: {
         user_id: body.user_id,
@@ -93,13 +94,21 @@ export async function POST(Request: NextRequest) {
         },
       },
     });
-
+    // 2. Thên đơn hàng vào giỏ hàng
+    const cartItems = await prisma.cart.create({
+      data: {
+        user_id: body.user_id,
+        booking_id: newBooking.id,
+        quantity: 1,
+      },
+    });
+    // 3. Cập nhật trạng thái sân đã đặt
     await prisma.price.update({
       where: { id: body.price_id },
       data: { status: "DADAT" },
     });
 
-    // Create notification
+    // 4. Gửi thông báo về đơn đặt sân
     const notification = await prisma.notification.create({
       data: {
         message: `Đơn đặt sân mới từ ${newBooking.user.Hoten}`,

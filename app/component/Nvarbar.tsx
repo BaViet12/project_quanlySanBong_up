@@ -72,22 +72,31 @@ const Navbar = () => {
     }
   };
 
+  const handleCartClick = () => {
+    router.push("/cart");
+  };
+
   return (
     <div className="relative pb-2 pt-3 ">
       <div className="flex justify-between items-center h-16 w-full pb-2">
         <div className="basic-2/6 ">
-          <img
-            className="w-52 ml-10 cursor-pointer"
-            src="https://cdn0021.imgtaothao.com/media/logo/logo-datsantructuyen.png"
-            alt="logo"
-          />
+          <a href="/">
+            <img
+              className="w-52 ml-10 cursor-pointer"
+              src="https://cdn0021.imgtaothao.com/media/logo/logo-datsantructuyen.png"
+              alt="logo"
+            />
+          </a>
         </div>
 
         <ul className="hidden lg:flex gap-5 font-Karla items-center">
           {/* Hiển thị thông tin người dùng nếu đã đăng nhập */}
           {user ? (
             <li className="relative flex justify-center items-center gap-5">
-              <FaCartArrowDown className="text-2xl hover:text-green-600" />
+              <FaCartArrowDown
+                className="text-2xl hover:text-green-600"
+                onClick={handleCartClick}
+              />
               <div className="flex justify-center items-center gap-2">
                 <div className="dropdown">
                   <div tabIndex={0} role="button" className="btn m-1 bg-white">
