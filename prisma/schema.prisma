@@ -89,6 +89,7 @@ model Cart {
   booking    Booking  @relation(fields: [booking_id], references: [id],name: "BookingToCart")
 }
 
+
 model Booking {
   id              Int           @id @default(autoincrement())
   user_id         Int

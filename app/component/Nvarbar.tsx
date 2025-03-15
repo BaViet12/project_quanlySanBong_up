@@ -79,7 +79,7 @@ const Navbar = () => {
   return (
     <div className="relative pb-2 pt-3 ">
       <div className="flex justify-between items-center h-16 w-full pb-2">
-        <div className="basic-2/6 ">
+        <div className="basic-1/6 ">
           <a href="/">
             <img
               className="w-52 ml-10 cursor-pointer"

@@ -2,6 +2,7 @@
 import TableTimeSlot from "@/app/component/TableTimeSlot";
 import React, { useState } from "react";
 import ExportTS from "./component/ExportTS";
+import { toast, ToastContainer } from "react-toastify";
 
 interface timeslot {
   name: string;
@@ -56,7 +57,7 @@ const timeslotmanagement = () => {
         throw new Error(errorData.message);
       }
       const data = await respone.json();
-      setSuccess(data.message || "Tạo khung giờ thành công");
+      toast.success(`${isEditing ? "Cập nhật" : "Tạo"} khung giờ thành công!`);
       setFormTimeSlot(initialFormData);
       setIsEditing(false);
       refreshData();
@@ -65,7 +66,11 @@ const timeslotmanagement = () => {
         dialog.showModal();
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Lỗi tạo khung giờ");
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : `Lỗi ${isEditing ? "cập nhật" : "tạo"} khung giờ`
+      );
       console.error("Lỗi tạo khung giờ", err);
     }
   };
@@ -98,10 +103,10 @@ const timeslotmanagement = () => {
         throw new Error("Lỗi khi xóa khung giờ");
       }
       const data = await respone.json();
-      setSuccess(data.message);
+      toast.success(data.message);
       refreshData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Lỗi xóa khung giờ");
+      toast.error(err instanceof Error ? err.message : "Lỗi xóa khung giờ");
     }
   };
 
@@ -187,6 +192,7 @@ const timeslotmanagement = () => {
           reloadKey={refreshData}
         />
       </div>
+      <ToastContainer position="bottom-right" />
     </div>
   );
 };

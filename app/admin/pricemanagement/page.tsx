@@ -1,6 +1,7 @@
 "use client";
 import TablePrice from "@/app/component/TablePrice";
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 interface Price {
   name: string;
@@ -59,7 +60,7 @@ const pricemanagement = () => {
       }
       const data = await respone.json();
 
-      setSuccess(data.message || "Tạo giá sân thành công");
+      toast.success(`${isEditing ? "Cập nhật" : "Tạo"} sân thành công`);
       setFormPrice(initialFormData);
       setIsEditing(false);
       refreshData();
@@ -68,8 +69,12 @@ const pricemanagement = () => {
         dialog.showModal();
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Lỗi tạo giá sân");
-      console.error("Lỗi tạo giá sân", err);
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : `Lỗi ${isEditing ? "cập nhật" : "tạo"} giá sân bóng`
+      ); // Hiển thị thông báo lỗi
+      console.log("Lỗi tạo giá sân bóng", err);
     }
   };
 
@@ -102,10 +107,10 @@ const pricemanagement = () => {
         throw new Error("Lỗi khi xóa giá sân");
       }
       const data = await respone.json();
-      setSuccess(data.message);
+      toast.success(data.message);
       refreshData();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Lỗi xóa giá sân");
+      toast.error(err instanceof Error ? err.message : "Lỗi xóa đơn giá");
     }
   };
 
@@ -213,6 +218,7 @@ const pricemanagement = () => {
           reloadKey={refreshData}
         />
       </div>
+      <ToastContainer position="bottom-right" />
     </div>
   );
 };

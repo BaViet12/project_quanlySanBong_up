@@ -95,55 +95,53 @@ const TableBooking = () => {
   };
 
   return (
-    <div className="space-x-4">
-      <div className="overflow-x-auto flex justify-center w-full">
-        <table className="table w-full xl:ml-36 border-2 mt-14 text-center">
-          <thead>
-            <tr className="bg-gray-500 text-white text-sm">
-              <th>Mã đơn hàng</th>
-              <th>Mã khách hàng</th>
-              <th>Tổng tiền</th>
-              <th>Đặt cọc</th>
-              <th>Giao dịch</th>
-              <th>Thao tác</th>
+    <div className="overflow-x-auto flex justify-center w-full">
+      <table className="table w-full xl:ml-36 border-2 mt-14 text-center">
+        <thead>
+          <tr className="bg-gray-500 text-white text-sm">
+            <th>Mã đơn hàng</th>
+            <th>Mã khách hàng</th>
+            <th>Tổng tiền</th>
+            <th>Đặt cọc</th>
+            <th>Giao dịch</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookingTable.map((booking) => (
+            <tr key={booking.id}>
+              <td>{booking.id}</td>
+              <td>{booking.user_id}</td>
+              <td>{booking.total_price}</td>
+              <td>{booking.paid_amount}</td>
+              <td className="">
+                <div className="flex justify-center">
+                  <img
+                    src={booking.receipt_image}
+                    className="w-15 h-12 object-cover rounded"
+                  />
+                </div>
+              </td>
+              <td>
+                <div className="flex gap-1 justify-center">
+                  <button
+                    onClick={() => handleConfirm(booking.id)}
+                    className="bg-blue-800 rounded-sm p-2 w-[80px]  text-white hover:bg-blue-700"
+                  >
+                    Xác nhận
+                  </button>
+                  <button
+                    onClick={() => handleDelete(booking.id)}
+                    className="bg-red-800 rounded-sm p-2 w-[80px] text-white hover:bg-blue-700"
+                  >
+                    Xóa
+                  </button>
+                </div>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {bookingTable.map((booking) => (
-              <tr key={booking.id}>
-                <td>{booking.id}</td>
-                <td>{booking.user_id}</td>
-                <td>{booking.total_price}</td>
-                <td>{booking.paid_amount}</td>
-                <td className="">
-                  <div className="flex justify-center">
-                    <img
-                      src={booking.receipt_image}
-                      className="w-15 h-12 object-cover rounded"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div className="flex gap-1 justify-center">
-                    <button
-                      onClick={() => handleConfirm(booking.id)}
-                      className="bg-blue-800 rounded-sm p-2 w-[80px]  text-white hover:bg-blue-700"
-                    >
-                      Xác nhận
-                    </button>
-                    <button
-                      onClick={() => handleDelete(booking.id)}
-                      className="bg-red-800 rounded-sm p-2 w-[80px] text-white hover:bg-blue-700"
-                    >
-                      Xóa
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

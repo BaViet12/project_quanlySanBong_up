@@ -36,15 +36,33 @@ const NavbarAdmin = () => {
   useEffect(() => {
     const channel = pusherClient.subscribe("notifications");
 
-    channel.bind("new-booking", (data: Notification) => {
-      setNotifications((prev) => [data, ...prev]);
-      setUnreadCount((prev) => prev + 1);
+    channel.bind("new-booking", async (data: Notification) => {
+      try {
+        const response = await fetch("/api/notifications", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to save notification");
+        }
+
+        // Cập nhật danh sách thông báo trong UI
+        setNotifications((prev) => [data, ...prev]);
+        setUnreadCount((prev) => prev + 1);
+      } catch (error) {
+        console.error("Error saving notification:", error);
+      }
     });
 
     return () => {
       pusherClient.unsubscribe("notifications");
     };
   }, []);
+
   useEffect(() => {
     const fetchSession = async () => {
       try {
@@ -72,8 +90,8 @@ const NavbarAdmin = () => {
   };
 
   return (
-    <div className="relative pb-2 pt-3 mx-10 ">
-      <div className="flex justify-between items-center h-16 w-full pb-2">
+    <div className="relative mx-10 ">
+      <div className="flex justify-between items-center h-16 w-full pt-5">
         <div className="basic-2/6 ">
           <a href="/">
             <img

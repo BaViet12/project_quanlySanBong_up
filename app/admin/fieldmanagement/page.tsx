@@ -6,6 +6,7 @@ import { set } from "date-fns";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import Export from "./component/Export";
+import { toast, ToastContainer } from "react-toastify";
 
 interface FormDataField {
   name: string;
@@ -88,7 +89,7 @@ const fieldmanagement = () => {
         );
       }
       const data = await respone.json();
-      setSuccess(`${isEditing ? "cập nhật" : "tạo"} sân thành công`);
+      toast.success(`${isEditing ? "Cập nhật" : "Tạo"} sân thành công!`);
       setFormData(initialFormData);
       setIsEditing(false);
       setImageUrl("");
@@ -99,11 +100,11 @@ const fieldmanagement = () => {
         dialog.close();
       }
     } catch (err) {
-      setError(
+      toast.error(
         err instanceof Error
           ? err.message
           : `Lỗi ${isEditing ? "cập nhật" : "tạo"} sân`
-      );
+      ); // Hiển thị thông báo lỗi
       console.log("Lỗi tạo sân bóng", err);
     }
   };
@@ -120,9 +121,9 @@ const fieldmanagement = () => {
         throw new Error("Lỗi khi xóa sân bóng");
       }
       const data = await respone.json();
-      setSuccess(data.message);
+      toast.success(data.message);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Lỗi xóa sân bóng");
+      toast.error(err instanceof Error ? err.message : "Lỗi xóa sân bóng");
     }
   };
 
@@ -149,16 +150,6 @@ const fieldmanagement = () => {
                 {isEditing ? "Cập Nhật Sản Phẩm" : "Thêm Mới Sản Phẩm"}
               </h3>
               <form method="dialog" onSubmit={handleSubmit}>
-                {error && (
-                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                    {error}
-                  </div>
-                )}
-                {success && (
-                  <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                    {success}
-                  </div>
-                )}
                 <div className="mb-4">
                   <label className="block text-gray-700">Tên sân</label>
                   <input
@@ -246,6 +237,7 @@ const fieldmanagement = () => {
           reloadKey={refreshData}
         />
       </div>
+      <ToastContainer position="bottom-right" />
     </div>
   );
 };

@@ -1,5 +1,4 @@
 import React from "react";
-// import NvarbarAdmin from "../component/NvarbarAdmin";
 import SidebarAdmin from "../component/SidebarAdmin";
 import { extractRouterConfig } from "uploadthing/server";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";

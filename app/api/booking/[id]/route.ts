@@ -57,25 +57,56 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  Request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const BookingId = parseInt(params.id);
 
   try {
-    const DeleteBookingID = await prisma.booking.delete({
+    // Kiểm tra sự tồn tại của Booking
+    const booking = await prisma.booking.findUnique({
       where: { id: BookingId },
+      include: { price: true, Carts: true }, // Lấy thông tin Price và Cart liên quan
     });
-    await prisma.price.update({
-      where: { id: DeleteBookingID.price_id },
-      data: {
-        status: "TRONG",
-      },
+
+    if (!booking) {
+      return NextResponse.json(
+        {
+          message: "Đơn đặt sân không tồn tại.",
+        },
+        { status: 404 }
+      );
+    }
+
+    // Bắt đầu giao dịch
+    const deleteBooking = await prisma.$transaction(async (prisma) => {
+      // Xóa các bản ghi trong Cart liên quan đến Booking
+      await prisma.cart.deleteMany({
+        where: {
+          booking_id: BookingId,
+        },
+      });
+
+      // Cập nhật trạng thái của Price
+      await prisma.price.update({
+        where: { id: booking.price_id },
+        data: {
+          status: "TRONG", // Cập nhật trạng thái của Price thành "TRONG"
+        },
+      });
+
+      // Xóa đơn đặt sân (Booking)
+      const DeleteBookingID = await prisma.booking.delete({
+        where: { id: BookingId },
+      });
+
+      return DeleteBookingID;
     });
+
     return NextResponse.json(
       {
-        DeleteBookingID,
-        message: `Xóa thành công đơn đặt sân theo ID : ${params.id}`,
+        deleteBooking,
+        message: `Xóa thành công đơn đặt sân theo ID: ${params.id}`,
       },
       { status: 200 }
     );

@@ -42,11 +42,7 @@ const SidebarAdmin: React.FC = () => {
       href: "/admin/confirmbooking",
       label: "Xác nhận đặt sân",
     },
-    // {
-    //   icon: <GiReceiveMoney />,
-    //   href: "/admin/confirmbooking",
-    //   label: "Sân đã xác nhận",
-    // },
+
     {
       icon: <TbSoccerField />,
       href: "/admin/fieldmanagement",
@@ -120,7 +116,7 @@ const SidebarAdmin: React.FC = () => {
         </div>
       </div>
       <div>
-        <ToastContainer autoClose={5000} />
+        <ToastContainer autoClose={5000} position="bottom-right" />
       </div>
     </div>
   );

@@ -10,8 +10,8 @@ export const pusherServer = new Pusher({
 });
 
 export const pusherClient = new PusherClient(
-  process.env.NEXT_PUBLIC_PUSHER_KEY!, // Thêm NEXT_PUBLIC
+  process.env.NEXT_PUBLIC_PUSHER_KEY!,
   {
-    cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!, // Thêm NEXT_PUBLIC
+    cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
   }
 );
