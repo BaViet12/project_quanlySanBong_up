@@ -113,6 +113,7 @@ export async function POST(Request: NextRequest) {
       data: {
         message: `Đơn đặt sân mới từ ${newBooking.user.Hoten}`,
         user_id: body.user_id,
+        booking_id: newBooking.id,
       },
     });
 

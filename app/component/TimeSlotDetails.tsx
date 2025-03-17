@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FileUpLoad } from "./FileUpLoad";
 
 import { UserAuth } from "../types/auth";
+import { toast, ToastContainer } from "react-toastify";
 
 interface TimeSlot {
   id: number;
@@ -80,7 +81,7 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
 
       const result = await response.json();
       if (response.ok) {
-        setSuccessMessage(result.message); // Hiển thị thông báo thành công
+        toast.success(result.message);
         setTimeout(() => {
           const modal = document.getElementById(
             "my_modal_3"
@@ -88,11 +89,11 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
           modal?.close(); // Đóng modal sau khi đặt sân thành công
         }, 1000); // Đảm bảo thông báo có thời gian hiển thị trước khi đóng modal
       } else {
-        alert(result.message);
+        toast.error(result.message);
       }
     } catch (error) {
       console.error("Lỗi khi đặt sân:", error);
-      alert("Có lỗi xảy ra. Vui lòng thử lại.");
+      toast.error("Có lỗi xảy ra. Vui lòng thử lại.");
     }
   };
 
@@ -204,11 +205,11 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
           </div>
         </dialog>
       </div>
-      {successMessage && (
-        <div className="mt-4 text-green-600 text-center">
-          <strong>{successMessage}</strong>
-        </div>
-      )}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
     </div>
   );
 };

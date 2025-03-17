@@ -67,7 +67,7 @@ const SidebarAdmin: React.FC = () => {
       setNotifications((prev) => [data, ...prev]);
       setUnreadCount((prev) => prev + 1);
       toast.success(
-        `New booking by ${data.bookingDetails.userName} for field ${data.bookingDetails.fieldName}`
+        `Có đặt sân mới từ ${data.bookingDetails.userName} cho sân ${data.bookingDetails.fieldName}`
       );
     });
 

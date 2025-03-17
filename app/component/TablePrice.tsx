@@ -35,10 +35,10 @@ const TablePrice: React.FC<TableDashboardProps> = ({
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     fetch(`/admin/api/price?page=${currentPage}&limit_size=${pageSize}`)
-      .then((Response) => {
-        if (!Response.ok)
+      .then((response) => {
+        if (!response.ok)
           throw new Error("Failed to fetch Data PhanTrangPrice");
-        return Response.json();
+        return response.json();
       })
       .then((data) => {
         setPrice(data.data);
@@ -62,7 +62,7 @@ const TablePrice: React.FC<TableDashboardProps> = ({
   return (
     <div className="space-x-4">
       <div className="overflow-x-auto flex justify-center scroll-m-10">
-        <table className="table w-[1100px] xl:ml-36 border-2 mt-14 text-center">
+        <table className="table w-full table-auto border-2 mt-14 text-center">
           <thead className="">
             <tr className="bg-gray-500 text-white text-sm">
               <th>Mã giá</th>
@@ -104,8 +104,8 @@ const TablePrice: React.FC<TableDashboardProps> = ({
         </table>
       </div>
       {phanTrang && (
-        <div className="flex justify-between space-x-2 mt-4 w-[1100px]">
-          <div className="flex ml-80">
+        <div className="flex justify-between space-x-2 mt-4 ">
+          <div className="flex">
             <div className=" space-x-2">
               <label htmlFor="pageSize" className="text-sm">
                 Số mục mỗi trang:

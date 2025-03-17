@@ -1,65 +1,97 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { pusherClient } from "../lib/pusher";
 import { TiThMenuOutline } from "react-icons/ti";
-import { UserAuth } from "../types/auth";
-import { da } from "date-fns/locale";
 import { FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
 import { GrDashboard } from "react-icons/gr";
 import { MdOutlineLogout } from "react-icons/md";
 import { IoIosNotifications } from "react-icons/io";
+import { UserAuth } from "../types/auth";
+import Pusher from "pusher-js";
 
 interface Notification {
   id: number;
   message: string;
-  bookingDetails: {
+  user_id: number;
+  created_at: string;
+  booking: {
     id: number;
-    userName: string;
-    fieldName: string;
-    timeslot: string;
-    totalPrice: number;
     status: string;
+    user: {
+      id: number;
+      Hoten: string;
+    };
+    price: {
+      id: number;
+      name: string;
+      price: string;
+    };
   };
 }
+interface PhanTrang {
+  totalRecords: number;
+  totalPage: number;
+  page: number;
+  limit_size: number;
+  skip: number;
+}
+
 const NavbarAdmin = () => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<UserAuth | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  useEffect(() => {
-    const channel = pusherClient.subscribe("notifications");
 
-    channel.bind("new-booking", async (data: Notification) => {
-      try {
-        const response = await fetch("/api/notifications", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to save notification");
-        }
-
-        // Cập nhật danh sách thông báo trong UI
-        setNotifications((prev) => [data, ...prev]);
-        setUnreadCount((prev) => prev + 1);
-      } catch (error) {
-        console.error("Error saving notification:", error);
+  const fetchNotification = async () => {
+    try {
+      const response = await fetch("/api/notifications");
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
       }
-    });
+      const data = await response.json();
+      console.log("Dữ liệu từ API thông báo", data.notificationsAPI);
 
+      setNotifications(data.notificationsAPI);
+
+      setUnreadCount(
+        data.notificationsAPI.filter(
+          (notif: Notification) =>
+            notif.booking && notif.booking.status === "DANGXULY"
+        ).length
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotification();
+    const pusher = new Pusher("3db545abf1b813cf59a0", {
+      cluster: "ap1",
+    });
+    const channel = pusher.subscribe("notifications");
+    channel.bind("new-booking", function (data: any) {
+      setNotifications((prevNotifications) => [
+        ...prevNotifications,
+        {
+          id: prevNotifications.length + 1,
+          message: data.notification.message,
+          user_id: data.bookingDetails.user_id,
+          created_at: new Date().toISOString(),
+          booking: data.bookingDetails,
+        },
+      ]);
+      setUnreadCount((prevCount) => prevCount + 1);
+    });
     return () => {
-      pusherClient.unsubscribe("notifications");
+      pusher.unsubscribe("notifications");
     };
   }, []);
 
@@ -78,11 +110,11 @@ const NavbarAdmin = () => {
     };
     fetchSession();
   }, []);
+
   const handleLogout = async () => {
     try {
       await fetch("/api/auth/logout", { method: "POST" });
       setUser(null);
-
       router.push("/");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -90,9 +122,9 @@ const NavbarAdmin = () => {
   };
 
   return (
-    <div className="relative mx-10 ">
+    <div className="relative mx-10">
       <div className="flex justify-between items-center h-16 w-full pt-5">
-        <div className="basic-2/6 ">
+        <div className="basic-2/6">
           <a href="/">
             <img
               className="w-52 ml-10 cursor-pointer"
@@ -101,7 +133,7 @@ const NavbarAdmin = () => {
             />
           </a>
         </div>
-        <ul className="hidden lg:flex gap-5 font-Karla ">
+        <ul className="hidden lg:flex gap-5 font-Karla">
           {user ? (
             <li className="relative">
               <div className="flex justify-center items-center gap-2">
@@ -112,30 +144,32 @@ const NavbarAdmin = () => {
                       role="button"
                       className="btn m-1 bg-white"
                     >
-                      <IoIosNotifications className="text-2xl " />
+                      <IoIosNotifications className="text-2xl" />
                     </div>
                     <ul
                       tabIndex={0}
-                      className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow "
+                      className="dropdown-content menu bg-white rounded-box z-[1000] w-[280px] p-2 shadow"
                     >
+                      <h1 className="text-xl font-semibold">Thông báo</h1>
                       {notifications.length === 0 ? (
                         <p className="text-gray-500 text-center">
                           Không có thông báo mới
                         </p>
                       ) : (
-                        notifications.map((notif, index) => (
+                        notifications.map((notif) => (
                           <div
-                            key={index}
-                            className="mb-4 p-3 border rounded-lg "
+                            key={notif.id}
+                            className="p-2 border rounded-lg bg-slate-50"
                           >
-                            <p className="font-medium">{notif.message}</p>
-                            <div className="mt-2 text-sm text-gray-600">
-                              <p>Khách: {notif.bookingDetails.userName}</p>
-                              <p>Sân: {notif.bookingDetails.fieldName}</p>
-                              <p>
-                                Giá:{" "}
-                                {notif.bookingDetails.totalPrice.toLocaleString()}
-                                đ
+                            <div className="text-sm text-gray-600 flex flex-col gap-3">
+                              <div className="flex justify-between">
+                                <p className="font-bold">
+                                  {notif.booking.user?.Hoten}
+                                </p>
+                                <p>{notif.booking.price?.price}đ</p>
+                              </div>
+                              <p className="text-xs">
+                                {notif.booking.price?.name}
                               </p>
                             </div>
                           </div>
@@ -151,7 +185,7 @@ const NavbarAdmin = () => {
                   </div>
                   <ul
                     tabIndex={0}
-                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow mr-[1000px] "
                   >
                     <li>
                       <div className="flex justify-around">
@@ -164,7 +198,7 @@ const NavbarAdmin = () => {
                     {user.vaitro?.Ten === "Admin" && (
                       <li>
                         <div className="flex justify-around">
-                          <a href="/admin " className="text-lg">
+                          <a href="/admin" className="text-lg">
                             Dashboard
                           </a>
                           <GrDashboard className="text-xl" />

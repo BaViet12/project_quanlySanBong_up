@@ -122,8 +122,8 @@ const ListFields: React.FC = () => {
                   {selectedField.status === "HOATDONG"
                     ? "Hoạt động"
                     : selectedField.status === "BAOTRI"
-                      ? "Bảo trì"
-                      : selectedField.status}
+                    ? "Bảo trì"
+                    : selectedField.status}
                 </span>
               </p>
               <p>
@@ -145,8 +145,8 @@ const ListFields: React.FC = () => {
                     selectedTimeSlot?.id === slot.id
                       ? "bg-yellow-500 text-white"
                       : slot.status
-                        ? "bg-blue-500 hover:bg-blue-600 text-white"
-                        : "bg-gray-400 cursor-not-allowed text-gray-700"
+                      ? "bg-blue-500 hover:bg-blue-600 text-white"
+                      : "bg-gray-400 cursor-not-allowed text-gray-700"
                   )}
                   disabled={!slot.status}
                 >
@@ -257,8 +257,8 @@ const ListFields: React.FC = () => {
                     {field.status === "HOATDONG"
                       ? "Hoạt động"
                       : field.status === "BAOTRI"
-                        ? "Bảo trì"
-                        : field.status}
+                      ? "Bảo trì"
+                      : field.status}
                   </p>
                 </div>
               </div>

@@ -42,9 +42,7 @@ export default function BarChart() {
     // Fetch API
     async function fetchData() {
       try {
-        const response = await fetch(
-          "http://localhost:3000/admin/api/CountFields"
-        );
+        const response = await fetch("/admin/api/CountFields");
         const data = await response.json();
 
         // Cập nhật dữ liệu biểu đồ

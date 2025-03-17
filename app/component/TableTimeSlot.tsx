@@ -37,7 +37,7 @@ const TableTimeSlot: React.FC<TableDashboardProps> = ({
   }, [reloadKey]);
   return (
     <div className="flex justify-center">
-      <table className="table w-full xl:ml-36 border-2 text-center">
+      <table className="table w-full border-2 text-center table-auto">
         <thead className="">
           <tr className="bg-gray-500 text-white text-sm">
             <th>Mã khung giờ</th>

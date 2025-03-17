@@ -96,7 +96,7 @@ const TableBooking = () => {
 
   return (
     <div className="overflow-x-auto flex justify-center w-full">
-      <table className="table w-full xl:ml-36 border-2 mt-14 text-center">
+      <table className="table w-full border-2 mt-14 text-center table-auto">
         <thead>
           <tr className="bg-gray-500 text-white text-sm">
             <th>Mã đơn hàng</th>

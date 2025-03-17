@@ -55,7 +55,6 @@ model Price {
   field       Fields      @relation(fields: [field_id], references: [id])
   timeslot    Timeslot    @relation(fields: [timeslot_id], references: [id])
   Bookings    Booking[]
-  
 }
 
 model Timeslot {
@@ -67,49 +66,52 @@ model Timeslot {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  UserName     String    @unique @db.VarChar(255)
-  MatKhau      String?   @db.VarChar(225)
-  Hoten        String?   @db.VarChar(225)  
-  phone        String?   @db.VarChar(15)
-  email        String?   @db.VarChar(100)
-  MaVaiTro     Int  
-  vaitro       VaiTro?   @relation(fields: [MaVaiTro], references: [id])
-  Bookings     Booking[]
-  Carts        Cart[]    @relation("UserToCart")
+  id       Int       @id @default(autoincrement())
+  UserName String    @unique @db.VarChar(255)
+  MatKhau  String?   @db.VarChar(225)
+  Hoten    String?   @db.VarChar(225)
+  phone    String?   @db.VarChar(15)
+  email    String?   @db.VarChar(100)
+  MaVaiTro Int
+  vaitro   VaiTro?   @relation(fields: [MaVaiTro], references: [id])
+  Bookings Booking[]
+  Carts    Cart[]    @relation("UserToCart")
 }
 
 model Cart {
   id         Int      @id @default(autoincrement())
   user_id    Int
-  booking_id   Int
+  booking_id Int
   quantity   Int      @default(1) // Số lượng sân đặt
   created_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id],name: "UserToCart" )
-  booking    Booking  @relation(fields: [booking_id], references: [id],name: "BookingToCart")
+  user       User     @relation(fields: [user_id], references: [id], name: "UserToCart")
+  booking    Booking  @relation(fields: [booking_id], references: [id], name: "BookingToCart")
 }
-
 
 model Booking {
-  id              Int           @id @default(autoincrement())
-  user_id         Int
-  price_id        Int
-  total_price     Decimal       @db.Decimal(10, 2)
-  paid_amount     Decimal       @db.Decimal(10, 2)  // Số tiền khách đã thanh toán
-  payment_status  PaymentStatus
-  receipt_image   String?     @db.VarChar(255) // Ảnh biên lai chuyển khoản
-  created_at      DateTime      @db.Timestamp
-  confirmed_at    DateTime?     @db.Timestamp // Thời gian nhân viên xác nhận
-  status          BookingStatus
-  user            User          @relation(fields: [user_id], references: [id])
-  price           Price         @relation(fields: [price_id], references: [id])
-  Carts           Cart[]        @relation("BookingToCart")
+  id             Int            @id @default(autoincrement())
+  user_id        Int
+  price_id       Int
+  total_price    Decimal        @db.Decimal(10, 2)
+  paid_amount    Decimal        @db.Decimal(10, 2) // Số tiền khách đã thanh toán
+  payment_status PaymentStatus
+  receipt_image  String?        @db.VarChar(255) // Ảnh biên lai chuyển khoản
+  created_at     DateTime       @db.Timestamp
+  confirmed_at   DateTime?      @db.Timestamp // Thời gian nhân viên xác nhận
+  status         BookingStatus
+  user           User           @relation(fields: [user_id], references: [id])
+  price          Price          @relation(fields: [price_id], references: [id])
+  Carts          Cart[]         @relation("BookingToCart")
+  notifications  Notification[] @relation("BookingToNotification")
 }
+
 model Notification {
-  id          Int      @id @default(autoincrement())
-  message     String
-  user_id     Int      
-  created_at  DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  message    String
+  user_id    Int
+  booking_id Int
+  created_at DateTime @default(now())
+  booking    Booking  @relation("BookingToNotification", fields: [booking_id], references: [id]) // Quan hệ với Booking
 }
 
 enum PaymentStatus {

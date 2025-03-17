@@ -63,9 +63,9 @@ const TableFields: React.FC<TableDashboardProps> = ({
   };
 
   return (
-    <div className="space-x-4 w-full">
+    <div className="space-x-4 w-auto">
       <div className="overflow-x-auto flex justify-center w-full">
-        <table className="table w-full xl:ml-36 border-2 mt-14 text-center">
+        <table className="table w-full border-2 mt-14 text-center table-auto ">
           <thead className="">
             <tr className="bg-gray-500 text-white text-sm">
               <th>Mã sân</th>
@@ -112,10 +112,9 @@ const TableFields: React.FC<TableDashboardProps> = ({
           </tbody>
         </table>
       </div>
-
       {phanTrang && (
         <div className="flex justify-between space-x-2 mt-4">
-          <div className="flex ml-32">
+          <div className="flex ">
             <div className=" space-x-2">
               <label htmlFor="pageSize" className="text-sm">
                 Số mục mỗi trang:

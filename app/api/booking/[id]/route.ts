@@ -95,6 +95,12 @@ export async function DELETE(
         },
       });
 
+      await prisma.notification.deleteMany({
+        where: {
+          booking_id: BookingId, // Giả sử bạn có trường `booking_id` trong bảng `notification`
+        },
+      });
+
       // Xóa đơn đặt sân (Booking)
       const DeleteBookingID = await prisma.booking.delete({
         where: { id: BookingId },

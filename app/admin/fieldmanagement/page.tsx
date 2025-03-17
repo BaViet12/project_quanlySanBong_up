@@ -128,8 +128,8 @@ const fieldmanagement = () => {
   };
 
   return (
-    <div className="p-2 w-full h-full ml-7" data-theme="light">
-      <div className="flex w-full justify-between items-center">
+    <div className="p-2 w-auto h-full" data-theme="light">
+      <div className="flex w-auto justify-between items-center">
         <h1 className="text-2xl font-bold py-3">Quản Lý Sân Bóng</h1>
         <div className="mr-32 flex gap-2">
           <button
@@ -229,7 +229,7 @@ const fieldmanagement = () => {
           </dialog>
         </div>
       </div>
-      <div className="mr-32">
+      <div className="mr-32 w-auto">
         <Export></Export>
         <TableFields
           onEdit={handleEdit}
