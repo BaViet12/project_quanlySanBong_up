@@ -1,3 +1,4 @@
+// app/api/timeslot
 import prisma from "@/prisma/client";
 import { timeStamp } from "console";
 import { NextRequest, NextResponse } from "next/server";
@@ -6,29 +7,6 @@ import { parseISO, isAfter, addHours } from "date-fns";
 export async function GET(req: NextRequest) {
   try {
     const TimeslotAPI = await prisma.timeslot.findMany();
-
-    // Chuyển giờ now sang giờ Việt Nam
-    // const nowUTC = new Date();
-    // const nowVN = addHours(nowUTC, 7); // Chuyển từ UTC sang GMT+7
-
-    // const updatedSoccer = TimeslotAPI.map((slot) => {
-    //   const startTime = new Date(slot.start_time);
-    //   const endTime = new Date(slot.end_time);
-
-    //   const isExpired = endTime < nowVN; // So sánh với giờ Việt Nam
-    //   const isAvailable = slot.status !== "DADAT" && !isExpired;
-
-    //   console.log("now (Việt Nam):", nowVN);
-    //   console.log("startTime:", startTime);
-    //   console.log("endTime:", endTime);
-    //   console.log("isExpired:", isExpired);
-
-    //   return {
-    //     ...slot,
-    //     status: isAvailable,
-    //   };
-    // });
-
     return NextResponse.json(
       { TimeslotAPI, message: "Các khung giờ" },
       { status: 201 }

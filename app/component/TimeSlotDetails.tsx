@@ -87,7 +87,7 @@ const TimeSlotDetails: React.FC<TimeSlotDetailsProps> = ({ timeSlot }) => {
             "my_modal_3"
           ) as HTMLDialogElement;
           modal?.close(); // Đóng modal sau khi đặt sân thành công
-        }, 1000); // Đảm bảo thông báo có thời gian hiển thị trước khi đóng modal
+        }); // Đảm bảo thông báo có thời gian hiển thị trước khi đóng modal
       } else {
         toast.error(result.message);
       }

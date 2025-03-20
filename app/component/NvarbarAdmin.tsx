@@ -10,6 +10,7 @@ import { MdOutlineLogout } from "react-icons/md";
 import { IoIosNotifications } from "react-icons/io";
 import { UserAuth } from "../types/auth";
 import Pusher from "pusher-js";
+import { toast } from "react-toastify";
 
 interface Notification {
   id: number;
@@ -71,6 +72,23 @@ const NavbarAdmin = () => {
     }
   };
 
+  const handleDeleteNotifications = async () => {
+    try {
+      const response = await fetch("/api/notifications", {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete notifications");
+      }
+      setNotifications([]);
+      setUnreadCount(0);
+      toast.success("Đã xóa tất cả thông báo");
+    } catch (error) {
+      console.error("Error deleting notifications:", error);
+      toast.success("Xóa thông báo thất bại");
+    }
+  };
+
   useEffect(() => {
     fetchNotification();
     const pusher = new Pusher("3db545abf1b813cf59a0", {
@@ -122,79 +140,82 @@ const NavbarAdmin = () => {
   };
 
   return (
-    <div className="relative mx-10">
-      <div className="flex justify-between items-center h-16 w-full pt-5">
-        <div className="basic-2/6">
-          <a href="/">
-            <img
-              className="w-52 ml-10 cursor-pointer"
-              src="https://cdn0021.imgtaothao.com/media/logo/logo-datsantructuyen.png"
-              alt="logo"
-            />
+    <div className="relative mx-5">
+      <div className="flex justify-between items-center h-16 w-full">
+        <div className="">
+          <a href="/" className="text-3xl font-bold hover:text-green-500">
+            Dashboard
           </a>
         </div>
         <ul className="hidden lg:flex gap-5 font-Karla">
           {user ? (
             <li className="relative">
-              <div className="flex justify-center items-center gap-2">
-                <div>
-                  <div className="dropdown dropdown-bottom">
-                    <div
-                      tabIndex={0}
-                      role="button"
-                      className="btn m-1 bg-white"
-                    >
-                      <IoIosNotifications className="text-2xl" />
-                    </div>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content menu bg-white rounded-box z-[1000] w-[280px] p-2 shadow"
-                    >
-                      <h1 className="text-xl font-semibold">Thông báo</h1>
-                      {notifications.length === 0 ? (
-                        <p className="text-gray-500 text-center">
-                          Không có thông báo mới
-                        </p>
-                      ) : (
-                        notifications.map((notif) => (
-                          <div
-                            key={notif.id}
-                            className="p-2 border rounded-lg bg-slate-50"
-                          >
-                            <div className="text-sm text-gray-600 flex flex-col gap-3">
-                              <div className="flex justify-between">
-                                <p className="font-bold">
-                                  {notif.booking.user?.Hoten}
-                                </p>
-                                <p>{notif.booking.price?.price}đ</p>
-                              </div>
-                              <p className="text-xs">
-                                {notif.booking.price?.name}
-                              </p>
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </ul>
-                  </div>
-                </div>
-                <div className="dropdown">
-                  <div tabIndex={0} role="button" className="btn m-1 bg-white">
-                    <FaUserCircle className="text-xl" />
-                    <span>{user?.Hoten}</span>
+              <div className="flex justify-center items-center gap-5">
+                <div className="dropdown dropdown-end">
+                  <div tabIndex={0} role="button" className="">
+                    <IoIosNotifications className="text-2xl hover:text-green-500" />
                   </div>
                   <ul
                     tabIndex={0}
-                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow mr-[1000px] "
+                    className="dropdown-content bg-white rounded-box z-[1000] w-[280px] p-2 shadow h-[300px] overflow-auto"
+                  >
+                    <div className="flex justify-between pb-2">
+                      <h1 className="text-xl font-semibold">Thông báo</h1>
+                      <button
+                        className="hover:bg-slate-600 hover:text-white rounded-md px-1"
+                        onClick={handleDeleteNotifications}
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                    {notifications.length === 0 ? (
+                      <p className="text-gray-500 text-center">
+                        Không có thông báo mới
+                      </p>
+                    ) : (
+                      notifications.map((notif) => (
+                        <div
+                          key={notif.id}
+                          className="p-2 border rounded-lg bg-slate-50 hover:bg-purple-200"
+                        >
+                          <div className="text-sm text-gray-600 flex flex-col gap-3 ">
+                            <div className="flex justify-between">
+                              <p className="font-bold">
+                                {notif.booking.user?.Hoten}
+                              </p>
+                              <p>{notif.booking.price?.price}đ</p>
+                            </div>
+                            <p className="text-xs">
+                              {notif.booking.price?.name}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </ul>
+                </div>
+
+                <div className="dropdown dropdown-end">
+                  <div tabIndex={0} role="button" className="">
+                    <div className="avatar avatar-online">
+                      <div className="w-8 rounded-full">
+                        <img src="admin.jpg" />
+                      </div>
+                    </div>
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
                   >
                     <li>
                       <div className="flex justify-around">
-                        <a href="/profile" className="text-lg">
+                        <a href="/Profile" className="text-lg">
                           Profile
                         </a>
                         <CgProfile className="text-xl" />
                       </div>
                     </li>
+
                     {user.vaitro?.Ten === "Admin" && (
                       <li>
                         <div className="flex justify-around">
@@ -237,3 +258,50 @@ const NavbarAdmin = () => {
 };
 
 export default NavbarAdmin;
+
+{
+  /* <div className="dropdown dropdown-bottom">
+                    <div
+                      tabIndex={0}
+                      role="button"
+                      className="btn m-1 bg-white"
+                    >
+                      <IoIosNotifications className="text-2xl" />
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content bg-white rounded-box z-[1000] w-[280px] p-2 shadow h-[300px] overflow-auto"
+                    >
+                      <div className="flex justify-between pb-2">
+                        <h1 className="text-xl font-semibold">Thông báo</h1>
+                        <button className="hover:bg-slate-600 hover:text-white rounded-md px-1">
+                          Xóa
+                        </button>
+                      </div>
+                      {notifications.length === 0 ? (
+                        <p className="text-gray-500 text-center">
+                          Không có thông báo mới
+                        </p>
+                      ) : (
+                        notifications.map((notif) => (
+                          <div
+                            key={notif.id}
+                            className="p-2 border rounded-lg bg-slate-50 hover:bg-purple-200"
+                          >
+                            <div className="text-sm text-gray-600 flex flex-col gap-3 ">
+                              <div className="flex justify-between">
+                                <p className="font-bold">
+                                  {notif.booking.user?.Hoten}
+                                </p>
+                                <p>{notif.booking.price?.price}đ</p>
+                              </div>
+                              <p className="text-xs">
+                                {notif.booking.price?.name}
+                              </p>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </ul>
+                  </div> */
+}

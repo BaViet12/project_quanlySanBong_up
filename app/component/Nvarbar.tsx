@@ -98,27 +98,31 @@ const Navbar = () => {
                 onClick={handleCartClick}
               />
               <div className="flex justify-center items-center gap-2">
-                <div className="dropdown">
-                  <div tabIndex={0} role="button" className="btn m-1 bg-white">
-                    <FaUserCircle className="text-2xl" />
-                    <span className="text-base">{user?.Hoten}</span>
+                <div className="dropdown dropdown-end">
+                  <div tabIndex={0} role="button" className="">
+                    <div className="avatar avatar-online">
+                      <div className="w-8 rounded-full">
+                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                      </div>
+                    </div>
                   </div>
                   <ul
                     tabIndex={0}
-                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                    className="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow-sm"
                   >
                     <li>
                       <div className="flex justify-around">
                         <a href="/Profile" className="text-lg">
                           Profile
                         </a>
-                        <CgProfile className="text-2xl" />
+                        <CgProfile className="text-xl" />
                       </div>
                     </li>
+
                     {user.vaitro?.Ten === "Admin" && (
                       <li>
                         <div className="flex justify-around">
-                          <a href="/admin " className="text-lg">
+                          <a href="/admin" className="text-lg">
                             Dashboard
                           </a>
                           <GrDashboard className="text-xl" />

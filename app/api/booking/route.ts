@@ -11,6 +11,9 @@ export async function GET(Request: NextRequest) {
       where: {
         status: "DANGXULY",
       },
+      orderBy: {
+        created_at: "desc",
+      },
     });
     return NextResponse.json(
       { BookingAPI, message: "Các đơn đặt sân" },
