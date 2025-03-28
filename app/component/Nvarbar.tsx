@@ -77,7 +77,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="relative pb-2 pt-3 ">
+    <div className="relative pt-1">
       <div className="flex justify-between items-center h-16 w-full pb-2">
         <div className="basic-1/6 ">
           <a href="/">
@@ -90,7 +90,6 @@ const Navbar = () => {
         </div>
 
         <ul className="hidden lg:flex gap-5 font-Karla items-center">
-          {/* Hiển thị thông tin người dùng nếu đã đăng nhập */}
           {user ? (
             <li className="relative flex justify-center items-center gap-5">
               <FaCartArrowDown

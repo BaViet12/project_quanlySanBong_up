@@ -33,7 +33,7 @@ const ExportTS = () => {
         <div
           tabIndex={0}
           role="button"
-          className="btn bg-green-500 text-white w-[90px] p-2"
+          className="btn bg-white text-black border-gray-400 w-[90px] p-2"
         >
           <TiExportOutline className="text-2xl" />
         </div>

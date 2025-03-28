@@ -1,5 +1,10 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
+import { GoPencil } from "react-icons/go";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { GrPrevious } from "react-icons/gr";
+import { GrNext } from "react-icons/gr";
 
 interface San {
   id: number;
@@ -14,13 +19,6 @@ interface TableDashboardProps {
   onDelete: (id: number) => void;
   reloadKey: (id: number) => void;
 }
-interface PhanTrang {
-  totalRecords: number;
-  totalPage: number;
-  page: number;
-  limit_size: number;
-  skip: number;
-}
 
 const TableFields: React.FC<TableDashboardProps> = ({
   onDelete,
@@ -28,52 +26,88 @@ const TableFields: React.FC<TableDashboardProps> = ({
   reloadKey,
 }) => {
   const [sanTable, setSanTable] = useState<San[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [phanTrang, setPhanTrang] = useState<PhanTrang | null>(null);
+  const [filter, setFilter] = useState("all");
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [page, setPage] = useState(1);
+  const [limitSize, setLimitSize] = useState(5);
   const [loading, setLoading] = useState(false);
   const [loadingFields, setLoadingFields] = useState(true);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  const handleCheckboxChange = (id: number) => {
+    setSelectedIds((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((item) => item !== id)
+        : [...prevSelected, id]
+    );
+  };
+
+  const handleDeleteSelected = () => {
+    if (selectedIds.length === 0) return alert("Vui lòng chọn ít nhất 1 sân");
+    fetch("/api/soccer", {
+      method: "DELETE",
+      body: JSON.stringify({ ids: selectedIds }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => {
+      alert("Xóa thành công");
+      setSelectedIds([]);
+      reloadKey(Date.now());
+    });
+  };
 
   useEffect(() => {
-    fetch(`/admin/api/field?page=${currentPage}&limit_size=${pageSize}`)
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to fetch data phan trang");
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data.data);
-        setSanTable(data.data);
-        setPhanTrang(data.meta);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }, [currentPage, pageSize, reloadKey]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-  const handlePageSizeChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const newSize = parseInt(event.target.value);
-    setPageSize(newSize);
-    setCurrentPage(1); // Reset to first page when changing page size
-  };
+    const fetchData = async () => {
+      const response = await fetch(
+        `/admin/api/field?filter=${filter}&page=${page}&limit_size=${limitSize}`
+      );
+      if (!response.ok) {
+        console.error("Lỗi fetch dữ liệu");
+        return;
+      }
+      const data = await response.json();
+      setSanTable(data.data);
+      setTotalRecords(data.meta.totalRecords);
+    };
+    fetchData().catch(console.error);
+  }, [filter, page, limitSize, reloadKey]);
+  const totalPages = Math.ceil(totalRecords / limitSize);
 
   return (
-    <div className="space-x-4 w-auto">
-      <div className="overflow-x-auto flex justify-center w-full">
-        <table className="table w-full border-2 mt-14 text-center table-auto ">
+    <div className="w-full overflow-x-auto pt-2">
+      <div className="flex flex-col gap-2">
+        <div className="w-full flex justify-between items-center">
+          <div>
+            <select
+              className="border px-2 py-1 rounded bg-gray-300"
+              id="filter"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <option value="all">Tất cả</option>
+              <option value="5">Sân 5</option>
+              <option value="7">Sân 7</option>
+            </select>
+          </div>
+          <div>
+            <button
+              onClick={handleDeleteSelected}
+              className=" px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Xóa mục đã chọn
+            </button>
+          </div>
+        </div>
+        <table className="table border-2 text-center table-auto w-full min-w-[400px]">
           <thead className="">
-            <tr className="bg-gray-500 text-white text-sm">
-              <th>Mã sân</th>
-              <th>Tên sân</th>
-              <th>Loại sân</th>
-              <th>Trạng thái</th>
-              <th>Mô tả</th>
-              <th>Thao tác</th>
+            <tr className="bg-slate-200 text-black">
+              <th></th>
+              <th>ID</th>
+              <th>SÂN</th>
+              <th>LOẠI</th>
+              <th>TRẠNG THÁI</th>
+              <th>THAO TÁC</th>
             </tr>
           </thead>
           <tbody>
@@ -84,86 +118,55 @@ const TableFields: React.FC<TableDashboardProps> = ({
             ) : (
               sanTable.map((field) => (
                 <tr key={field.id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(field.id)}
+                      onChange={() => handleCheckboxChange(field.id)}
+                    />
+                  </td>
                   <td>{field.id}</td>
                   <td>{field.name}</td>
                   <td>{field.field_type}</td>
                   <td>{field.status}</td>
-                  <td>{field.MoTa}</td>
-                  <td>
-                    <div className="flex gap-1 justify-center">
-                      <button
-                        type="submit"
-                        className="bg-blue-800 rounded-sm px-1 text-white hover:bg-blue-700"
-                        onClick={() => onEdit(field)}
-                      >
-                        Sửa
-                      </button>
-                      <button
-                        className="bg-red-800 rounded-sm px-1 text-white hover:bg-blue-700"
-                        onClick={() => onDelete(field.id)}
-                      >
-                        Xóa
-                      </button>
-                    </div>
+                  <td className="flex gap-2 justify-center items-center">
+                    <button
+                      type="submit"
+                      className="text-xl rounded-sm  text-black hover:text-black"
+                      onClick={() => onEdit(field)}
+                    >
+                      <GoPencil />
+                    </button>
+                    <button
+                      className="text-xl rounded-sm  text-red-700 hover:text-black"
+                      onClick={() => onDelete(field.id)}
+                    >
+                      <RiDeleteBin6Line />
+                    </button>
                   </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
-      </div>
-      {phanTrang && (
-        <div className="flex justify-between space-x-2 mt-4">
-          <div className="flex ">
-            <div className=" space-x-2">
-              <label htmlFor="pageSize" className="text-sm">
-                Số mục mỗi trang:
-              </label>
-              <select
-                id="pageSize"
-                value={pageSize}
-                onChange={handlePageSizeChange}
-                className="border rounded px-2 py-1"
-              >
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="50">50</option>
-              </select>
-            </div>
-          </div>
-          <div className="flex space-x-3">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-3 py-1 bg-gray-800 text-white rounded hover:bg-blue-600 transition-colors disabled:bg-gray-300"
-            >
-              Trước
-            </button>
-
-            {[...Array(phanTrang.totalPage)].map((_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => handlePageChange(index + 1)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === index + 1
-                    ? "bg-green-800 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === phanTrang.totalPage}
-              className="px-3 py-1 bg-green-800 text-white rounded hover:bg-blue-600 transition-colors disabled:bg-gray-300"
-            >
-              Sau
-            </button>
-          </div>
+        <div className="flex items-center justify-end gap-5 w-full">
+          <button
+            onClick={() => setPage(Math.max(page - 1, 1))}
+            className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
+          >
+            <GrPrevious />
+          </button>
+          <span>
+            Trang {page} / {totalPages}
+          </span>
+          <button
+            onClick={() => setPage(Math.min(page + 1, totalPages))}
+            className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
+          >
+            <GrNext />
+          </button>
         </div>
-      )}
+      </div>
     </div>
   );
 };

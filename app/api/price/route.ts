@@ -63,10 +63,25 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const Delete = await prisma.price.deleteMany();
+    const body = await req.json();
+    const { ids } = body;
+
+    if (!ids || ids.length === 0) {
+      return NextResponse.json(
+        { message: "Không có ID nào được gửi" },
+        { status: 400 }
+      );
+    }
+    const deleted = await prisma.price.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
     return NextResponse.json(
-      { Delete, message: "Xóa thành công" },
-      { status: 201 }
+      { deleted, message: "Xóa thành công" },
+      { status: 200 }
     );
   } catch (error: any) {
     return NextResponse.json({ message: "Xóa thất bại" }, { status: 400 });

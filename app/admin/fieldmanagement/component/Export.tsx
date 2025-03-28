@@ -53,17 +53,17 @@ const Export = () => {
   return (
     <div className="flex justify-end gap-2">
       <div>
-        <button className="btn bg-blue-500 text-white w-[95px]">
-          <FaFileImport className="text-2xl" />
+        <button className="btn bg-white text-white w-[95px] border-gray-400">
+          <FaFileImport className="text-2xl text-black " />
         </button>
       </div>
       <div className="dropdown dropdown-bottom dropdown-end">
         <div
           tabIndex={0}
           role="button"
-          className="btn bg-green-500 text-white w-[95px]"
+          className="btn bg-white text-white w-[95px] border-gray-400"
         >
-          <TiExportOutline className="text-2xl" />
+          <TiExportOutline className="text-2xl text-black" />
         </div>
         <ul
           tabIndex={0}
@@ -82,7 +82,9 @@ const Export = () => {
         </ul>
       </div>
       <div>
-        <button className="btn bg-red-500 text-white w-[95px]">Report</button>
+        <button className="btn bg-white text-black w-[95px] border-gray-400">
+          Report
+        </button>
       </div>
     </div>
   );

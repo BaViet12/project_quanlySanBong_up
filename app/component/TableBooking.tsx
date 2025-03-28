@@ -1,6 +1,8 @@
 "use client";
 import { tr } from "date-fns/locale";
 import React, { useEffect, useState } from "react";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { GiConfirmed } from "react-icons/gi";
 
 interface Booking {
   id: number;
@@ -98,7 +100,7 @@ const TableBooking = () => {
     <div className="overflow-x-auto flex justify-center w-full">
       <table className="table w-full border-2 mt-14 text-center table-auto">
         <thead>
-          <tr className="bg-gray-500 text-white text-sm">
+          <tr className="bg-slate-200 text-black">
             <th>Mã đơn hàng</th>
             <th>Mã khách hàng</th>
             <th>Tổng tiền</th>
@@ -118,7 +120,7 @@ const TableBooking = () => {
                 <div className="flex justify-center">
                   <img
                     src={booking.receipt_image}
-                    className="w-15 h-12 object-cover rounded"
+                    className="w-24 h-28 object-cover rounded"
                   />
                 </div>
               </td>
@@ -126,15 +128,15 @@ const TableBooking = () => {
                 <div className="flex gap-1 justify-center">
                   <button
                     onClick={() => handleConfirm(booking.id)}
-                    className="bg-blue-800 rounded-sm p-2 w-[80px]  text-white hover:bg-blue-700"
+                    className="text-2xl rounded-sm text-green-700 hover:text-black"
                   >
-                    Xác nhận
+                    <GiConfirmed />
                   </button>
                   <button
                     onClick={() => handleDelete(booking.id)}
-                    className="bg-red-800 rounded-sm p-2 w-[80px] text-white hover:bg-blue-700"
+                    className="text-2xl rounded-sm  text-red-700 hover:text-black"
                   >
-                    Xóa
+                    <RiDeleteBin6Line />
                   </button>
                 </div>
               </td>

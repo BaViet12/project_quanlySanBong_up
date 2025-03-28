@@ -140,11 +140,14 @@ const NavbarAdmin = () => {
   };
 
   return (
-    <div className="relative mx-5">
-      <div className="flex justify-between items-center h-16 w-full">
-        <div className="">
-          <a href="/" className="text-3xl font-bold hover:text-green-500">
-            Dashboard
+    <div className="relative border-b">
+      <div className="flex justify-between items-center h-12 w-full py-2 pt-3">
+        <div className="ml-14">
+          <a
+            href="/"
+            className="text-xl font-bold hover:text-green-500 uppercase"
+          >
+            Sân Bóng Làng Hòa Mỹ
           </a>
         </div>
         <ul className="hidden lg:flex gap-5 font-Karla">
@@ -258,50 +261,3 @@ const NavbarAdmin = () => {
 };
 
 export default NavbarAdmin;
-
-{
-  /* <div className="dropdown dropdown-bottom">
-                    <div
-                      tabIndex={0}
-                      role="button"
-                      className="btn m-1 bg-white"
-                    >
-                      <IoIosNotifications className="text-2xl" />
-                    </div>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content bg-white rounded-box z-[1000] w-[280px] p-2 shadow h-[300px] overflow-auto"
-                    >
-                      <div className="flex justify-between pb-2">
-                        <h1 className="text-xl font-semibold">Thông báo</h1>
-                        <button className="hover:bg-slate-600 hover:text-white rounded-md px-1">
-                          Xóa
-                        </button>
-                      </div>
-                      {notifications.length === 0 ? (
-                        <p className="text-gray-500 text-center">
-                          Không có thông báo mới
-                        </p>
-                      ) : (
-                        notifications.map((notif) => (
-                          <div
-                            key={notif.id}
-                            className="p-2 border rounded-lg bg-slate-50 hover:bg-purple-200"
-                          >
-                            <div className="text-sm text-gray-600 flex flex-col gap-3 ">
-                              <div className="flex justify-between">
-                                <p className="font-bold">
-                                  {notif.booking.user?.Hoten}
-                                </p>
-                                <p>{notif.booking.price?.price}đ</p>
-                              </div>
-                              <p className="text-xs">
-                                {notif.booking.price?.name}
-                              </p>
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </ul>
-                  </div> */
-}

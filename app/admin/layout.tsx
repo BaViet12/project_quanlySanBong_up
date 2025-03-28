@@ -13,16 +13,15 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       <div className="fixed top-0 left-0 w-full z-50 bg-white">
         <NavbarAdmin></NavbarAdmin>
       </div>
-      <div className="flex w-full bg-white min-h-screen pt-20">
+      <div className="flex w-full bg-white min-h-screen pt-14 fixed">
         <aside className="w-72">
           <SidebarAdmin />
         </aside>
-        <main className="flex-1 pl-6 justify-center h-full w-full min-h-screen overflow-auto pt-4">
+        <main className="flex-1 pl-6 justify-center w-full min-h-screen pt-4">
           <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           {children}
         </main>
       </div>
-      <Footer></Footer>
     </div>
   );
 };

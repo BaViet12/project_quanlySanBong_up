@@ -116,7 +116,7 @@ const timeslotmanagement = () => {
         <h1 className="text-2xl font-bold">Quản Lý Khung Giờ</h1>
         <div className="mr-32 flex gap-2">
           <button
-            className="bg-green-800 p-3 text-white rounded-md hover:bg-cyan-600"
+            className="btn text-white w-[200px] bg-black border-gray-400"
             onClick={() => document.getElementById("my_modal_3").showModal()}
           >
             Thêm khung giờ
@@ -186,7 +186,7 @@ const timeslotmanagement = () => {
           </dialog>
         </div>
       </div>
-      <div className="mr-36 pt-10">
+      <div className="mr-36 pt-2">
         <ExportTS></ExportTS>
         <TableTimeSlot
           onEdit={handleEdit}

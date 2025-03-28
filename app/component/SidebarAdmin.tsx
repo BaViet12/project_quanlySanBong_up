@@ -78,9 +78,9 @@ const SidebarAdmin: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-full w-72 fixed items-center">
+    <div className="flex flex-col h-full w-60 fixed items-center">
       <div>
-        <p className="w-64 flex justify-center font-medium rounded-xl p-4 my-4 gap-2 border-2 border-gray-200 text-gray-700">
+        <p className="w-64 flex justify-center font-medium rounded-xl p-4 my-4 gap-2  text-gray-700">
           <Link className="" href={"/admin"}>
             DashBoard
           </Link>
@@ -90,7 +90,7 @@ const SidebarAdmin: React.FC = () => {
         </p>
       </div>
 
-      <div className="collapse collapse-arrow w-64 border-2 border-gray-200">
+      <div className="collapse collapse-arrow w-64 ">
         <input type="checkbox" name="my-accordion-2" />
         <div className="collapse-title text-gray-700 flex justify-center font-medium ">
           <div>Quản Lý</div>
@@ -101,14 +101,14 @@ const SidebarAdmin: React.FC = () => {
               <li key={link.href} className="my-5 pl-4">
                 <button
                   onClick={() => handleNavigation(link.href)}
-                  className={`block pl-7 pr-7 py-2 rounded-lg transition-colors ${
+                  className={`flex items-center gap-2 p-2 rounded-lg transition-colors ${
                     isActivePath(link.href)
                       ? "bg-gray-800 text-white"
                       : "text-gray-700 hover:bg-green-900 hover:text-white"
                   }`}
                 >
-                  <div className="absolute left-9">{link.icon}</div>
-                  <div className="text-lg">{link.label}</div>
+                  <div className="text-xs">{link.icon}</div>
+                  <div className="">{link.label}</div>
                 </button>
               </li>
             ))}

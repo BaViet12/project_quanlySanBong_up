@@ -10,8 +10,10 @@ const Footer = () => {
             src="https://cdn0021.imgtaothao.com/media/logo/logo-datsantructuyen.png"
             alt="logo"
           />
-          <p className="ml-11 ">Sân bóng Đình Làng Hòa Mỹ</p>
-          <p className="ml-11">
+          <p className="ml-11 text-blue-700 uppercase">
+            Sân bóng Đình Làng Hòa Mỹ
+          </p>
+          <p className="ml-11 text-green-700">
             K120 Nguyễn Huy Tưởng, Hòa Minh, Liên Chiểu, Đà Nẵng
           </p>
         </aside>
